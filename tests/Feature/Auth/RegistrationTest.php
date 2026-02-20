@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\Roles;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
@@ -19,8 +21,8 @@ class RegistrationTest extends TestCase
     public function test_new_users_can_register(): void
     {
         $response = $this->post(route('register.store'), [
-            'slug' => fake()->uuid(),
-            'role_id' => 1,
+            'slug' => Uuid::uuid4()->toString(),
+            'role_id' => Roles::firstOrCreate(['slug' => 'user'], ['role' => 'User'])->id,
             'name' => 'John Doe',
             'email' => 'test@example.com',
             'password' => 'password',
