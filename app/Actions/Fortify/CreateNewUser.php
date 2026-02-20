@@ -4,6 +4,7 @@ namespace App\Actions\Fortify;
 
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
+use App\Models\Roles;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -27,7 +28,7 @@ class CreateNewUser implements CreatesNewUsers
 
         return User::create([
             'slug' => Uuid::uuid4()->toString(),
-            'role_id' => 1,
+            'role_id' => Roles::firstOrCreate(['slug' => 'user'], ['role' => 'User'])->id,
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => $input['password'],
