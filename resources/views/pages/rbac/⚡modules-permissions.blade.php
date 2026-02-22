@@ -10,7 +10,11 @@ new class extends Component {
     public function mount(Modules $modules)
     {
         $this->modules = $modules;
-        $this->permissions = Permissions::where('module_id', $modules->id)->get();
+    }
+    #[Computed]
+    public function permissions()
+    {
+        return Permissions::where('module_id', $this->modules->id)->get();
     }
 };
 ?>
@@ -20,7 +24,7 @@ new class extends Component {
         'title' => 'Modules Permissions Manager',
         'description' => 'Kelola seluruh data akses pengguna dan izin akses fitur-fitur yang tersedia.',
     ])
-    <flux:heading class="sr-only">{{ __('Role Based Access Control Manager') }}</flux:heading>
+    <flux:heading class="sr-only">Role Based Access Control Manager</flux:heading>
     @if ($permissions->isEmpty())
         <div class="w-full h-full flex flex-col gap-4 items-center justify-center my-24">
             <x-icon name="fluentui-channel-dismiss-24" class="size-24 text-gray-400" />

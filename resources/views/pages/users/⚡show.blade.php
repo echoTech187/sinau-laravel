@@ -42,7 +42,7 @@ new class extends Component {
     #[Computed]
     public function users()
     {
-        return User::query()
+        return User::select('id', 'name', 'email', 'created_at', 'role_id')
             ->with('role')
             ->when($this->search, fn($q) => $q->where(fn($sub) => $sub->where('name', 'like', "%{$this->search}%")->orWhere('email', 'like', "%{$this->search}%")))
             ->tap(fn($query) => $this->sortColumn ? $query->orderBy($this->sortColumn, $this->sortDirection) : $query)

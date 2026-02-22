@@ -3,6 +3,7 @@ use App\Models\User;
 use App\Models\Roles;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
+use Livewire\Attributes\Computed;
 use Illuminate\Validation\Rule;
 use Ramsey\Uuid\Uuid;
 use Mary\Traits\Toast;
@@ -10,7 +11,6 @@ use Mary\Traits\Toast;
 new class extends Component {
     use Toast;
     public User $user;
-    public Collection $roles;
 
     public $name = '';
     public $email = '';
@@ -20,13 +20,17 @@ new class extends Component {
     public function mount(User $user)
     {
         $this->user = $user;
-        $this->roles = Roles::all();
 
         if ($this->user->exists) {
             $this->name = $this->user->name;
             $this->email = $this->user->email;
             $this->role_id = $this->user->role_id;
         }
+    }
+    #[Computed]
+    public function roles()
+    {
+        return Roles::select('id', 'role')->get();
     }
 
     public function save()
@@ -68,7 +72,6 @@ new class extends Component {
 
         $this->toast(type: 'success', title: 'It is done!', description: 'Data berhasil disimpan.', position: 'toast-top toast-end', icon: 'o-information-circle', css: 'alert-info', timeout: 3000, redirectTo: null);
 
-        $this->roles = Roles::all();
         $this->role = '';
         Flux::modals()->close();
     }
@@ -81,8 +84,8 @@ new class extends Component {
         'title' => $user->slug ? 'Edit Pengguna' : 'Tambah Pengguna Baru',
         'description' => 'Lengkapi informasi dibawah ini untuk membuat akun baru pengguna.',
     ])
-    <flux:heading class="sr-only">{{ __('Create New User') }}</flux:heading>
+    <flux:heading class="sr-only">Create New User</flux:heading>
     <x-pages::users.layout>
-        <x-pages::users.form.index :user="$user" :roles="$roles" />
+        <x-pages::users.form.index :user="$user" :roles="$this->roles" />
     </x-pages::users.layout>
 </div>
