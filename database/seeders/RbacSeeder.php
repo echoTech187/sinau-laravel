@@ -65,14 +65,23 @@ class RbacSeeder extends Seeder
         }
 
         // 2. Create Permissions
-        $p1 = Permission::updateOrCreate(['name' => 'Lihat Produk', 'slug' => 'product.index', 'module_id' => 1]);
-        $p2 = Permission::updateOrCreate(['name' => 'Tambah Produk', 'slug' => 'product.create', 'module_id' => 1]);
-        $p3 = Permission::updateOrCreate(['name' => 'Setujui Bayar', 'slug' => 'finance.approve', 'module_id' => 3]);
+        $p1 = Permission::updateOrCreate(
+            ['slug' => 'product.index'],
+            ['name' => 'Lihat Produk', 'module_id' => 1]
+        );
+        $p2 = Permission::updateOrCreate(
+            ['slug' => 'product.create'],
+            ['name' => 'Tambah Produk', 'module_id' => 1]
+        );
+        $p3 = Permission::updateOrCreate(
+            ['slug' => 'finance.approve'],
+            ['name' => 'Setujui Bayar', 'module_id' => 3]
+        );
 
         // 3. Assign Permissions to Roles
-        Roles::find(1)->permissions()->attach([$p1->id, $p2->id, $p3->id]);
-        Roles::find(2)->permissions()->attach([$p1->id, $p2->id]); // Hanya lihat
-        Roles::find(3)->permissions()->attach([$p3->id]);
+        Roles::find(1)?->permissions()->attach(array_filter([$p1?->id, $p2?->id, $p3?->id]));
+        Roles::find(2)?->permissions()->attach(array_filter([$p1?->id, $p2?->id])); // Hanya lihat
+        Roles::find(3)?->permissions()->attach(array_filter([$p3?->id]));
 
         // 4. Assign Modules to Roles
         // Roles::find(1)->modules()->attach([1, 2, 3, 4, 5]);
