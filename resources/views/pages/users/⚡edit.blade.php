@@ -17,7 +17,7 @@ new class extends Component {
     public $role_id = '';
     public $role = '';
 
-    public function mount(User $user)
+    public function mount(User $user): void
     {
         $this->user = $user;
 
@@ -28,12 +28,12 @@ new class extends Component {
         }
     }
     #[Computed]
-    public function roles()
+    public function roles(): Collection
     {
         return Roles::select('id', 'role')->get();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -59,7 +59,7 @@ new class extends Component {
         }
     }
 
-    public function createRole()
+    public function createRole(): void
     {
         $this->validate([
             'role' => ['required', 'string', 'max:255', 'unique:roles,role'],

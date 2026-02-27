@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'avatar',
     ];
 
     /**
@@ -68,5 +69,15 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(\App\Models\Roles::class, 'role_id');
+    }
+
+    /**
+     * Get the user's avatar URL.
+     */
+    public function getAvatarUrlAttribute(): string
+    {
+        return $this->avatar
+            ? asset('storage/' . $this->avatar)
+            : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
     }
 }

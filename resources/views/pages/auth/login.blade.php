@@ -18,7 +18,7 @@
                     autocomplete="current-password" :placeholder="__('Sandi')" viewable />
 
                 @if (Route::has('password.request'))
-                    <flux:link class="absolute top-0 text-sm end-0" :href="route('password.request')" wire:navigate>
+                    <flux:link class="absolute top-0 text-sm inset-e-0" :href="route('password.request')" wire:navigate>
                         {{ __('Lupa password?') }}
                     </flux:link>
                 @endif

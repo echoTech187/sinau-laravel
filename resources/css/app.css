@@ -61,9 +61,9 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
 
-/* \[:where(&)\]:size-4 {
+\[:where(&)\]:size-4 {
     @apply size-4;
-} */
+}
 
 
 
@@ -78,7 +78,6 @@ select:focus[data-flux-control] {
 }
 
 /* maryUI */
-@source "../../vendor/robsontenorio/mary/src/View/Components/**/*.php";
 
 /* Theme toggle */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -89,7 +88,7 @@ select:focus[data-flux-control] {
 */
 
 .mary-table-pagination span[aria-current="page"]>span {
-    @apply bg-primary text-base-100
+    @apply bg-blue-200 text-blue-800;
 }
 
 .mary-table-pagination button {

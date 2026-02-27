@@ -22,10 +22,11 @@ return new class extends Migration
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
             $table->string('name');         // Contoh: "Master Data", "Settings"
-            $table->string('label');        // Nama tampilan (bisa translate)
+            $table->string('slug')->unique(); // Contoh: "master-data", "settings"
             $table->string('icon')->nullable(); // Icon untuk header grup (jika perlu)
             $table->integer('order')->default(0); // Urutan tampil
             $table->boolean('is_active')->default(true);
+            $table->string('description')->nullable(); // Deskripsi
             $table->timestamps();
         });
 

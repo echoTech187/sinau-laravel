@@ -122,8 +122,7 @@
         </div>
         <a href="#"
             class="flex flex-col items-center flex-2 bg-neutral-primary-soft p-6 border border-default rounded-base shadow-xs">
-            <img class="object-cover w-full rounded-base h-64 md:h-auto md:w-48 mb-4 md:mb-0"
-                src="/docs/images/blog/image-4.jpg" alt="">
+
             <div class="flex flex-col justify-between md:p-4 leading-normal">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-heading">Streamlining your design process today.
                 </h5>

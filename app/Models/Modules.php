@@ -13,8 +13,9 @@ class Modules extends Model
         'id',
         'icon',
         'name',
-        'label',
+        'slug',
         'order',
+        'description',
         'is_active',
     ];
 

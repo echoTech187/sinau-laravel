@@ -98,7 +98,6 @@ return [
         //     ],
         //
         // ],
-
     ],
 
     /*
@@ -176,7 +175,7 @@ return [
         |
         */
 
-        'default' => 'Icon',
+        'default' => 'icons',
 
     ],
 
