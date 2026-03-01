@@ -12,7 +12,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasFactory, Notifiable, TwoFactorAuthenticatable, \App\Traits\HasPermissions;
 
     /**
      * The attributes that are mass assignable.
@@ -69,6 +69,12 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(\App\Models\Roles::class, 'role_id');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(\App\Models\Roles::class, 'user_has_roles', 'user_id', 'role_id')
+                    ->withPivot(['data_scope', 'starts_at', 'expires_at']);
     }
 
     /**

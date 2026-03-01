@@ -82,40 +82,58 @@ new class extends Component {
 
     <x-pages::settings.layout :heading="__('Profile')" :subheading="__('Update your name and email address')">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
-            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
+            <div class="space-y-2">
+                <label for="name"
+                    class="block text-sm font-bold text-zinc-700 dark:text-zinc-300">{{ __('Name') }}</label>
+                <input id="name" wire:model="name" type="text" required autofocus autocomplete="name"
+                    class="input input-bordered w-full bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-indigo-500/20" />
+                @error('name')
+                    <span class="text-xs text-red-500">{{ $message }}</span>
+                @enderror
+            </div>
 
-            <div>
-                <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
+            <div class="space-y-2">
+                <label for="email"
+                    class="block text-sm font-bold text-zinc-700 dark:text-zinc-300">{{ __('Email') }}</label>
+                <input id="email" wire:model="email" type="email" required autocomplete="email"
+                    class="input input-bordered w-full bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-indigo-500/20" />
+                @error('email')
+                    <span class="text-xs text-red-500">{{ $message }}</span>
+                @enderror
 
                 @if ($this->hasUnverifiedEmail)
-                    <div>
-                        <flux:text class="mt-4">
+                    <div
+                        class="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-900/50 dark:bg-amber-900/20">
+                        <p class="text-sm text-amber-800 dark:text-amber-200">
                             {{ __('Your email address is unverified.') }}
 
-                            <flux:link class="text-sm cursor-pointer"
+                            <button type="button"
+                                class="font-bold underline cursor-pointer hover:text-amber-900 dark:hover:text-amber-100"
                                 wire:click.prevent="resendVerificationNotification">
                                 {{ __('Click here to re-send the verification email.') }}
-                            </flux:link>
-                        </flux:text>
+                            </button>
+                        </p>
 
                         @if (session('status') === 'verification-link-sent')
-                            <flux:text class="mt-2 font-medium !dark:text-green-400 text-green-600!">
+                            <p class="mt-2 text-sm font-bold text-emerald-600 dark:text-emerald-400">
                                 {{ __('A new verification link has been sent to your email address.') }}
-                            </flux:text>
+                            </p>
                         @endif
                     </div>
                 @endif
             </div>
 
-            <div class="flex items-center gap-4">
-                <div class="flex items-center justify-end">
-                    <flux:button variant="primary" type="submit" class="w-full" data-test="update-profile-button">
-                        {{ __('Save') }}
-                    </flux:button>
-                </div>
+            <div class="flex items-center gap-4 pt-2">
+                <button type="submit" class="btn btn-primary sm:w-auto px-8 rounded-xl shadow-lg shadow-indigo-500/30"
+                    data-test="update-profile-button">
+                    {{ __('Save') }}
+                </button>
 
                 <x-action-message class="me-3" on="profile-updated">
-                    {{ __('Saved.') }}
+                    <span class="text-sm font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                        <x-heroicon-o-check-circle class="w-5 h-5" />
+                        {{ __('Saved.') }}
+                    </span>
                 </x-action-message>
             </div>
         </form>
@@ -125,3 +143,5 @@ new class extends Component {
         @endif
     </x-pages::settings.layout>
 </section>
+
+<x-slot:title>{{ __('Profile Information') }}</x-slot:title>

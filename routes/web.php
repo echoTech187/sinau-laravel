@@ -11,6 +11,11 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 require __DIR__.'/rbac.php';
+require __DIR__.'/pobus.php';
 require __DIR__.'/products.php';
 require __DIR__.'/users.php';
 require __DIR__.'/settings.php';
+
+Route::middleware(['auth'])->group(function() {
+    Route::livewire('/transactions', 'pages::transactions.index')->name('transactions.index');
+});

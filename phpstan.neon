@@ -1,0 +1,34 @@
+parameters:
+    level: 5
+    paths:
+        - app
+        - database/seeders
+    excludePaths:
+        - database/seeders/DatabaseSeeder.php
+    ignoreErrors:
+        # Laravel Eloquent where() accepts 2-argument shorthand: where('col', 'val')
+        # This is valid Laravel syntax; IDE stubs may incorrectly flag it as missing args.
+        -
+            message: '#Call to method .*::where\(\) with 2 arguments, at least 3 expected#'
+            paths:
+                - database/seeders
+        -
+            message: '#Call to method .*::whereIn\(\) with 2 arguments#'
+            paths:
+                - database/seeders
+        -
+            message: '#Call to method .*::whereNotIn\(\) with 2 arguments#'
+            paths:
+                - database/seeders
+        -
+            message: '#Call to static method .*::count\(\) with 0 arguments#'
+            paths:
+                - database/seeders
+        -
+            message: '#Call to static method .*::first\(\) with 0 arguments#'
+            paths:
+                - database/seeders
+        -
+            message: '#Call to static method .*::pluck\(\) with 1 argument#'
+            paths:
+                - database/seeders

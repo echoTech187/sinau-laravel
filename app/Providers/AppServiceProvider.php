@@ -24,6 +24,18 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        // Super Admin Bypass
+        \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
+            if ($user->hasRole('super-admin')) {
+                return true;
+            }
+        });
+
+        // Permission check linkage
+        \Illuminate\Support\Facades\Gate::after(function ($user, $ability) {
+            return $user->hasPermissionTo($ability);
+        });
     }
 
     /**

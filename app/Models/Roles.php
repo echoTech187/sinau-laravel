@@ -24,6 +24,16 @@ class Roles extends Model
         return $this->hasMany(User::class, 'role_id');
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
 
     public function permissions()
     {
@@ -38,5 +48,10 @@ class Roles extends Model
     public function role_has_permissions()
     {
         return $this->hasMany(RolePermissions::class, 'role_id');
+    }
+
+    public function fieldPermissions()
+    {
+        return $this->hasMany(FieldPermission::class, 'role_id');
     }
 }

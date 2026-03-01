@@ -3,17 +3,14 @@
 ])
 
 @if ($sidebar)
-    <flux:sidebar.brand {{ $attributes }}>
-        <x-slot name="logo"
-            class="flex aspect-square size-auto items-center justify-center rounded-md text-accent-foreground">
-            <x-app-logo-icon class="size-auto fill-current text-white dark:text-black" />
-        </x-slot>
-    </flux:sidebar.brand>
+    <a {{ $attributes->merge(['class' => 'flex items-center gap-2']) }}>
+        <x-app-logo-icon class="size-8 text-blue-600" />
+        <span class="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
+            Sinau<span class="text-blue-600">Laravel</span>
+        </span>
+    </a>
 @else
-    <flux:brand {{ $attributes }}>
-        <x-slot name="logo"
-            class="flex aspect-square size-8 items-center justify-center rounded-md text-accent-foreground">
-            <x-app-logo-icon class="size-5 fill-current text-white dark:text-black" />
-        </x-slot>
-    </flux:brand>
+    <a {{ $attributes->merge(['class' => 'flex items-center gap-2']) }}>
+        <x-app-logo-icon class="size-8 text-blue-600" />
+    </a>
 @endif

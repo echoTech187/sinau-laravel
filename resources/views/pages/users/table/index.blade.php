@@ -13,94 +13,173 @@
     'actionable' => false,
 ])
 
-<flux:heading class="sr-only">{{ __('Kelola Pengguna & Izin') }}</flux:heading>
-<div class="flex items-center justify-between my-4 gap-4">
-    <div class="flex items-center gap-2">
+<div
+    class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-3xl shadow-sm overflow-hidden animate-fade-in-up">
 
-        @if ($filterable)
-            <div class="flex items-center gap-2">
+    <!-- Filter & Search Row -->
+    <div
+        class="flex flex-col md:flex-row gap-3 items-center justify-between p-4 border-b border-zinc-100 dark:border-zinc-800">
+        <!-- Left: filters + perPage -->
+        <div class="flex items-center gap-2 flex-wrap w-full md:w-auto">
+            @if ($filterable)
                 @foreach ($filters as $filter)
-                    <flux:select placeholder="{{ $filter['label'] }}"
-                        wire:model.live.debounce.300ms="filter.{{ $filter['name'] }}">
-                        <flux:select.option value="">{{ __('Semua') }}</flux:select.option>
-                        @foreach ($filter['options'] as $option)
-                            <flux:select.option value="{{ $option }}">{{ $option }}</flux:select.option>
-                        @endforeach
-                    </flux:select>
+                    <div
+                        class="flex gap-1 p-1 bg-zinc-100/80 dark:bg-zinc-800/80 rounded-xl border border-zinc-200/50 dark:border-zinc-700/50">
+                        <select wire:model.live.debounce.300ms="filter.{{ $filter['name'] }}"
+                            class="select select-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium">
+                            <option value="">{{ $filter['label'] }}</option>
+                            @foreach ($filter['options'] as $option)
+                                <option value="{{ $option }}">{{ $option }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 @endforeach
-            </div>
-        @endif
-    </div>
-    <div class="flex items-center gap-2">
-        <flux:button class="max-md:gap-0!" variant="outline" icon="arrow-path" wire:click="import"
-            title="Import Pengguna" data-test="import-user-button">
-
-            <span class="hidden sm:inline">{{ __('Import Pengguna') }}</span>
-        </flux:button>
-        <flux:button class="max-md:gap-0!" variant="primary" icon="user-plus" wire:click="create"
-            title="Tambah Pengguna" data-test="create-user-button" wire:navigate>
-            <span class="hidden sm:inline">{{ __('Tambah Pengguna') }}</span>
-        </flux:button>
-    </div>
-
-</div>
-<div class="flex items-center justify-between my-4 gap-4">
-    <div class="flex items-center gap-2">
-        <flux:select placeholder="Show" wire:model.live.debounce.300ms="perPage">
-            <flux:select.option>Semua</flux:select.option>
-            <flux:select.option>10</flux:select.option>
-            <flux:select.option>25</flux:select.option>
-            <flux:select.option>100</flux:select.option>
-            <flux:select.option>250</flux:select.option>
-        </flux:select>
-    </div>
-    <div class="flex items-center gap-2">
-        <flux:input icon="magnifying-glass" placeholder="Cari Nama atau Email" @style(['placeholder:text-zinc-400 placeholder:text-xs'])
-            wire:model.live.debounce.300ms="search" />
-
-
-    </div>
-</div>
-<flux:table :paginate="$paginate ? $data : null">
-    <flux:table.columns>
-        @foreach ($columns as $column)
-            @if (isset($column['sortable']) && $column['sortable'])
-                <flux:table.column sortable :sorted="$sortColumn === $column['name']" :direction="$sortDirection"
-                    wire:click="sort('{{ $column['name'] }}')" key="{{ $column['label'] }}">
-                    {{ $column['label'] }}
-                </flux:table.column>
-            @else
-                <flux:table.column key="{{ $column['name'] }}">
-                    {{ $column['label'] }}
-                </flux:table.column>
             @endif
-        @endforeach
-        <flux:table.column class="text-right w-20">Aksi</flux:table.column>
-    </flux:table.columns>
-    <flux:table.rows>
-        @foreach ($data as $user)
-            <flux:table.row key="{{ $user->id }}">
-                @foreach ($columns as $column)
-                    <flux:table.cell>
-                        <flux:text>{{ data_get($user, $column['name']) }}</flux:text>
-                    </flux:table.cell>
-                @endforeach
 
-                <flux:table.cell>
-                    <flux:dropdown offset="-15" gap="2">
-                        <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" inset="top bottom">
-                        </flux:button>
-                        <flux:menu>
-                            <flux:menu.item :href="route('user.permission')" icon="key" wire:navigate>
-                                {{ __('Permissions') }}
-                            </flux:menu.item>
-                            <flux:menu.item wire:click="edit({{ $user->id }})" icon="pencil" wire:navigate>
-                                {{ __('Edit') }}
-                            </flux:menu.item>
-                        </flux:menu>
-                    </flux:dropdown>
-                </flux:table.cell>
-            </flux:table.row>
-        @endforeach
-    </flux:table.rows>
-</flux:table>
+            <!-- PerPage -->
+            <div
+                class="flex gap-1 p-1 bg-zinc-100/80 dark:bg-zinc-800/80 rounded-xl border border-zinc-200/50 dark:border-zinc-700/50">
+                <select wire:model.live.debounce.300ms="perPage"
+                    class="select select-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium">
+                    <option value="Semua">Semua</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="100">100</option>
+                    <option value="250">250</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Right: Search + Action Buttons -->
+        <div class="flex items-center gap-3 w-full md:w-auto">
+            <!-- Search -->
+            <div class="relative flex-1 md:w-72 group">
+                <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                    <x-heroicon-o-magnifying-glass
+                        class="w-4 h-4 text-zinc-400 group-focus-within:text-indigo-500 transition-colors" />
+                </div>
+                <input type="text" placeholder="Cari Nama atau Email..." wire:model.live.debounce.300ms="search"
+                    class="input input-sm w-full pl-11 bg-white/50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-indigo-500/20" />
+            </div>
+
+            <!-- Import Button -->
+            <button wire:click="import" title="Import Pengguna"
+                class="btn btn-sm btn-ghost gap-2 rounded-xl text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 shrink-0">
+                <x-heroicon-o-arrow-path class="w-4 h-4" />
+                <span class="hidden sm:inline">Import</span>
+            </button>
+
+            <!-- Add User Button -->
+            @can('user.manage')
+                <button wire:click="create" wire:navigate title="Tambah Pengguna"
+                    class="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-xl transition-all hover:-translate-y-0.5 font-bold shrink-0">
+                    <x-heroicon-o-user-plus class="w-4 h-4" />
+                    <span class="hidden sm:inline">Tambah</span>
+                </button>
+            @endcan
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+        <table class="table table-sm w-full text-left border-collapse whitespace-nowrap">
+            <thead>
+                <tr
+                    class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-wider text-[10px]">
+                    <th class="py-4 pl-4 w-10 text-center">
+                        <x-heroicon-o-hashtag class="w-3.5 h-3.5 text-zinc-400 mx-auto" />
+                    </th>
+
+                    @foreach ($columns as $column)
+                        <th class="py-4 px-4">
+                            @if (isset($column['sortable']) && $column['sortable'])
+                                <button wire:click="sort('{{ $column['name'] }}')"
+                                    class="flex items-center gap-1.5 hover:text-indigo-600 transition-colors group">
+                                    {{ $column['label'] }}
+                                    @if ($sortColumn === $column['name'])
+                                        <x-heroicon-s-chevron-{{ $sortDirection === 'asc' ? 'up' : 'down' }}
+                                            class="w-3 h-3 text-indigo-500" />
+                                    @else
+                                        <x-heroicon-o-chevron-up-down
+                                            class="w-3 h-3 text-zinc-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    @endif
+                                </button>
+                            @else
+                                {{ $column['label'] }}
+                            @endif
+                        </th>
+                    @endforeach
+
+                    <th class="py-4 px-4 text-right pr-4">AKSI</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/60 text-sm">
+                @foreach ($data as $index => $user)
+                    <tr
+                        class="group hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors border-b border-zinc-100 dark:border-zinc-800/50 last:border-0">
+                        <!-- Row Number -->
+                        <td class="py-3 pl-4 text-center text-[10px] font-bold text-zinc-400">
+                            {{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}
+                        </td>
+
+                        @foreach ($columns as $column)
+                            <td class="py-3 px-4">
+                                @if ($column['name'] === 'role.role')
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 text-[9px] font-black uppercase tracking-widest">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                        {{ data_get($user, $column['name']) ?? 'No Role' }}
+                                    </span>
+                                @elseif($column['name'] === 'name')
+                                    <div class="font-bold text-zinc-800 dark:text-zinc-200 text-sm tracking-tight">
+                                        {{ data_get($user, $column['name']) }}
+                                    </div>
+                                @elseif($column['name'] === 'email')
+                                    <div class="text-zinc-500 dark:text-zinc-400 text-xs font-medium">
+                                        {{ data_get($user, $column['name']) }}
+                                    </div>
+                                @else
+                                    <div class="text-zinc-500 dark:text-zinc-400 text-xs font-medium">
+                                        {{ data_get($user, $column['name']) }}
+                                    </div>
+                                @endif
+                            </td>
+                        @endforeach
+
+                        <td class="py-3 pr-4">
+                            <div
+                                class="flex items-center justify-end gap-1 translate-x-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                                @can('user.manage')
+                                    <a href="{{ route('user.permission', $user->id) }}" wire:navigate
+                                        class="btn btn-ghost btn-xs btn-square hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-indigo-500 rounded-lg"
+                                        title="Hak Akses">
+                                        <x-heroicon-o-shield-check class="w-4 h-4" />
+                                    </a>
+
+                                    <button wire:click="edit({{ $user->id }})"
+                                        class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 rounded-lg"
+                                        title="Edit User">
+                                        <x-heroicon-o-pencil-square class="w-4 h-4" />
+                                    </button>
+
+                                    <button wire:click="delete({{ $user->id }})"
+                                        wire:confirm="Yakin ingin menghapus user ini?"
+                                        class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 rounded-lg"
+                                        title="Hapus User">
+                                        <x-heroicon-o-trash class="w-4 h-4" />
+                                    </button>
+                                @endcan
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    @if ($paginate && $data->hasPages())
+        <div class="px-6 py-4 border-t border-zinc-100 dark:border-zinc-800">
+            {{ $data->links() }}
+        </div>
+    @endif
+</div>
