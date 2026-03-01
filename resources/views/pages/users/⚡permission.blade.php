@@ -365,11 +365,10 @@ new class extends Component {
     <x-slot:title>Izin Akses Spesifik</x-slot:title>
     <!-- Decorative Background Blob -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div
-            class="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
+        <div class="absolute top-0 right-0 w-150 h-150 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
         </div>
         <div
-            class="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[100px]">
+            class="absolute bottom-0 left-1/4 w-125 h-125 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[100px]">
         </div>
     </div>
 
@@ -380,7 +379,7 @@ new class extends Component {
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
-                            class="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/30">
+                            class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/30">
                             <x-heroicon-o-shield-check class="w-6 h-6 text-white" />
                         </div>
                         Manajemen Izin Spesifik

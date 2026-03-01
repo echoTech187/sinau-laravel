@@ -1,6 +1,7 @@
+﻿@php /** @var \App\Livewire\Pages\Bookings\Index $this */ @endphp
 <div class="container relative min-h-screen pb-20">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[100px]"></div>
+        <div class="absolute top-0 right-0 w-125 h-125 bg-purple-500/5 rounded-full blur-[100px]"></div>
     </div>
 
     <div class="relative z-10 space-y-8">
@@ -10,7 +11,7 @@
                 <h1
                     class="text-3xl font-black tracking-tight text-zinc-900 dark:text-white uppercase flex items-center gap-4">
                     <div
-                        class="p-3.5 rounded-[24px] bg-gradient-to-br from-indigo-500 to-purple-600 shadow-xl shadow-indigo-500/20 text-white">
+                        class="p-3.5 rounded-3xl bg-linear-to-br from-indigo-500 to-purple-600 shadow-xl shadow-indigo-500/20 text-white">
                         <x-heroicon-o-clipboard-document-list class="w-8 h-8" />
                     </div>
                     Riwayat Booking
@@ -109,7 +110,7 @@
         </div>
 
         <!-- Table Card -->
-        <div class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-[32px] overflow-hidden shadow-sm animate-fade-in-up"
+        <div class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-4xl overflow-hidden shadow-sm animate-fade-in-up"
             style="animation-delay: 0.3s">
             <div class="overflow-x-auto">
                 <table class="table table-lg w-full">
@@ -158,11 +159,11 @@
                                         <div class="flex flex-col gap-1 items-start">
                                             <div class="flex items-center gap-2 group/route text-pretty transition-all">
                                                 <span
-                                                    class="text-xs font-black text-zinc-800 dark:text-white uppercase truncate max-w-[120px]">{{ $b->schedule->route->origin->name }}</span>
+                                                    class="text-xs font-black text-zinc-800 dark:text-white uppercase truncate max-w-30">{{ $b->schedule->route->origin->name }}</span>
                                                 <x-heroicon-o-arrow-right
                                                     class="w-3 h-3 text-zinc-300 dark:text-zinc-600 group-hover/route:text-indigo-500" />
                                                 <span
-                                                    class="text-xs font-black text-zinc-800 dark:text-white uppercase truncate max-w-[120px] text-pretty">{{ $b->schedule->route->destination->name }}</span>
+                                                    class="text-xs font-black text-zinc-800 dark:text-white uppercase truncate max-w-30 text-pretty">{{ $b->schedule->route->destination->name }}</span>
                                             </div>
                                             <span
                                                 class="text-[9px] font-black text-indigo-500 uppercase tracking-widest bg-indigo-50/50 dark:bg-indigo-500/10 px-2 py-0.5 rounded-md">{{ $b->schedule->bus->busClass->name }}</span>
@@ -181,9 +182,9 @@
                                     <td class="py-6 text-center">
                                         <span
                                             class="px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest
-                                        @if ($b->payment_status->value === 'paid') bg-emerald-500/10 text-emerald-600 border border-emerald-500/20
-                                        @elseif($b->payment_status->value === 'unpaid') bg-amber-500/10 text-amber-600 border border-amber-500/20
-                                        @else bg-zinc-500/10 text-zinc-500 border border-zinc-500/20 @endif
+                                        @if ($b->payment_status->value === 'paid') text-emerald-600 border border-emerald-500/20
+                                        @elseif($b->payment_status->value === 'unpaid')
+                                        @else bg-zinc-500/10 @endif
                                     ">
                                             {{ $b->payment_status->name }}
                                         </span>

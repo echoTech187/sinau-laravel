@@ -60,25 +60,25 @@ class Create extends Component
     #[Computed]
     public function routes()
     {
-        return BusRoute::orderBy('name')->get();
+        return BusRoute::orderBy('name', 'asc')->get();
     }
 
     #[Computed]
     public function buses()
     {
-        return Bus::orderBy('name')->get();
+        return Bus::orderBy('name', 'asc')->get();
     }
 
     #[Computed]
     public function crews()
     {
-        return Crew::orderBy('name')->get();
+        return Crew::orderBy('name', 'asc')->get();
     }
 
     #[Computed]
     public function positions()
     {
-        return CrewPosition::orderBy('name')->get();
+        return CrewPosition::orderBy('name', 'asc')->get();
     }
 
     #[Computed]

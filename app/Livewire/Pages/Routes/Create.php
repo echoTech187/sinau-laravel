@@ -17,7 +17,7 @@ class Create extends Component
     #[Computed]
     public function locations()
     {
-        return Location::orderBy('name')->get();
+        return Location::orderBy('name', 'asc')->get();
     }
 
     public function addStop()
@@ -33,8 +33,9 @@ class Create extends Component
     public function saveRoute()
     {
         $this->form->store();
-        
+
         session()->flash('message', 'Data Rute berhasil ditambahkan!');
+
         return $this->redirectRoute('routes.index', navigate: true);
     }
 

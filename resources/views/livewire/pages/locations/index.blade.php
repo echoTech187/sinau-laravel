@@ -1,8 +1,9 @@
+﻿@php /** @var \App\Livewire\Pages\Locations\Index $this */ @endphp
 <div class="container relative min-h-screen pb-10">
     <!-- Decorative Background Blob -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[100px]"></div>
-        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[100px]"></div>
+        <div class="absolute top-0 right-0 w-125 h-125 bg-indigo-500/5 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-0 left-0 w-125 h-125 bg-purple-500/5 rounded-full blur-[100px]"></div>
     </div>
 
     <div class="relative z-10 space-y-6">
@@ -11,7 +12,7 @@
             <div>
                 <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                     <div
-                        class="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/20 text-white">
+                        class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/20 text-white">
                         <x-heroicon-o-map-pin class="w-6 h-6" />
                     </div>
                     Master Titik Lokasi

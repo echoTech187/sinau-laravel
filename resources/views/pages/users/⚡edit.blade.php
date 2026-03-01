@@ -87,10 +87,10 @@ new class extends Component {
     <!-- Decorative Background Blob behind layout -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div
-            class="absolute -top-1/4 -right-1/4 w-[800px] h-[800px] bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-[120px]">
+            class="absolute -top-1/4 -right-1/4 w-200 h-200 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-[120px]">
         </div>
         <div
-            class="absolute -bottom-1/4 -left-1/4 w-[800px] h-[800px] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[120px]">
+            class="absolute -bottom-1/4 -left-1/4 w-200 h-200 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[120px]">
         </div>
     </div>
 
@@ -101,7 +101,7 @@ new class extends Component {
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
-                            class="p-2.5 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/30">
+                            class="p-2.5 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/30">
                             @if ($user->exists)
                                 <x-heroicon-o-pencil-square class="w-6 h-6 text-white" />
                             @else

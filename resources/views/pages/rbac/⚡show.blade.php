@@ -397,7 +397,7 @@ new class extends Component {
                                 <div class="flex items-center gap-3 pr-6">
                                     <div
                                         class="p-2 rounded-xl shrink-0
-                                                bg-gradient-to-br from-blue-500 to-indigo-600
+                                                bg-linear-to-br from-blue-500 to-indigo-600
                                                 shadow-[0_4px_12px_rgba(59,130,246,0.35)]
                                                 group-hover/mod:scale-105 transition-transform duration-300">
                                         <x-heroicon-o-shield-check class="size-4 text-white" />
@@ -510,7 +510,7 @@ new class extends Component {
                                 <div class="flex items-center gap-3 pr-6">
                                     <div
                                         class="p-2 rounded-xl shrink-0
-                                                bg-gradient-to-br from-purple-500 to-fuchsia-600
+                                                bg-linear-to-br from-purple-500 to-fuchsia-600
                                                 shadow-[0_4px_12px_rgba(168,85,247,0.35)]
                                                 group-hover/menu:scale-105 transition-transform duration-300">
                                         <x-heroicon-o-bars-3 class="size-4 text-white" />
@@ -621,7 +621,7 @@ new class extends Component {
             @else
                 <div
                     class="overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900">
-                    <table class="table table-sm w-full min-w-[560px]">
+                    <table class="table table-sm w-full min-w-140">
                         <thead class="bg-zinc-50 dark:bg-zinc-800">
                             <tr>
                                 <th class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase">#</th>
@@ -665,7 +665,7 @@ new class extends Component {
                                         @endphp
                                         <span class="badge badge-sm {{ $color }}">{{ $log->event }}</span>
                                     </td>
-                                    <td class="max-w-[180px] hidden md:table-cell">
+                                    <td class="max-w-45 hidden md:table-cell">
                                         @if (is_array($log->properties))
                                             <div class="text-xs text-zinc-500 dark:text-zinc-400 space-y-0.5">
                                                 @foreach (array_slice($log->properties, 0, 2) as $key => $val)

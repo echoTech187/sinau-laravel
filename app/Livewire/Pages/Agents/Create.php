@@ -18,7 +18,7 @@ class Create extends Component
     #[Computed]
     public function branchOffices()
     {
-        return Agent::where('type', '=', 'branch_office')->where('status', '=', 'active')->get();
+        return Agent::where('type', '=', 'branch_office', 'and')->where('status', '=', 'active')->get();
     }
 
     #[Computed]

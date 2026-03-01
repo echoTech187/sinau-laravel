@@ -1,10 +1,9 @@
+﻿@php /** @var \App\Livewire\Pages\Schedules\Create $this */ @endphp
 <div class="container relative min-h-screen pb-10">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div
-            class="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
+        <div class="absolute top-0 right-0 w-150 h-150 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
         </div>
-        <div
-            class="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-sky-500/10 dark:bg-sky-500/5 rounded-full blur-[100px]">
+        <div class="absolute bottom-0 left-1/4 w-125 h-125 bg-sky-500/10 dark:bg-sky-500/5 rounded-full blur-[100px]">
         </div>
     </div>
 
@@ -15,7 +14,7 @@
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
-                            class="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-500 to-sky-600 shadow-lg shadow-indigo-500/30">
+                            class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-sky-600 shadow-lg shadow-indigo-500/30">
                             <x-heroicon-o-calendar-days class="w-6 h-6 text-white" />
                         </div>
                         Terbitkan Jadwal Keberangkatan Baru
@@ -54,7 +53,7 @@
                                         Rute Utama*</span>
                                 </label>
                                 <select wire:model.live="form.route_id"
-                                    class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.route_id') border-red-500 @enderror">
+                                    class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.route_id')  @enderror">
                                     <option value="">-- Pilih Rute --</option>
                                     @foreach ($this->routes as $route)
                                         <option value="{{ $route->id }}">{{ $route->name }}
@@ -74,7 +73,7 @@
                                         Bus*</span>
                                 </label>
                                 <select wire:model="form.bus_id"
-                                    class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.bus_id') border-red-500 @enderror">
+                                    class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.bus_id')  @enderror">
                                     <option value="">-- Pilih Bus --</option>
                                     @foreach ($this->buses as $bus)
                                         <option value="{{ $bus->id }}">{{ $bus->name }}
@@ -96,7 +95,7 @@
                                         Berangkat*</span>
                                 </label>
                                 <input type="date" wire:model="form.departure_date"
-                                    class="input input-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.departure_date') border-red-500 @enderror" />
+                                    class="input input-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.departure_date')  @enderror" />
                                 @error('form.departure_date')
                                     <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
                                 @enderror
@@ -109,7 +108,7 @@
                                         Berangkat*</span>
                                 </label>
                                 <input type="datetime-local" wire:model="form.departure_time"
-                                    class="input input-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.departure_time') border-red-500 @enderror" />
+                                    class="input input-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.departure_time')  @enderror" />
                                 @error('form.departure_time')
                                     <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
                                 @enderror
@@ -122,7 +121,7 @@
                                         Sampai*</span>
                                 </label>
                                 <input type="datetime-local" wire:model="form.arrival_estimate"
-                                    class="input input-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.arrival_estimate') border-red-500 @enderror" />
+                                    class="input input-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.arrival_estimate')  @enderror" />
                                 @error('form.arrival_estimate')
                                     <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
                                 @enderror
@@ -140,7 +139,7 @@
                                     <span
                                         class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 font-bold text-xs uppercase">Rp</span>
                                     <input type="number" wire:model="form.base_price"
-                                        class="input input-bordered w-full pl-12 bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-zinc-800 @error('form.base_price') border-red-500 @enderror"
+                                        class="input input-bordered w-full pl-12 bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-zinc-800 @error('form.base_price')  @enderror"
                                         placeholder="0" />
                                 </div>
                                 @error('form.base_price')

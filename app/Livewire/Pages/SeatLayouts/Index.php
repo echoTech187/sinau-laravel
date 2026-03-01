@@ -3,16 +3,18 @@
 namespace App\Livewire\Pages\SeatLayouts;
 
 use App\Models\SeatLayout;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Computed;
 
 class Index extends Component
 {
     use WithPagination;
 
     public string $search = '';
+
     public bool $confirmingLayoutDeletion = false;
+
     public ?int $layoutIdBeingDeleted = null;
 
     protected $queryString = [
@@ -28,7 +30,7 @@ class Index extends Component
     public function seatLayouts()
     {
         return SeatLayout::query()
-            ->where('name', 'like', '%' . $this->search . '%')
+            ->where('name', 'like', '%'.$this->search.'%', 'and')
             ->withCount('buses')
             ->latest()
             ->paginate(10);
@@ -43,7 +45,7 @@ class Index extends Component
     public function deleteLayout()
     {
         if ($this->layoutIdBeingDeleted) {
-            SeatLayout::find($this->layoutIdBeingDeleted)->delete();
+            SeatLayout::find($this->layoutIdBeingDeleted, 'id')->delete();
             $this->confirmingLayoutDeletion = false;
             $this->layoutIdBeingDeleted = null;
             $this->dispatch('notify', 'Layout kursi berhasil dihapus.', 'success');

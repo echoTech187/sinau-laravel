@@ -3,8 +3,8 @@
 namespace App\Livewire\Pages\Routes;
 
 use App\Livewire\Forms\RouteForm;
-use App\Models\Route;
 use App\Models\Location;
+use App\Models\Route;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -14,6 +14,7 @@ use Livewire\Component;
 class Edit extends Component
 {
     public RouteForm $form;
+
     public Route $route;
 
     public function mount(Route $route)
@@ -25,7 +26,7 @@ class Edit extends Component
     #[Computed]
     public function locations()
     {
-        return Location::orderBy('name')->get();
+        return Location::orderBy('name', 'asc')->get();
     }
 
     public function addStop()
@@ -41,8 +42,9 @@ class Edit extends Component
     public function saveRoute()
     {
         $this->form->update();
-        
+
         session()->flash('message', 'Data Rute berhasil diperbarui!');
+
         return $this->redirectRoute('routes.index', navigate: true);
     }
 

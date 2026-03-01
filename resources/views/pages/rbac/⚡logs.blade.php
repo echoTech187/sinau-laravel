@@ -61,11 +61,10 @@ new class extends Component {
 
     <!-- Decorative Background Blobs -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div
-            class="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
+        <div class="absolute top-0 right-0 w-150 h-150 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
         </div>
         <div
-            class="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-violet-500/10 dark:bg-violet-500/5 rounded-full blur-[100px]">
+            class="absolute bottom-0 left-1/4 w-125 h-125 bg-violet-500/10 dark:bg-violet-500/5 rounded-full blur-[100px]">
         </div>
     </div>
 
@@ -77,7 +76,7 @@ new class extends Component {
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
-                            class="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/30">
+                            class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/30">
                             <x-heroicon-o-clipboard-document-list class="w-6 h-6 text-white" />
                         </div>
                         Log Aktivitas RBAC
@@ -183,7 +182,7 @@ new class extends Component {
                                         @if ($log->actor)
                                             <div class="flex items-center gap-2">
                                                 <div
-                                                    class="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white text-[10px] font-black shrink-0">
+                                                    class="w-7 h-7 rounded-full bg-linear-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white text-[10px] font-black shrink-0">
                                                     {{ substr($log->actor->name, 0, 1) }}
                                                 </div>
                                                 <div>

@@ -115,7 +115,7 @@ new class extends Component {
                         rounded-2xl shadow-sm animate-fade-in-up">
                 <div
                     class="p-2 rounded-xl w-fit
-                            bg-gradient-to-br from-blue-500 to-indigo-600
+                            bg-linear-to-br from-blue-500 to-indigo-600
                             shadow-[0_4px_12px_rgba(59,130,246,0.35)]">
                     <x-heroicon-o-user-group class="size-5 text-white" />
                 </div>
@@ -137,7 +137,7 @@ new class extends Component {
                 <div
                     class="overflow-x-auto rounded-2xl border border-white/30 dark:border-white/10
                             bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl shadow-sm">
-                    <table class="table table-sm w-full min-w-[420px]">
+                    <table class="table table-sm w-full min-w-105">
                         <thead class="bg-zinc-50 dark:bg-zinc-800">
                             <tr>
                                 <th class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase">Pengguna
@@ -195,7 +195,7 @@ new class extends Component {
                         bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl
                         shadow-sm p-4 space-y-3">
                 <h3 class="font-semibold text-sm text-zinc-800 dark:text-zinc-200 flex items-center gap-2">
-                    <div class="p-1.5 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600">
+                    <div class="p-1.5 rounded-lg bg-linear-to-br from-blue-500 to-indigo-600">
                         <x-heroicon-o-magnifying-glass class="size-3.5 text-white" />
                     </div>
                     Cari & Tambah Pengguna

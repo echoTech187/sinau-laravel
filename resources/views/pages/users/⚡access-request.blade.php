@@ -192,7 +192,7 @@ new class extends Component {
                                         </div>
                                         @if ($req->status !== 'pending' && $req->review_note)
                                             <div
-                                                class="text-[10px] text-zinc-500 bg-zinc-100 dark:bg-zinc-900 rounded p-1.5 max-w-[150px] relative">
+                                                class="text-[10px] text-zinc-500 bg-zinc-100 dark:bg-zinc-900 rounded p-1.5 max-w-37.5 relative">
                                                 <div
                                                     class="absolute -top-1 right-2 size-2 bg-zinc-100 dark:bg-zinc-900 rotate-45">
                                                 </div>

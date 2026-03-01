@@ -1,10 +1,10 @@
+﻿@php /** @var \App\Livewire\Pages\Cargo\Checker $this */ @endphp
 <div class="container relative min-h-screen pb-10">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div
-            class="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
+        <div class="absolute top-0 right-0 w-150 h-150 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
         </div>
         <div
-            class="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[100px]">
+            class="absolute bottom-0 left-1/4 w-125 h-125 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[100px]">
         </div>
     </div>
 
@@ -12,7 +12,7 @@
         <!-- Header -->
         <header class="text-center space-y-4">
             <div
-                class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-zinc-800 to-zinc-900 dark:from-zinc-100 dark:to-white shadow-xl shadow-zinc-500/20 text-white dark:text-zinc-900 transform hover:rotate-12 transition-transform duration-500">
+                class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-linear-to-br from-zinc-800 to-zinc-900 dark:from-zinc-100 dark:to-white shadow-xl shadow-zinc-500/20 text-white dark:text-zinc-900 transform hover:rotate-12 transition-transform duration-500">
                 <x-heroicon-o-shield-check class="w-10 h-10 text-emerald-400 dark:text-emerald-500" />
             </div>
             <div>
@@ -63,13 +63,13 @@
                 <div class="flex justify-center -mt-14 mb-6">
                     @if ($selectedShipment->status->value === 'inspected_by_checker')
                         <div
-                            class="px-8 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-2xl text-xs font-black uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/30 flex items-center gap-3">
+                            class="px-8 py-3 bg-linear-to-r from-emerald-500 to-emerald-600 text-white rounded-2xl text-xs font-black uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/30 flex items-center gap-3">
                             <x-heroicon-s-check-badge class="w-5 h-5" />
                             VERIFIED (SAFE)
                         </div>
                     @else
                         <div
-                            class="px-8 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-2xl text-xs font-black uppercase tracking-[0.2em] shadow-lg shadow-amber-500/30 flex items-center gap-3">
+                            class="px-8 py-3 bg-linear-to-r from-amber-500 to-amber-600 text-white rounded-2xl text-xs font-black uppercase tracking-[0.2em] shadow-lg shadow-amber-500/30 flex items-center gap-3">
                             <x-heroicon-o-clock class="w-5 h-5" />
                             PENDING VERIFICATION
                         </div>

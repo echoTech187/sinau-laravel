@@ -20,7 +20,7 @@ new class extends Component {
         <header class="mb-8 flex flex-col sm:flex-row sm:items-center gap-4">
             <div class="flex items-center gap-4">
                 <div
-                    class="p-3 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/30">
+                    class="p-3 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/30">
                     <x-heroicon-o-banknotes class="w-7 h-7 text-white" />
                 </div>
                 <div>

@@ -1,10 +1,10 @@
+﻿@php /** @var \App\Livewire\Pages\SeatLayouts\Create $this */ @endphp
 <div class="container relative min-h-screen pb-10">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div
-            class="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
+        <div class="absolute top-0 right-0 w-150 h-150 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
         </div>
         <div
-            class="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[100px]">
+            class="absolute bottom-0 left-1/4 w-125 h-125 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[100px]">
         </div>
     </div>
 
@@ -15,7 +15,7 @@
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
-                            class="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/30">
+                            class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/30">
                             <x-heroicon-o-plus-circle class="w-6 h-6 text-white" />
                         </div>
                         Editor Layout Kursi
@@ -118,7 +118,7 @@
             <div class="lg:col-span-3">
                 <div
                     class="bg-zinc-100 dark:bg-zinc-950/50 rounded-[40px] p-8 border border-zinc-200 dark:border-zinc-800 shadow-inner perspective-1000 overflow-auto">
-                    <div class="inline-grid gap-2 p-6 bg-white dark:bg-zinc-900 rounded-[32px] border border-zinc-200 dark:border-zinc-800 shadow-xl"
+                    <div class="inline-grid gap-2 p-6 bg-white dark:bg-zinc-900 rounded-4xl border border-zinc-200 dark:border-zinc-800 shadow-xl"
                         style="grid-template-columns: repeat({{ $form->grid_columns }}, minmax(0, 1fr));">
 
                         @foreach ($form->layout_mapping as $index => $seat)
@@ -165,7 +165,7 @@
                     <button wire:click="save"
                         class="btn bg-indigo-600 hover:bg-indigo-700 text-white border-0 px-10 h-14 rounded-2xl shadow-xl shadow-indigo-600/30 font-black tracking-tight text-lg transition-all group overflow-hidden relative">
                         <div
-                            class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer">
+                            class="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer">
                         </div>
                         <span wire:loading.remove wire:target="save" class="flex items-center gap-3 relative z-10">
                             <x-heroicon-o-check-circle class="w-6 h-6" />

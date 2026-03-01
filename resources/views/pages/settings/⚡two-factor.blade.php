@@ -214,7 +214,7 @@ new class extends Component {
 
                     <div class="flex items-center gap-3">
                         <span
-                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400 font-bold text-xs uppercase tracking-wider border border-red-200 dark:border-red-500/20 shadow-sm relative z-10">
+                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400 font-bold text-xs uppercase tracking-wider border border-red-200 dark:/20 shadow-sm relative z-10">
                             <x-heroicon-o-x-circle class="size-4" />
                             {{ __('Disabled') }}
                         </span>
@@ -238,7 +238,7 @@ new class extends Component {
 
     <div x-data="{ showModal: @entangle('showModal') }" @keydown.escape.window="showModal = false; $wire.closeModal()">
         <div x-show="showModal" style="display: none;"
-            class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
+            class="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
             <!-- Backdrop -->
             <div x-show="showModal" x-transition.opacity class="fixed inset-0 bg-zinc-900/60 backdrop-blur-sm"
                 @click="showModal = false; $wire.closeModal()"></div>
@@ -262,7 +262,7 @@ new class extends Component {
                         <div class="space-y-2 text-center">
                             <h2 class="text-xl font-bold text-zinc-900 dark:text-white leading-tight">
                                 {{ $this->modalConfig['title'] }}</h2>
-                            <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-[280px] mx-auto">
+                            <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-70 mx-auto">
                                 {{ $this->modalConfig['description'] }}</p>
                         </div>
                     </div>
@@ -296,7 +296,7 @@ new class extends Component {
                     @else
                         @error('setupData')
                             <div
-                                class="p-3 bg-red-50 dark:bg-red-500/10 rounded-xl flex gap-3 text-red-800 dark:text-red-200 text-sm font-bold border border-red-200 dark:border-red-500/20">
+                                class="p-3 bg-red-50 dark:bg-red-500/10 rounded-xl flex gap-3 text-red-800 dark:text-red-200 text-sm font-bold border border-red-200 dark:/20">
                                 <x-heroicon-o-x-circle class="w-5 h-5 shrink-0" />
                                 <span>{{ $message }}</span>
                             </div>
@@ -306,12 +306,11 @@ new class extends Component {
                             <div class="p-3 bg-white rounded-2xl border border-zinc-200 shadow-sm">
                             @empty($qrCodeSvg)
                                 <div
-                                    class="w-[180px] h-[180px] flex items-center justify-center bg-zinc-50 dark:bg-zinc-100 rounded-xl">
+                                    class="w-45 h-45 flex items-center justify-center bg-zinc-50 dark:bg-zinc-100 rounded-xl">
                                     <x-heroicon-o-arrow-path class="w-8 h-8 text-zinc-300 animate-spin" />
                                 </div>
                             @else
-                                <div
-                                    class="w-[180px] h-[180px] flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
+                                <div class="w-45 h-45 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
                                     {!! $qrCodeSvg !!}
                                 </div>
                             @endempty
@@ -350,7 +349,7 @@ new class extends Component {
                             <div
                                 class="flex items-stretch w-full border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950/50 rounded-xl overflow-hidden group focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all">
                             @empty($manualSetupKey)
-                                <div class="flex items-center justify-center w-full p-3 h-[46px]">
+                                <div class="flex items-center justify-center w-full p-3 h-11.5">
                                     <x-heroicon-o-arrow-path class="w-4 h-4 text-zinc-400 animate-spin" />
                                 </div>
                             @else

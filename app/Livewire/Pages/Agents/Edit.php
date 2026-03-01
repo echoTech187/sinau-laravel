@@ -14,6 +14,7 @@ use Livewire\Component;
 class Edit extends Component
 {
     public AgentForm $form;
+
     public Agent $agent;
 
     public function mount(Agent $agent)
@@ -25,13 +26,13 @@ class Edit extends Component
     #[Computed]
     public function branchOffices()
     {
-        return Agent::where('type', '=', 'branch_office')->where('status', '=', 'active')->get();
+        return Agent::where('type', '=', 'branch_office', 'and')->where('status', '=', 'active')->get();
     }
 
     #[Computed]
     public function locations()
     {
-        return Location::whereHas('roles', function($q) {
+        return Location::whereHas('roles', function ($q) {
             $q->where('name', '=', 'Agen');
         })->get();
     }
@@ -39,8 +40,9 @@ class Edit extends Component
     public function saveAgent()
     {
         $this->form->update();
-        
+
         session()->flash('message', 'Data Agen/Mitra berhasil diperbarui!');
+
         return $this->redirectRoute('agents.index', navigate: true);
     }
 

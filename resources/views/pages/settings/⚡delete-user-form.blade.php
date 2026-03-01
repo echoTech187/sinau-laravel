@@ -27,7 +27,7 @@ new class extends Component {
 
 <section class="mt-10 space-y-6">
     <div class="relative mb-5">
-        <h2 class="text-lg font-bold text-zinc-900 dark:text-zinc-100">{{ __('Delete account') }}</h2>
+        <h2 class="text-lg font-bold text-zinc-900 dark:text-zinc-100">{{ __('Delete Account') }}</h2>
         <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">{{ __('Delete your account and all of its resources') }}
         </p>
     </div>
@@ -40,7 +40,7 @@ new class extends Component {
         </button>
 
         <div x-show="confirmDeletion" style="display: none;"
-            class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
+            class="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
             <!-- Backdrop -->
             <div x-show="confirmDeletion" x-transition.opacity class="fixed inset-0 bg-zinc-900/60 backdrop-blur-sm"
                 @click="confirmDeletion = false"></div>

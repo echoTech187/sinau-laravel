@@ -24,7 +24,7 @@
 <body class="min-h-screen bg-zinc-100 dark:bg-zinc-950 font-sans antialiased text-zinc-900 dark:text-zinc-100">
     <!-- Dynamic Fixed Tooltip for Mini Sidebar -->
     <div x-show="tooltipText !== '' && sidebarCollapsed" style="display: none;"
-        class="fixed z-[100] left-[4.5rem] px-2.5 py-1.5 bg-zinc-800 dark:bg-zinc-700 text-white text-[11px] font-semibold tracking-wide rounded-lg shadow-lg pointer-events-none whitespace-nowrap"
+        class="fixed z-100 left-18 px-2.5 py-1.5 bg-zinc-800 dark:bg-zinc-700 text-white text-[11px] font-semibold tracking-wide rounded-lg shadow-lg pointer-events-none whitespace-nowrap"
         :style="`top: ${tooltipY}px;`" x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 translate-x-[-10px]" x-transition:enter-end="opacity-100 translate-x-0"
         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-x-0"
@@ -132,7 +132,7 @@
                                                 $isActive = $child->route && request()->routeIs($child->route);
                                                 $iconComponent = 'heroicon-o-' . $childIcon;
                                             @endphp
-                                            <a href="{{ $child->route && Route::has($child->route) ? route($child->route) : '#' }}"
+                                            <a href="{{ $child->route && \Illuminate\Support\Facades\Route::has($child->route) ? route($child->route) : '#' }}"
                                                 wire:navigate
                                                 @mouseenter="showTooltip($event, '{{ __($child->name) }}')"
                                                 @mouseleave="hideTooltip()"
@@ -177,7 +177,7 @@
                                 </div>
                             @endif
                         @else
-                            <a href="{{ $root->route && Route::has($root->route) ? route($root->route) : '#' }}"
+                            <a href="{{ $root->route && \Illuminate\Support\Facades\Route::has($root->route) ? route($root->route) : '#' }}"
                                 wire:navigate @mouseenter="showTooltip($event, '{{ __($root->name) }}')"
                                 @mouseleave="hideTooltip()"
                                 :class="sidebarCollapsed ? 'justify-center px-0 py-2.5' : 'gap-3 px-3 py-2'"
@@ -226,7 +226,7 @@
                 </div>
                 <div x-show="sidebarCollapsed" class="flex justify-center" x-transition.opacity.duration.300ms
                     style="display: none;">
-                    <div class="size-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-sm cursor-pointer hover:opacity-90 ring-2 ring-transparent transition-all"
+                    <div class="size-10 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-sm cursor-pointer hover:opacity-90 ring-2 ring-transparent transition-all"
                         title="{{ auth()->user()->name }}">
                         {{ auth()->user()->initials() ?? 'US' }}
                     </div>

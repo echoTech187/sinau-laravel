@@ -100,7 +100,7 @@ new class extends Component {
                 animate-fade-in-up">
         <div
             class="p-3 rounded-xl w-fit
-                    bg-gradient-to-br from-blue-500 to-indigo-600
+                    bg-linear-to-br from-blue-500 to-indigo-600
                     shadow-[0_4px_12px_rgba(59,130,246,0.4)]">
             <x-heroicon-o-user-group class="size-6 text-white" />
         </div>

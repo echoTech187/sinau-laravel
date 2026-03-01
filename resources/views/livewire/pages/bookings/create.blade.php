@@ -1,7 +1,8 @@
+﻿@php /** @var \App\Livewire\Pages\Bookings\Create $this */ @endphp
 <div class="container relative min-h-screen pb-20">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-[120px]"></div>
-        <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-rose-500/5 rounded-full blur-[100px]"></div>
+        <div class="absolute top-0 right-0 w-150 h-150 bg-indigo-500/5 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-0 left-0 w-100 h-100 bg-rose-500/5 rounded-full blur-[100px]"></div>
     </div>
 
     <div class="relative z-10 max-w-6xl mx-auto space-y-8">
@@ -9,7 +10,7 @@
             class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-5 animate-fade-in-up">
             <div class="flex items-center gap-3 sm:gap-4">
                 <div
-                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/20 text-white flex items-center justify-center transform hover:rotate-6 transition-transform shrink-0">
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-linear-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/20 text-white flex items-center justify-center transform hover:rotate-6 transition-transform shrink-0">
                     <x-heroicon-o-ticket class="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
                 <div>
@@ -59,7 +60,7 @@
 
                         <div class="flex flex-col sm:flex-row sm:items-end gap-4">
                             <!-- Origin, Swap, Destination group -->
-                            <div class="sm:contents flex flex-col gap-[6px]">
+                            <div class="sm:contents flex flex-col gap-1.5">
                                 <!-- Origin -->
                                 <div class="form-control w-full">
                                     <label class="label pb-0">
@@ -135,7 +136,7 @@
                     @if (count($this->schedules) > 0)
                         @foreach ($this->schedules as $s)
                             <div wire:key="schedule-{{ $s->id }}"
-                                class="group bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-[28px] sm:rounded-[32px] p-4 sm:p-6 shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all hover:-translate-y-1 relative overflow-hidden">
+                                class="group bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-[28px] sm:rounded-4xl p-4 sm:p-6 shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all hover:-translate-y-1 relative overflow-hidden">
                                 <!-- Background Accent -->
                                 <div
                                     class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-indigo-500/10 transition-colors">
@@ -144,7 +145,7 @@
                                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 sm:items-center relative z-10">
                                     <!-- Departure Info (hidden on mobile, shown inline) -->
                                     <div
-                                        class="hidden sm:flex flex-col items-center justify-center min-w-[110px] text-center px-4 border-r border-zinc-100 dark:border-zinc-800">
+                                        class="hidden sm:flex flex-col items-center justify-center min-w-27.5 text-center px-4 border-r border-zinc-100 dark:border-zinc-800">
                                         <span
                                             class="text-3xl font-black text-zinc-900 dark:text-white">{{ $s->departure_time->format('H:i') }}</span>
                                         <span
@@ -206,7 +207,7 @@
 
                                     <!-- Price & Action -->
                                     <div
-                                        class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center sm:min-w-[160px] gap-3">
+                                        class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center sm:min-w-40 gap-3">
                                         <div class="text-left sm:text-right">
                                             <span
                                                 class="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Mulai
@@ -449,7 +450,7 @@
                                             class="input input-bordered h-11 w-full bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all" />
                                     </div>
                                     <div
-                                        class="flex items-center justify-between sm:flex-col sm:items-end sm:justify-center sm:min-w-[140px]">
+                                        class="flex items-center justify-between sm:flex-col sm:items-end sm:justify-center sm:min-w-35">
                                         <span
                                             class="text-[9px] font-black uppercase tracking-widest text-zinc-400">Harga
                                             Tiket</span>
@@ -467,7 +468,7 @@
                             <button type="submit"
                                 class="btn flex-1 bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-2xl shadow-indigo-600/30 rounded-2xl sm:rounded-3xl h-14 sm:h-16 font-black uppercase tracking-widest text-xs sm:text-sm group overflow-hidden relative">
                                 <div
-                                    class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer">
+                                    class="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer">
                                 </div>
                                 <span wire:loading.remove wire:target="saveBooking"
                                     class="flex items-center gap-2 relative z-10">

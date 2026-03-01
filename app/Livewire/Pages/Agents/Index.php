@@ -16,11 +16,15 @@ class Index extends Component
     use WithPagination;
 
     public bool $confirmingAgentDeletion = false;
+
     public ?int $agentIdBeingDeleted = null;
 
     public string $search = '';
+
     public string $typeFilter = '';
+
     public string $statusFilter = '';
+
     public string $locationFilter = '';
 
     public function updatingSearch()
@@ -46,7 +50,7 @@ class Index extends Component
     #[Computed]
     public function locations()
     {
-        return Location::whereHas('roles', function($q) {
+        return Location::whereHas('roles', function ($q) {
             $q->where('name', '=', 'Agen');
         })->get();
     }
@@ -56,9 +60,9 @@ class Index extends Component
     {
         return [
             'total' => Agent::count('*'),
-            'active' => Agent::where('status', '=', 'active')->count('*'),
-            'branch' => Agent::where('type', '=', 'branch_office')->count('*'),
-            'partner' => Agent::whereIn('type', ['partner_exclusive', 'partner_general'])->count('*'),
+            'active' => Agent::where('status', '=', 'active', 'and')->count('*'),
+            'branch' => Agent::where('type', '=', 'branch_office', 'and')->count('*'),
+            'partner' => Agent::whereIn('type', ['partner_exclusive', 'partner_general'], 'and', false)->count('*'),
         ];
     }
 
@@ -68,9 +72,9 @@ class Index extends Component
         return Agent::with(['location', 'parentBranch', 'balance'])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                      ->orWhere('agent_code', 'like', '%' . $this->search . '%')
-                      ->orWhere('phone_number', 'like', '%' . $this->search . '%');
+                    $q->where('name', 'like', '%'.$this->search.'%')
+                        ->orWhere('agent_code', 'like', '%'.$this->search.'%')
+                        ->orWhere('phone_number', 'like', '%'.$this->search.'%');
                 });
             })
             ->when($this->typeFilter, function ($query) {
@@ -99,7 +103,7 @@ class Index extends Component
 
         $this->confirmingAgentDeletion = false;
         $this->agentIdBeingDeleted = null;
-        
+
         session()->flash('message', 'Data Agen berhasil dihapus!');
     }
 

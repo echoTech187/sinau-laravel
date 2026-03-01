@@ -59,7 +59,7 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
+                (PHP_VERSION_ID >= 80400 ? (defined('PDO::MYSQL_ATTR_SSL_CA') ? \PDO::MYSQL_ATTR_SSL_CA : 1012) : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA', null),
             ]) : [],
         ],
 
@@ -79,7 +79,7 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
+                (PHP_VERSION_ID >= 80400 ? (defined('PDO::MYSQL_ATTR_SSL_CA') ? \PDO::MYSQL_ATTR_SSL_CA : 1012) : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA', null),
             ]) : [],
         ],
 
@@ -153,10 +153,10 @@ return [
         ],
 
         'default' => [
-            'url' => env('REDIS_URL'),
+            'url' => env('REDIS_URL', null),
             'host' => env('REDIS_HOST', '127.0.0.1'),
-            'username' => env('REDIS_USERNAME'),
-            'password' => env('REDIS_PASSWORD'),
+            'username' => env('REDIS_USERNAME', null),
+            'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
             'max_retries' => env('REDIS_MAX_RETRIES', 3),
@@ -166,10 +166,10 @@ return [
         ],
 
         'cache' => [
-            'url' => env('REDIS_URL'),
+            'url' => env('REDIS_URL', null),
             'host' => env('REDIS_HOST', '127.0.0.1'),
-            'username' => env('REDIS_USERNAME'),
-            'password' => env('REDIS_PASSWORD'),
+            'username' => env('REDIS_USERNAME', null),
+            'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '1'),
             'max_retries' => env('REDIS_MAX_RETRIES', 3),

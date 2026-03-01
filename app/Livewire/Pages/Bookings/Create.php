@@ -44,7 +44,7 @@ class Create extends Component
     #[Computed]
     public function locations()
     {
-        return Location::orderBy('name')->get();
+        return Location::orderBy('name', 'asc')->get();
     }
 
     #[Computed]
@@ -58,7 +58,7 @@ class Create extends Component
         // For simplicity in this demo, we check if the route's origin/destination match
         // Or if they are in the route stops.
         return Schedule::query()
-            ->whereDate('departure_date', $this->departure_date)
+            ->whereDate('departure_date', '=', $this->departure_date, 'and')
             ->whereHas('route', function ($q) {
                 $q->where(function ($q2) {
                     $q2->where('origin_location_id', $this->origin_id)

@@ -11,7 +11,7 @@
                    hover:border-zinc-200 dark:hover:border-zinc-800"
         :class="open ? 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-sm' : ''">
         <div
-            class="size-9 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+            class="size-9 rounded-lg bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
             {{ $initials }}
         </div>
         <div class="flex-1 text-left min-w-0">

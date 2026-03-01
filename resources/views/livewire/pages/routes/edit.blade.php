@@ -1,10 +1,9 @@
+﻿@php /** @var \App\Livewire\Pages\Routes\Edit $this */ @endphp
 <div class="container relative min-h-screen pb-10">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div
-            class="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
+        <div class="absolute top-0 right-0 w-150 h-150 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
         </div>
-        <div
-            class="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-sky-500/10 dark:bg-sky-500/5 rounded-full blur-[100px]">
+        <div class="absolute bottom-0 left-1/4 w-125 h-125 bg-sky-500/10 dark:bg-sky-500/5 rounded-full blur-[100px]">
         </div>
     </div>
 
@@ -15,7 +14,7 @@
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
-                            class="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-500 to-sky-600 shadow-lg shadow-indigo-500/30">
+                            class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-sky-600 shadow-lg shadow-indigo-500/30">
                             <x-heroicon-o-pencil-square class="w-6 h-6 text-white" />
                         </div>
                         Ubah Master Rute: {{ $route->name }}
@@ -64,7 +63,7 @@
                             </span>
                         </label>
                         <input type="text" wire:model="form.name"
-                            class="input input-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.name') border-red-500 @enderror"
+                            class="input input-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.name')  @enderror"
                             placeholder="Surabaya - Malang PP" />
                         @error('form.name')
                             <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
@@ -81,7 +80,7 @@
                             </span>
                         </label>
                         <select wire:model="form.origin_location_id"
-                            class="select select-bordered bg-white dark:bg-zinc-950 border-emerald-200 dark:border-emerald-900/50 rounded-xl shadow-sm focus:ring-2 focus:ring-emerald-500 transition-all @error('form.origin_location_id') border-red-500 @enderror">
+                            class="select select-bordered bg-white dark:bg-zinc-950 border-emerald-200 dark:border-emerald-900/50 rounded-xl shadow-sm focus:ring-2 focus:ring-emerald-500 transition-all @error('form.origin_location_id') @enderror">
                             <option value="">-- Pilih Asal Keberangkatan --</option>
                             @foreach ($this->locations as $loc)
                                 <option value="{{ $loc->id }}">{{ $loc->name }}</option>
@@ -100,7 +99,7 @@
                             </span>
                         </label>
                         <select wire:model="form.destination_location_id"
-                            class="select select-bordered bg-white dark:bg-zinc-950 border-red-200 dark:border-red-900/50 rounded-xl shadow-sm focus:ring-2 focus:ring-red-500 transition-all @error('form.destination_location_id') border-red-500 @enderror">
+                            class="select select-bordered bg-white dark:bg-zinc-950 dark:border-red-900/50 rounded-xl shadow-sm focus:ring-2 focus:ring-red-500 transition-all @error('form.destination_location_id')  @enderror">
                             <option value="">-- Pilih Tujuan Akhir --</option>
                             @foreach ($this->locations as $loc)
                                 <option value="{{ $loc->id }}">{{ $loc->name }}</option>
@@ -119,7 +118,7 @@
                             </span>
                         </label>
                         <input type="number" wire:model="form.distance_km"
-                            class="input input-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.distance_km') border-red-500 @enderror"
+                            class="input input-bordered bg-white dark:bg-zinc-950 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.distance_km')  @enderror"
                             placeholder="Cth: 155" />
                         @error('form.distance_km')
                             <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
@@ -163,7 +162,7 @@
                                             class="label-text text-[10px] font-bold text-zinc-400">Pilih Lokasi
                                             Stop*</span></label>
                                     <select wire:model="form.stops.{{ $index }}.location_id"
-                                        class="select select-bordered select-sm w-full bg-white dark:bg-zinc-900 @error('form.stops.' . $index . '.location_id') border-red-500 @enderror shadow-sm">
+                                        class="select select-bordered select-sm w-full bg-white dark:bg-zinc-900 @error('form.stops.' . $index . '.location_id')  @enderror shadow-sm">
                                         <option value="">Pilih Titik Lokasi / Agen</option>
                                         @foreach ($this->locations as $loc)
                                             <option value="{{ $loc->id }}">{{ $loc->name }}</option>
@@ -180,7 +179,7 @@
                                             class="label-text text-[10px] font-bold text-zinc-400">Aturan Akses
                                             Penumpang*</span></label>
                                     <select wire:model="form.stops.{{ $index }}.type"
-                                        class="select select-bordered select-sm w-full bg-white dark:bg-zinc-900 @error('form.stops.' . $index . '.type') border-red-500 @enderror shadow-sm">
+                                        class="select select-bordered select-sm w-full bg-white dark:bg-zinc-900 @error('form.stops.' . $index . '.type')  @enderror shadow-sm">
                                         <option value="both">Naik turun Penumpang (Both)</option>
                                         <option value="boarding_only">Hanya Naik (Boarding)</option>
                                         <option value="dropoff_only">Hanya Turun (Dropoff)</option>
@@ -227,8 +226,7 @@
                 </div>
 
                 @error('form.stops')
-                    <div
-                        class="mt-4 p-3 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl">
+                    <div class="mt-4 p-3 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:/20 rounded-xl">
                         <span class="text-xs text-red-600 dark:text-red-400 font-bold flex items-center gap-2">
                             <x-heroicon-s-exclamation-circle class="w-4 h-4" /> Validasi Gagal: {{ $message }}
                         </span>
@@ -241,7 +239,7 @@
                 <button type="submit"
                     class="btn bg-indigo-600 hover:bg-indigo-700 text-white border-0 px-10 h-14 rounded-2xl shadow-xl shadow-indigo-600/30 font-black tracking-tight text-lg transition-all group overflow-hidden relative">
                     <div
-                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer">
+                        class="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer">
                     </div>
                     <span wire:loading.remove wire:target="saveRoute" class="flex items-center gap-3 relative z-10">
                         <x-heroicon-o-check-circle class="w-6 h-6" />

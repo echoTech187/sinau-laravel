@@ -1,10 +1,10 @@
+﻿@php /** @var \App\Livewire\Pages\Crews\Create $this */ @endphp
 <div class="container relative min-h-screen pb-10">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div
-            class="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-[100px]">
+            class="absolute top-0 right-0 w-150 h-150 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-[100px]">
         </div>
-        <div
-            class="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-teal-500/10 dark:bg-teal-500/5 rounded-full blur-[100px]">
+        <div class="absolute bottom-0 left-1/4 w-125 h-125 bg-teal-500/10 dark:bg-teal-500/5 rounded-full blur-[100px]">
         </div>
     </div>
 
@@ -15,7 +15,7 @@
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
-                            class="p-2.5 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/30">
+                            class="p-2.5 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/30">
                             <x-heroicon-o-user-plus class="w-6 h-6 text-white" />
                         </div>
                         Tambah Kru Baru
@@ -154,7 +154,7 @@
                     <button type="submit"
                         class="btn bg-indigo-600 hover:bg-indigo-700 text-white border-0 px-10 h-14 rounded-2xl shadow-xl shadow-indigo-600/30 font-black tracking-tight text-lg transition-all group overflow-hidden relative">
                         <div
-                            class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer">
+                            class="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer">
                         </div>
                         <span wire:loading.remove wire:target="saveCrew" class="flex items-center gap-3 relative z-10">
                             <x-heroicon-o-check-circle class="w-6 h-6" />

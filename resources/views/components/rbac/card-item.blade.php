@@ -42,7 +42,7 @@
     <div class="flex items-start gap-3 pr-16 relative z-10">
         <div
             class="p-2.5 rounded-xl shrink-0
-                    bg-gradient-to-br from-blue-500 to-indigo-600
+                    bg-linear-to-br from-blue-500 to-indigo-600
                     shadow-[0_4px_12px_rgba(59,130,246,0.4)]
                     group-hover:shadow-[0_6px_20px_rgba(59,130,246,0.5)]
                     group-hover:scale-110 transition-all duration-300">
@@ -64,7 +64,7 @@
     </p>
 
     {{-- Divider --}}
-    <div class="h-px bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-600/50 to-transparent relative z-10">
+    <div class="h-px bg-linear-to-r from-transparent via-zinc-200 dark:via-zinc-600/50 to-transparent relative z-10">
     </div>
 
     {{-- Stats --}}
@@ -121,7 +121,7 @@
     <div class="flex items-center gap-2 relative z-10 mt-auto pt-1">
         <button
             class="btn btn-sm flex-1 relative overflow-hidden
-                   bg-gradient-to-r from-blue-500 to-indigo-600
+                   bg-linear-to-r from-blue-500 to-indigo-600
                    hover:from-blue-600 hover:to-indigo-700
                    text-white border-0
                    shadow-[0_2px_10px_rgba(59,130,246,0.35)]

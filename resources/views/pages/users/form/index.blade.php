@@ -106,7 +106,7 @@
 
         <div class="flex items-center justify-end w-full mt-10 pt-8 border-t border-zinc-100 dark:border-zinc-800/50">
             <button type="submit"
-                class="btn bg-gradient-to-br from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white border-none shadow-xl shadow-blue-500/20 rounded-2xl px-12 h-14 transition-all hover:-translate-y-1 font-black uppercase tracking-widest text-[10px]">
+                class="btn bg-linear-to-br from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white border-none shadow-xl shadow-blue-500/20 rounded-2xl px-12 h-14 transition-all hover:-translate-y-1 font-black uppercase tracking-widest text-[10px]">
                 {{ $user->id ? 'Simpan Perubahan' : 'Daftarkan Pengguna' }}
             </button>
         </div>

@@ -1,6 +1,7 @@
+﻿@php /** @var \App\Livewire\Pages\Shipments\Show $this */ @endphp
 <div class="container relative min-h-screen pb-20">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[100px]"></div>
+        <div class="absolute top-0 right-0 w-125 h-125 bg-indigo-500/5 rounded-full blur-[100px]"></div>
     </div>
 
     <div class="relative z-10 max-w-5xl mx-auto space-y-8 animate-fade-in-up">
@@ -14,7 +15,7 @@
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
-                            class="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/20 text-white group-hover:scale-110 transition-transform">
+                            class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/20 text-white group-hover:scale-110 transition-transform">
                             <x-heroicon-o-eye class="w-6 h-6" />
                         </div>
                         Detail Resi Kargo
@@ -148,7 +149,7 @@
                     </h4>
 
                     <div
-                        class="relative space-y-10 before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-indigo-500 before:via-zinc-200 before:to-transparent">
+                        class="relative space-y-10 before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-linear-to-b before:from-indigo-500 before:via-zinc-200 before:to-transparent">
                         @php
                             $statuses = [
                                 'received_at_agent' => 'Laporan Diterima Agen',

@@ -4,21 +4,25 @@ namespace App\Livewire\Pages\BusClasses;
 
 use App\Models\BusClass;
 use App\Models\Facility;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Computed;
 
 class Index extends Component
 {
     use WithPagination;
 
     public string $search = '';
+
     public bool $confirmingBusClassDeletion = false;
+
     public ?int $busClassIdBeingDeleted = null;
 
     // Facility Management
     public bool $showingFacilityModal = false;
+
     public string $newFacilityName = '';
+
     public string $newFacilityIcon = '';
 
     protected $queryString = [
@@ -34,7 +38,7 @@ class Index extends Component
     public function busClasses()
     {
         return BusClass::query()
-            ->where('name', 'like', '%' . $this->search . '%')
+            ->where('name', 'like', '%'.$this->search.'%', 'and')
             ->with('facilities')
             ->withCount('buses')
             ->latest()
@@ -67,7 +71,7 @@ class Index extends Component
 
     public function deleteFacility($id)
     {
-        Facility::find($id)->delete();
+        Facility::find($id, 'id')->delete();
         $this->dispatch('notify', 'Fasilitas berhasil dihapus.', 'info');
     }
 
@@ -80,7 +84,7 @@ class Index extends Component
     public function deleteBusClass()
     {
         if ($this->busClassIdBeingDeleted) {
-            BusClass::find($this->busClassIdBeingDeleted)->delete();
+            BusClass::find($this->busClassIdBeingDeleted, 'id')->delete();
             $this->confirmingBusClassDeletion = false;
             $this->busClassIdBeingDeleted = null;
             $this->dispatch('notify', 'Kelas Bus berhasil dihapus.', 'success');

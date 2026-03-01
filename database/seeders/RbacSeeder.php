@@ -45,19 +45,19 @@ class RbacSeeder extends Seeder
             Roles::updateOrCreate(['slug' => $data['slug']], $data);
         }
 
-        $superAdmin = Roles::where('slug', 'super-admin')->first();
-        $admin = Roles::where('slug', 'administrator')->first();
-        $manager = Roles::where('slug', 'manager')->first();
-        $finance = Roles::where('slug', 'finance')->first();
-        $hrd = Roles::where('slug', 'hrd')->first();
-        $warehouse = Roles::where('slug', 'warehouse')->first();
-        $viewer = Roles::where('slug', 'viewer')->first();
-        $guestRole = Roles::where('slug', 'guest')->first();
+        $superAdmin = Roles::where('slug', '=', 'super-admin', 'and')->first();
+        $admin = Roles::where('slug', '=', 'administrator', 'and')->first();
+        $manager = Roles::where('slug', '=', 'manager', 'and')->first();
+        $finance = Roles::where('slug', '=', 'finance', 'and')->first();
+        $hrd = Roles::where('slug', '=', 'hrd', 'and')->first();
+        $warehouse = Roles::where('slug', '=', 'warehouse', 'and')->first();
+        $viewer = Roles::where('slug', '=', 'viewer', 'and')->first();
+        $guestRole = Roles::where('slug', '=', 'guest', 'and')->first();
 
         // Set parent_id untuk guest
         $guestRole->update(['parent_id' => $viewer->id]);
 
-        $this->command->info('✅ Roles berhasil dibuat/diperbarui: '.Roles::count().' roles.');
+        $this->command->info('✅ Roles berhasil dibuat/diperbarui: '.Roles::count('*').' roles.');
 
         // ============================================================
         // 2. MODULES
@@ -77,7 +77,7 @@ class RbacSeeder extends Seeder
         $modCargo = Modules::create(['name' => 'Kargo & Anti-Fraud', 'slug' => 'cargo', 'icon' => 'heroicon-o-archive-box', 'order' => 11, 'is_active' => true, 'description' => 'Manajemen kargo, bagasi, dan verifikasi anti-fraud.']);
         $modManifest = Modules::create(['name' => 'SJO & Inspeksi', 'slug' => 'manifests', 'icon' => 'heroicon-o-clipboard-document-check', 'order' => 12, 'is_active' => true, 'description' => 'Manajemen Surat Jalan Operasional dan Inspeksi Kelayakan Armada (P2H).']);
 
-        $this->command->info('✅ Modules berhasil dibuat: '.Modules::count().' modul.');
+        $this->command->info('✅ Modules berhasil dibuat: '.Modules::count('*').' modul.');
 
         // ============================================================
         // 3. PERMISSIONS
@@ -176,9 +176,7 @@ class RbacSeeder extends Seeder
         $pManifestManage = $p($modManifest->id, 'Kelola SJO', 'manifests.manage', 'Operasional');
         $pManifestInspect = $p($modManifest->id, 'Input Inspeksi P2H', 'manifests.inspect', 'Operasional');
 
-
-
-        $this->command->info('✅ Permissions berhasil dibuat: '.Permissions::count().' izin.');
+        $this->command->info('✅ Permissions berhasil dibuat: '.Permissions::count('*').' izin.');
 
         // ============================================================
         // 4. MENUS
@@ -246,42 +244,40 @@ class RbacSeeder extends Seeder
         $menuManifest = Menus::create(['module_id' => $modManifest->id, 'parent_id' => null, 'permission_id' => $pManifestView->id, 'name' => 'SJO & Inspeksi', 'icon' => 'heroicon-o-clipboard-document-check', 'route' => null, 'order' => 12, 'is_active' => true]);
         Menus::create(['module_id' => $modManifest->id, 'parent_id' => $menuManifest->id, 'permission_id' => $pManifestView->id, 'name' => 'Monitoring SJO', 'icon' => 'heroicon-o-tv', 'route' => 'manifests.index', 'order' => 1, 'is_active' => true]);
 
-
-
-        $this->command->info('✅ Menus berhasil dibuat: '.Menus::count().' menu.');
+        $this->command->info('✅ Menus berhasil dibuat: '.Menus::count('*').' menu.');
 
         // ============================================================
         // 5. ASSIGN PERMISSIONS TO ROLES
         // ============================================================
-        $allPermIds = Permissions::pluck('id')->toArray();
+        $allPermIds = Permissions::pluck('id', null)->toArray();
 
         // Super Admin: semua
         $superAdmin->permissions()->attach($allPermIds);
 
         // Admin: semua kecuali delete sensitif
-        $adminPerms = Permissions::whereNotIn('slug', ['product.delete', 'transaction.delete', 'payroll.process'])->pluck('id')->toArray();
+        $adminPerms = Permissions::whereNotIn('slug', ['product.delete', 'transaction.delete', 'payroll.process'], 'and')->pluck('id', null)->toArray();
         $admin->permissions()->attach($adminPerms);
 
         // Manager: view semua + approve + report
         $managerSlugs = ['dashboard.view', 'product.view', 'category.view', 'supplier.view', 'order.view', 'order.approve', 'invoice.view', 'invoice.send', 'transaction.view', 'payment.approve', 'finance.report', 'employee.view', 'attendance.view', 'payroll.view', 'report.sales', 'report.finance', 'report.stock', 'report.employee', 'report.export', 'user.view', 'log.view', 'settings.view', 'rbac.approvals.index'];
-        $manager->permissions()->attach(Permissions::whereIn('slug', $managerSlugs)->pluck('id')->toArray());
+        $manager->permissions()->attach(Permissions::whereIn('slug', $managerSlugs, 'and', false)->pluck('id', null)->toArray());
 
         // Staff Keuangan
         $financeSlugs = ['dashboard.view', 'order.view', 'invoice.view', 'invoice.create', 'invoice.send', 'transaction.view', 'transaction.create', 'transaction.edit', 'payment.approve', 'finance.report', 'report.finance', 'settings.view'];
-        $finance->permissions()->attach(Permissions::whereIn('slug', $financeSlugs)->pluck('id')->toArray());
+        $finance->permissions()->attach(Permissions::whereIn('slug', $financeSlugs, 'and', false)->pluck('id', null)->toArray());
 
         // Staff HRD
         $hrdSlugs = ['dashboard.view', 'employee.view', 'employee.create', 'employee.edit', 'attendance.view', 'attendance.manage', 'payroll.view', 'payroll.process', 'report.employee', 'settings.view'];
-        $hrd->permissions()->attach(Permissions::whereIn('slug', $hrdSlugs)->pluck('id')->toArray());
+        $hrd->permissions()->attach(Permissions::whereIn('slug', $hrdSlugs, 'and', false)->pluck('id', null)->toArray());
 
         // Staff Gudang
         $warehouseSlugs = ['dashboard.view', 'product.view', 'product.create', 'product.edit', 'category.view', 'category.create', 'supplier.view', 'order.view', 'report.stock', 'settings.view'];
-        $warehouse->permissions()->attach(Permissions::whereIn('slug', $warehouseSlugs)->pluck('id')->toArray());
+        $warehouse->permissions()->attach(Permissions::whereIn('slug', $warehouseSlugs, 'and', false)->pluck('id', null)->toArray());
 
         // Viewer
-        $viewerPerms = Permissions::where(fn ($q) => $q->where('slug', 'like', '%.view')
-            ->orWhere('slug', 'like', 'report.%')
-        )->pluck('id')->toArray();
+        $viewerPerms = Permissions::where(fn (\Illuminate\Database\Eloquent\Builder $q) => $q->where('slug', 'like', '%.view', 'and')
+            ->orWhere('slug', 'like', 'report.%', 'or'), null, null, 'and'
+        )->pluck('id', null)->toArray();
         $viewer->permissions()->attach(array_unique($viewerPerms));
 
         // Guest: hanya dashboard
@@ -323,9 +319,9 @@ class RbacSeeder extends Seeder
         );
         $this->command->newLine();
         $this->command->info('🎉 RBAC Seeder selesai!');
-        $this->command->info('   Modules : '.Modules::count());
-        $this->command->info('   Perms   : '.Permissions::count());
-        $this->command->info('   Menus   : '.Menus::count());
-        $this->command->info('   Roles   : '.Roles::count());
+        $this->command->info('   Modules : '.Modules::count('*'));
+        $this->command->info('   Perms   : '.Permissions::count('*'));
+        $this->command->info('   Menus   : '.Menus::count('*'));
+        $this->command->info('   Roles   : '.Roles::count('*'));
     }
 }

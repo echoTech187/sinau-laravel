@@ -17,6 +17,7 @@ class Index extends Component
     use WithPagination;
 
     public bool $confirmingBusDeletion = false;
+
     public ?int $busIdBeingDeleted = null;
 
     public string $search = '';
@@ -53,10 +54,10 @@ class Index extends Component
     public function stats()
     {
         return [
-            'total' => Bus::count(),
-            'active' => Bus::where('status', BusStatus::ACTIVE->value)->count(),
-            'maintenance' => Bus::where('status', BusStatus::MAINTENANCE->value)->count(),
-            'inactive' => Bus::where('status', BusStatus::INACTIVE->value)->count(),
+            'total' => Bus::count('id'),
+            'active'      => Bus::where('status', '=', BusStatus::ACTIVE->value, 'and')->count('id'),
+            'maintenance' => Bus::where('status', '=', BusStatus::MAINTENANCE->value, 'and')->count('id'),
+            'inactive'    => Bus::where('status', '=', BusStatus::INACTIVE->value, 'and')->count('id'),
         ];
     }
 

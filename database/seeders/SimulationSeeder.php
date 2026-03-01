@@ -2,14 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-
 use App\Models\Branch;
+use App\Models\Roles;
 use App\Models\Transaction;
 use App\Models\User;
-use App\Models\Roles;
-use Illuminate\Support\Str;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class SimulationSeeder extends Seeder
@@ -26,7 +23,7 @@ class SimulationSeeder extends Seeder
 
         // 2. Create Dummy Transactions
         $branches = [$branchJkt, $branchSby, $branchBdg];
-        
+
         // Bersihkan transaksi lama agar tidak dobel saat di-seed ulang
         Transaction::truncate();
 
@@ -34,18 +31,18 @@ class SimulationSeeder extends Seeder
             for ($i = 1; $i <= 10; $i++) {
                 Transaction::create([
                     'branch_id' => $branch->id,
-                    'invoice_number' => 'INV-' . strtoupper(substr($branch->name, 0, 3)) . '-' . rand(1000, 9999) . '-' . $i,
+                    'invoice_number' => 'INV-'.strtoupper(substr($branch->name, 0, 3)).'-'.rand(1000, 9999).'-'.$i,
                     'amount' => rand(100000, 5000000),
-                    'description' => 'Penjualan ke Pelanggan ' . rand(1, 100) . ' di ' . $branch->name
+                    'description' => 'Penjualan ke Pelanggan '.rand(1, 100).' di '.$branch->name,
                 ]);
             }
         }
 
         // 3. Assign Secondary Role to "Eko Susanto" with scope restricting to Jakarta
-        $userEko = User::where('email', 'ekosuesanto25@gmail.com')->first();
+        $userEko = User::where('email', '=', 'ekosuesanto25@gmail.com', 'and')->first();
         if ($userEko) {
             $regionalRole = Roles::firstOrCreate(
-                ['slug' => 'regional-manager'], 
+                ['slug' => 'regional-manager'],
                 ['role' => 'Regional Manager']
             );
 
@@ -54,7 +51,7 @@ class SimulationSeeder extends Seeder
                 [
                     'data_scope' => json_encode(['branch_id' => [$branchJkt->id]]),
                     'starts_at' => null,
-                    'expires_at' => null
+                    'expires_at' => null,
                 ]
             );
 

@@ -173,11 +173,10 @@ new class extends Component {
 
     <!-- Decorative Background Blobs -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div
-            class="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
+        <div class="absolute top-0 right-0 w-150 h-150 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
         </div>
         <div
-            class="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-violet-500/10 dark:bg-violet-500/5 rounded-full blur-[100px]">
+            class="absolute bottom-0 left-1/4 w-125 h-125 bg-violet-500/10 dark:bg-violet-500/5 rounded-full blur-[100px]">
         </div>
     </div>
 
@@ -189,7 +188,7 @@ new class extends Component {
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
-                            class="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/30">
+                            class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/30">
                             <x-heroicon-o-inbox class="w-6 h-6 text-white" />
                         </div>
                         Inbox Approval
@@ -312,7 +311,7 @@ new class extends Component {
                                                 {{ $req->typeLabel() }}
                                             </span>
                                             <div
-                                                class="text-[10px] text-zinc-400 max-w-[180px] break-words font-mono italic">
+                                                class="text-[10px] text-zinc-400 max-w-45 wrap-break-word font-mono italic">
                                                 {{ is_array($req->requested_changes) ? json_encode($req->requested_changes) : $req->requested_changes }}
                                             </div>
                                         </div>
@@ -321,7 +320,7 @@ new class extends Component {
                                     <!-- Alasan -->
                                     <td class="py-4">
                                         <p
-                                            class="text-xs text-zinc-500 dark:text-zinc-400 max-w-[200px] leading-relaxed italic">
+                                            class="text-xs text-zinc-500 dark:text-zinc-400 max-w-50 leading-relaxed italic">
                                             "{{ $req->reason ?: 'Tidak ada alasan' }}"
                                         </p>
                                     </td>
@@ -403,4 +402,3 @@ new class extends Component {
         </div>
     </div>
 </div>
-

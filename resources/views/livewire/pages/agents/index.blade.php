@@ -1,11 +1,14 @@
+﻿@php /** @var \App\Livewire\Pages\Agents\Index $this */ @endphp
+@php
+    /** @var \App\Livewire\Pages\Agents\Index $this */
+@endphp
 <div class="container relative min-h-screen pb-10">
     <!-- Decorative Background Blob -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div
-            class="absolute top-0 right-0 w-[600px] h-[600px] bg-sky-500/10 dark:bg-sky-500/5 rounded-full blur-[100px]">
+        <div class="absolute top-0 right-0 w-150 h-150 bg-sky-500/10 dark:bg-sky-500/5 rounded-full blur-[100px]">
         </div>
         <div
-            class="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
+            class="absolute bottom-0 left-1/4 w-125 h-125 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
         </div>
     </div>
 
@@ -16,7 +19,7 @@
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
-                            class="p-2.5 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 shadow-lg shadow-sky-500/30">
+                            class="p-2.5 rounded-2xl bg-linear-to-br from-sky-500 to-indigo-600 shadow-lg shadow-sky-500/30">
                             <x-heroicon-o-building-storefront class="w-6 h-6 text-white" />
                         </div>
                         Master Data Agen & Cabang
@@ -104,7 +107,7 @@
                     </select>
                     <div class="w-px h-6 bg-zinc-300 dark:bg-zinc-700 my-auto"></div>
                     <select wire:model.live="locationFilter"
-                        class="select select-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium whitespace-nowrap max-w-[200px]">
+                        class="select select-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium whitespace-nowrap max-w-50">
                         <option value="">Semua Lokasi</option>
                         @foreach ($this->locations as $loc)
                             <option value="{{ $loc->id }}">{{ $loc->name }}</option>
@@ -192,7 +195,7 @@
                                                 {{ $typeFormat }}
                                             </span>
                                             @if ($agent->parentBranch)
-                                                <span class="text-[10px] text-zinc-500 truncate max-w-[150px]"
+                                                <span class="text-[10px] text-zinc-500 truncate max-w-37.5"
                                                     title="Induk: {{ $agent->parentBranch->name }}">
                                                     Induk: {{ $agent->parentBranch->name }}
                                                 </span>
@@ -230,7 +233,7 @@
                                                 'inactive'
                                                     => 'bg-zinc-100 text-zinc-500 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700',
                                                 'banned'
-                                                    => 'bg-red-50 text-red-600 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20',
+                                                    => 'bg-red-50 text-red-600 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:/20',
                                                 default => 'bg-zinc-100 text-zinc-500 border-zinc-200',
                                             };
                                         @endphp

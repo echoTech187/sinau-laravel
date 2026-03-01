@@ -2,17 +2,18 @@
 
 namespace App\Livewire\Pages\Bookings;
 
+use App\Enums\PaymentStatus;
 use App\Models\Booking;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Computed;
-use App\Enums\PaymentStatus;
 
 class Index extends Component
 {
     use WithPagination;
 
     public string $search = '';
+
     public string $status = '';
 
     protected $queryString = [
@@ -35,12 +36,12 @@ class Index extends Component
     {
         return Booking::query()
             ->with(['schedule.route.origin', 'schedule.route.destination', 'schedule.bus.busClass'])
-            ->when($this->search, function($q) {
-                $q->where('booking_code', 'like', '%' . $this->search . '%')
-                  ->orWhere('customer_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('customer_phone', 'like', '%' . $this->search . '%');
+            ->when($this->search, function ($q) {
+                $q->where('booking_code', 'like', '%'.$this->search.'%')
+                    ->orWhere('customer_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('customer_phone', 'like', '%'.$this->search.'%');
             })
-            ->when($this->status, function($q) {
+            ->when($this->status, function ($q) {
                 $q->where('payment_status', $this->status);
             })
             ->latest()
@@ -51,10 +52,10 @@ class Index extends Component
     public function stats()
     {
         return [
-            'total' => Booking::count(),
-            'paid' => Booking::where('payment_status', PaymentStatus::PAID)->count(),
-            'unpaid' => Booking::where('payment_status', PaymentStatus::UNPAID)->count(),
-            'total_revenue' => Booking::where('payment_status', PaymentStatus::PAID)->sum('total_amount'),
+            'total' => Booking::count('id'),
+            'paid' => Booking::where('payment_status', '=', PaymentStatus::PAID, 'and')->count(),
+            'unpaid' => Booking::where('payment_status', '=', PaymentStatus::UNPAID, 'and')->count(),
+            'total_revenue' => Booking::where('payment_status', '=', PaymentStatus::PAID, 'and')->sum('total_amount'),
         ];
     }
 

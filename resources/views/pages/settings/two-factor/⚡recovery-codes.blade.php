@@ -90,7 +90,7 @@ new class extends Component {
             <div class="space-y-4">
                 @error('recoveryCodes')
                     <div
-                        class="p-4 bg-red-50 dark:bg-red-500/10 rounded-2xl flex gap-3 text-red-800 dark:text-red-200 text-sm font-bold border border-red-200 dark:border-red-500/20">
+                        class="p-4 bg-red-50 dark:bg-red-500/10 rounded-2xl flex gap-3 text-red-800 dark:text-red-200 text-sm font-bold border border-red-200 dark:/20">
                         <x-heroicon-o-x-circle class="w-5 h-5 shrink-0" />
                         <span>{{ $message }}</span>
                     </div>

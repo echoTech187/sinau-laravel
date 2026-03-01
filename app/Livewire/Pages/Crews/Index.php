@@ -47,10 +47,10 @@ class Index extends Component
     public function stats()
     {
         return [
-            'total' => Crew::count(),
-            'active' => Crew::where('status', 'active')->count(),
-            'on_leave' => Crew::where('status', 'on_leave')->count(),
-            'inactive' => Crew::whereIn('status', ['inactive', 'suspended'])->count(),
+            'total' => Crew::count('id'),
+            'active' => Crew::where('status', '=', 'active', 'and')->count('id'),
+            'on_leave' => Crew::where('status', '=', 'on_leave', 'and')->count('id'),
+            'inactive' => Crew::where('status', '=', 'inactive', 'and')->orWhere('status', '=', 'suspended', 'or')->count('id'),
         ];
     }
 

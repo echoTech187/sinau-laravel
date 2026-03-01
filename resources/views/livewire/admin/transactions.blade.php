@@ -2,7 +2,7 @@
     <div class="p-6 max-w-7xl mx-auto animate-fade-in-up">
 
         <header class="mb-6 flex items-center gap-3">
-            <div class="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/30">
+            <div class="p-2.5 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/30">
                 <flux:icon.banknotes class="w-6 h-6 text-white" />
             </div>
             <div>
@@ -28,6 +28,9 @@
                     </thead>
                     <tbody class="divide-y divide-zinc-200/50 dark:divide-zinc-700/50">
                         @if ($transactions && count($transactions) > 0)
+                            @php
+                                /** @var \App\Models\Transaction[] $transactions */
+                            @endphp
                             @foreach ($transactions as $t)
                                 <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-700/30 transition-colors">
                                     <td class="px-6 py-4 font-mono text-zinc-900 dark:text-white">

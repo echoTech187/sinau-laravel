@@ -1,6 +1,7 @@
+﻿@php /** @var \App\Livewire\Pages\Bookings\Show $this */ @endphp
 <div class="container relative min-h-screen pb-20">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[120px]"></div>
+        <div class="absolute top-0 right-0 w-150 h-150 bg-emerald-500/5 rounded-full blur-[120px]"></div>
     </div>
 
     <div class="relative z-10 max-w-4xl mx-auto space-y-8 animate-fade-in-up">
@@ -106,7 +107,7 @@
                     </h2>
                     @foreach ($booking->tickets as $ticket)
                         <div
-                            class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-[32px] p-6 shadow-sm flex flex-col md:flex-row items-center gap-6 group hover:translate-x-1 transition-all relative overflow-hidden">
+                            class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-4xl p-6 shadow-sm flex flex-col md:flex-row items-center gap-6 group hover:translate-x-1 transition-all relative overflow-hidden">
                             <div
                                 class="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-500 opacity-20 group-hover:opacity-100 transition-opacity">
                             </div>
@@ -148,7 +149,7 @@
             <aside class="space-y-6">
                 <div
                     class="bg-zinc-900 dark:bg-zinc-950 rounded-[40px] p-8 shadow-2xl text-white relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-transparent"></div>
+                    <div class="absolute inset-0 bg-linear-to-br from-indigo-600/20 to-transparent"></div>
                     <div class="relative z-10 space-y-8">
                         <div>
                             <h3
