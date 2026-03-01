@@ -151,68 +151,71 @@
                 </div>
 
                 <div class="space-y-4">
-                    @forelse($form->stops as $index => $stop)
-                        <div wire:key="stop-{{ $index }}"
-                            class="flex flex-col md:flex-row items-center gap-4 bg-zinc-50/50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-700/50 p-4 rounded-xl group relative">
-                            <!-- Indicator Urutan -->
-                            <div
-                                class="w-8 h-8 shrink-0 bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400 rounded-full flex items-center justify-center font-bold text-xs ring-4 ring-white dark:ring-zinc-900">
-                                {{ $index + 1 }}
-                            </div>
+                    @if (count($form->stops) > 0)
+                        @foreach ($form->stops as $index => $stop)
+                            <div wire:key="stop-{{ $index }}"
+                                class="flex flex-col md:flex-row items-center gap-4 bg-zinc-50/50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-700/50 p-4 rounded-xl group relative">
+                                <!-- Indicator Urutan -->
+                                <div
+                                    class="w-8 h-8 shrink-0 bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400 rounded-full flex items-center justify-center font-bold text-xs ring-4 ring-white dark:ring-zinc-900">
+                                    {{ $index + 1 }}
+                                </div>
 
-                            <!-- Pemilihan Lokasi -->
-                            <div class="w-full md:flex-1">
-                                <label class="label hidden md:flex"><span
-                                        class="label-text text-[10px] font-bold text-zinc-400">Pilih Lokasi
-                                        Stop*</span></label>
-                                <select wire:model="form.stops.{{ $index }}.location_id"
-                                    class="select select-bordered select-sm w-full bg-white dark:bg-zinc-900 @error('form.stops.' . $index . '.location_id') border-red-500 @enderror">
-                                    <option value="">Pilih Titik Lokasi / Agen</option>
-                                    @foreach ($this->locations as $loc)
-                                        <option value="{{ $loc->id }}">{{ $loc->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('form.stops.' . $index . '.location_id')
-                                    <span class="text-[10px] text-red-500 mt-1">{{ $message }}</span>
-                                @enderror
-                            </div>
+                                <!-- Pemilihan Lokasi -->
+                                <div class="w-full md:flex-1">
+                                    <label class="label hidden md:flex"><span
+                                            class="label-text text-[10px] font-bold text-zinc-400">Pilih Lokasi
+                                            Stop*</span></label>
+                                    <select wire:model="form.stops.{{ $index }}.location_id"
+                                        class="select select-bordered select-sm w-full bg-white dark:bg-zinc-900 @error('form.stops.' . $index . '.location_id') border-red-500 @enderror">
+                                        <option value="">Pilih Titik Lokasi / Agen</option>
+                                        @foreach ($this->locations as $loc)
+                                            <option value="{{ $loc->id }}">{{ $loc->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('form.stops.' . $index . '.location_id')
+                                        <span class="text-[10px] text-red-500 mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
 
-                            <!-- Aturan Penumpang -->
-                            <div class="w-full md:w-48 shrink-0">
-                                <label class="label hidden md:flex"><span
-                                        class="label-text text-[10px] font-bold text-zinc-400">Aturan Akses
-                                        Penumpang*</span></label>
-                                <select wire:model="form.stops.{{ $index }}.type"
-                                    class="select select-bordered select-sm w-full bg-white dark:bg-zinc-900 @error('form.stops.' . $index . '.type') border-red-500 @enderror">
-                                    <option value="both">Naik turun Penumpang (Both)</option>
-                                    <option value="boarding_only">Hanya Naik (Boarding)</option>
-                                    <option value="dropoff_only">Hanya Turun (Dropoff)</option>
-                                    <option value="transit">Check / Transit (No-Pax)</option>
-                                </select>
-                                @error('form.stops.' . $index . '.type')
-                                    <span class="text-[10px] text-red-500 mt-1">{{ $message }}</span>
-                                @enderror
-                            </div>
+                                <!-- Aturan Penumpang -->
+                                <div class="w-full md:w-48 shrink-0">
+                                    <label class="label hidden md:flex"><span
+                                            class="label-text text-[10px] font-bold text-zinc-400">Aturan Akses
+                                            Penumpang*</span></label>
+                                    <select wire:model="form.stops.{{ $index }}.type"
+                                        class="select select-bordered select-sm w-full bg-white dark:bg-zinc-900 @error('form.stops.' . $index . '.type') border-red-500 @enderror">
+                                        <option value="both">Naik turun Penumpang (Both)</option>
+                                        <option value="boarding_only">Hanya Naik (Boarding)</option>
+                                        <option value="dropoff_only">Hanya Turun (Dropoff)</option>
+                                        <option value="transit">Check / Transit (No-Pax)</option>
+                                    </select>
+                                    @error('form.stops.' . $index . '.type')
+                                        <span class="text-[10px] text-red-500 mt-1">{{ $message }}</span>
+                                    @enderror
+                                </div>
 
-                            <!-- Is Checkpoint Switch -->
-                            <div
-                                class="w-full md:w-32 shrink-0 flex items-center justify-center md:justify-end gap-3 mt-4 md:mt-0 md:pt-6">
-                                <label class="cursor-pointer label p-0 gap-2">
-                                    <span class="label-text text-xs mr-2">Cek Kontrol?</span>
-                                    <input type="checkbox" wire:model="form.stops.{{ $index }}.is_checkpoint"
-                                        class="toggle toggle-sm toggle-primary" />
-                                </label>
-                            </div>
+                                <!-- Is Checkpoint Switch -->
+                                <div
+                                    class="w-full md:w-32 shrink-0 flex items-center justify-center md:justify-end gap-3 mt-4 md:mt-0 md:pt-6">
+                                    <label class="cursor-pointer label p-0 gap-2">
+                                        <span class="label-text text-xs mr-2">Cek Kontrol?</span>
+                                        <input type="checkbox"
+                                            wire:model="form.stops.{{ $index }}.is_checkpoint"
+                                            class="toggle toggle-sm toggle-primary" />
+                                    </label>
+                                </div>
 
-                            <!-- Remove Button -->
-                            <div class="absolute -top-3 -right-3 md:relative md:top-0 md:right-0 md:pt-6">
-                                <button type="button" wire:click="removeStop({{ $index }})"
-                                    class="btn btn-circle btn-sm md:btn-square md:rounded-lg bg-red-100 hover:bg-red-200 text-red-600 border-0 dark:bg-red-500/20 dark:hover:bg-red-500/30 dark:text-red-400 shadow-sm">
-                                    <x-heroicon-o-x-mark class="w-4 h-4" />
-                                </button>
+                                <!-- Remove Button -->
+                                <div class="absolute -top-3 -right-3 md:relative md:top-0 md:right-0 md:pt-6">
+                                    <button type="button" wire:click="removeStop({{ $index }})"
+                                        class="btn btn-circle btn-sm md:btn-square md:rounded-lg bg-red-100 hover:bg-red-200 text-red-600 border-0 dark:bg-red-500/20 dark:hover:bg-red-500/30 dark:text-red-400 shadow-sm">
+                                        <x-heroicon-o-x-mark class="w-4 h-4" />
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    @empty
+                        @endforeach
+                    @else
                         <div
                             class="py-8 text-center bg-zinc-50/50 dark:bg-zinc-800/20 rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700">
                             <x-heroicon-o-arrows-right-left
@@ -220,10 +223,11 @@
                             <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Belum ada Titik
                                 Pemberhentian/Stop yang dikonfigurasi.</p>
                             <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-1">Rute ini dianggap sebagai Rute
-                                Langganan Cepat (Point-to-Point) antara Asal -> Tujuan tanpa melalui terminal agen lain.
+                                Langganan Cepat (Point-to-Point) antara Asal -> Tujuan tanpa melalui terminal agen
+                                lain.
                             </p>
                         </div>
-                    @endforelse
+                    @endif
                 </div>
 
                 @error('form.stops')

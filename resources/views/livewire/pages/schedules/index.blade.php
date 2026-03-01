@@ -161,121 +161,125 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/60 text-sm">
-                            @forelse($this->schedules as $schedule)
-                                <tr wire:key="schedule-{{ $schedule->id }}"
-                                    class="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors border-b border-zinc-100 dark:border-zinc-800/50 last:border-0">
-                                    <!-- Timing -->
-                                    <td class="py-4 pl-6">
-                                        <div class="flex flex-col">
-                                            <span
-                                                class="font-bold text-zinc-900 dark:text-white">{{ $schedule->departure_date->format('d M Y') }}</span>
-                                            <div class="flex items-center gap-2 mt-1">
+                            @if (count($this->schedules) > 0)
+                                @foreach ($this->schedules as $schedule)
+                                    <tr wire:key="schedule-{{ $schedule->id }}"
+                                        class="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors border-b border-zinc-100 dark:border-zinc-800/50 last:border-0">
+                                        <!-- Timing -->
+                                        <td class="py-4 pl-6">
+                                            <div class="flex flex-col">
                                                 <span
-                                                    class="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 text-[10px] font-mono font-bold border border-indigo-100 dark:border-indigo-800">
-                                                    {{ $schedule->departure_time->format('H:i') }}
-                                                </span>
-                                                <x-heroicon-o-chevron-right class="w-3 h-3 text-zinc-300" />
-                                                <span class="text-[10px] text-zinc-500 font-medium">ETA
-                                                    {{ $schedule->arrival_estimate->format('H:i') }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <!-- Route -->
-                                    <td class="py-4">
-                                        <div class="flex flex-col">
-                                            <span
-                                                class="font-bold text-zinc-800 dark:text-zinc-200 text-xs">{{ $schedule->route->name }}</span>
-                                            <span
-                                                class="text-[10px] text-zinc-500 mt-0.5 font-semibold tracking-tighter uppercase">{{ $schedule->route->route_code }}</span>
-                                        </div>
-                                    </td>
-
-                                    <!-- Bus -->
-                                    <td class="py-4 whitespace-nowrap">
-                                        <div class="flex items-center gap-2">
-                                            <div class="p-1.5 rounded-lg bg-sky-50 dark:bg-sky-900/20 text-sky-600">
-                                                <x-heroicon-o-truck class="w-4 h-4" />
-                                            </div>
-                                            <div>
-                                                <p
-                                                    class="text-[11px] font-bold text-zinc-800 dark:text-zinc-300 leading-tight">
-                                                    {{ $schedule->bus->name }}</p>
-                                                <p class="text-[9px] text-zinc-500">{{ $schedule->bus->plate_number }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <!-- Crews -->
-                                    <td class="py-4">
-                                        <div class="flex -space-x-1.5 overflow-hidden">
-                                            @foreach ($schedule->crews as $crew)
-                                                <div class="inline-flex items-center justify-center size-6 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-white dark:border-zinc-900 text-[9px] font-bold text-zinc-600 dark:text-zinc-400"
-                                                    title="{{ $crew->crew->name }} ({{ $crew->position->name }})">
-                                                    {{ collect(explode(' ', $crew->crew->name))->take(1)->map(fn($w) => substr($w, 0, 1))->implode('') }}
+                                                    class="font-bold text-zinc-900 dark:text-white">{{ $schedule->departure_date->format('d M Y') }}</span>
+                                                <div class="flex items-center gap-2 mt-1">
+                                                    <span
+                                                        class="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 text-[10px] font-mono font-bold border border-indigo-100 dark:border-indigo-800">
+                                                        {{ $schedule->departure_time->format('H:i') }}
+                                                    </span>
+                                                    <x-heroicon-o-chevron-right class="w-3 h-3 text-zinc-300" />
+                                                    <span class="text-[10px] text-zinc-500 font-medium">ETA
+                                                        {{ $schedule->arrival_estimate->format('H:i') }}</span>
                                                 </div>
-                                            @endforeach
-                                        </div>
-                                    </td>
+                                            </div>
+                                        </td>
 
-                                    <!-- Price & Type -->
-                                    <td class="py-4">
-                                        <div class="flex flex-col">
+                                        <!-- Route -->
+                                        <td class="py-4">
+                                            <div class="flex flex-col">
+                                                <span
+                                                    class="font-bold text-zinc-800 dark:text-zinc-200 text-xs">{{ $schedule->route->name }}</span>
+                                                <span
+                                                    class="text-[10px] text-zinc-500 mt-0.5 font-semibold tracking-tighter uppercase">{{ $schedule->route->route_code }}</span>
+                                            </div>
+                                        </td>
+
+                                        <!-- Bus -->
+                                        <td class="py-4 whitespace-nowrap">
+                                            <div class="flex items-center gap-2">
+                                                <div
+                                                    class="p-1.5 rounded-lg bg-sky-50 dark:bg-sky-900/20 text-sky-600">
+                                                    <x-heroicon-o-truck class="w-4 h-4" />
+                                                </div>
+                                                <div>
+                                                    <p
+                                                        class="text-[11px] font-bold text-zinc-800 dark:text-zinc-300 leading-tight">
+                                                        {{ $schedule->bus->name }}</p>
+                                                    <p class="text-[9px] text-zinc-500">
+                                                        {{ $schedule->bus->plate_number }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <!-- Crews -->
+                                        <td class="py-4">
+                                            <div class="flex -space-x-1.5 overflow-hidden">
+                                                @foreach ($schedule->crews as $crew)
+                                                    <div class="inline-flex items-center justify-center size-6 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-white dark:border-zinc-900 text-[9px] font-bold text-zinc-600 dark:text-zinc-400"
+                                                        title="{{ $crew->crew->name }} ({{ $crew->position->name }})">
+                                                        {{ collect(explode(' ', $crew->crew->name))->take(1)->map(fn($w) => substr($w, 0, 1))->implode('') }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </td>
+
+                                        <!-- Price & Type -->
+                                        <td class="py-4">
+                                            <div class="flex flex-col">
+                                                <span
+                                                    class="font-bold text-indigo-600 dark:text-indigo-400 text-xs">Rp{{ number_format($schedule->base_price) }}</span>
+                                                <span
+                                                    class="text-[9px] text-zinc-400 uppercase tracking-widest font-bold mt-0.5">{{ $schedule->trip_type->value }}</span>
+                                            </div>
+                                        </td>
+
+                                        <!-- Status -->
+                                        <td class="py-4">
+                                            @php
+                                                $statusClass = match ($schedule->status->value) {
+                                                    'scheduled'
+                                                        => 'bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800',
+                                                    'on_the_way'
+                                                        => 'bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800',
+                                                    'arrived'
+                                                        => 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800',
+                                                    'canceled'
+                                                        => 'bg-red-50 text-red-600 border-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800',
+                                                    default => 'bg-zinc-50 text-zinc-600 border-zinc-100',
+                                                };
+                                            @endphp
                                             <span
-                                                class="font-bold text-indigo-600 dark:text-indigo-400 text-xs">Rp{{ number_format($schedule->base_price) }}</span>
-                                            <span
-                                                class="text-[9px] text-zinc-400 uppercase tracking-widest font-bold mt-0.5">{{ $schedule->trip_type->value }}</span>
-                                        </div>
-                                    </td>
+                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold border uppercase tracking-wider {{ $statusClass }}">
+                                                {{ $schedule->status->value }}
+                                            </span>
+                                        </td>
 
-                                    <!-- Status -->
-                                    <td class="py-4">
-                                        @php
-                                            $statusClass = match ($schedule->status->value) {
-                                                'scheduled'
-                                                    => 'bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800',
-                                                'on_the_way'
-                                                    => 'bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800',
-                                                'arrived'
-                                                    => 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800',
-                                                'canceled'
-                                                    => 'bg-red-50 text-red-600 border-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800',
-                                                default => 'bg-zinc-50 text-zinc-600 border-zinc-100',
-                                            };
-                                        @endphp
-                                        <span
-                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold border uppercase tracking-wider {{ $statusClass }}">
-                                            {{ $schedule->status->value }}
-                                        </span>
-                                    </td>
-
-                                    <!-- Actions -->
-                                    <td class="px-6 py-4 text-right">
-                                        <div class="flex items-center justify-end gap-1">
-                                            <a wire:navigate href="{{ route('schedules.edit', $schedule) }}"
-                                                class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-indigo-500 rounded-lg inline-flex items-center justify-center"
-                                                title="Edit Jadwal">
-                                                <x-heroicon-o-pencil-square class="w-4 h-4" />
-                                            </a>
-                                            <button type="button"
-                                                wire:confirm="Batalkan jadwal rute {{ $schedule->route->name }}?"
-                                                wire:click="deleteSchedule({{ $schedule->id }})"
-                                                class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 rounded-lg"
-                                                title="Hapus">
-                                                <x-heroicon-o-trash class="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
+                                        <!-- Actions -->
+                                        <td class="px-6 py-4 text-right">
+                                            <div class="flex items-center justify-end gap-1">
+                                                <a wire:navigate href="{{ route('schedules.edit', $schedule) }}"
+                                                    class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-indigo-500 rounded-lg inline-flex items-center justify-center"
+                                                    title="Edit Jadwal">
+                                                    <x-heroicon-o-pencil-square class="w-4 h-4" />
+                                                </a>
+                                                <button type="button"
+                                                    wire:confirm="Batalkan jadwal rute {{ $schedule->route->name }}?"
+                                                    wire:click="deleteSchedule({{ $schedule->id }})"
+                                                    class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 rounded-lg"
+                                                    title="Hapus">
+                                                    <x-heroicon-o-trash class="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
                                 <tr>
                                     <td colspan="7" class="py-12 text-center text-zinc-500">
                                         <x-heroicon-o-calendar-days class="w-12 h-12 mx-auto mb-3 opacity-20" />
                                         <p class="font-medium">Tidak ada jadwal ditemukan</p>
                                     </td>
                                 </tr>
-                            @endforelse
+                            @endif
                         </tbody>
                     </table>
                 </div>

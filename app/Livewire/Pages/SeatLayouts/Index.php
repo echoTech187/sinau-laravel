@@ -46,7 +46,7 @@ class Index extends Component
             SeatLayout::find($this->layoutIdBeingDeleted)->delete();
             $this->confirmingLayoutDeletion = false;
             $this->layoutIdBeingDeleted = null;
-            $this->dispatch('notify', message: 'Layout kursi berhasil dihapus.', type: 'success');
+            $this->dispatch('notify', 'Layout kursi berhasil dihapus.', 'success');
         }
     }
 

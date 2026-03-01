@@ -49,67 +49,72 @@
                                 </tr>
                             </thead>
                             <tbody class="text-sm">
-                                @forelse($this->busClasses as $bc)
-                                    <tr wire:key="bc-{{ $bc->id }}"
-                                        class="border-b border-zinc-100 dark:border-zinc-800/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors">
-                                        <td class="py-4 pl-6">
-                                            <div class="flex flex-col">
-                                                <span
-                                                    class="font-bold text-zinc-900 dark:text-white">{{ $bc->name }}</span>
-                                                <span
-                                                    class="text-[10px] text-zinc-400 max-w-xs truncate">{{ $bc->description ?? 'Deskripsi belum diisi.' }}</span>
-                                            </div>
-                                        </td>
-                                        <td class="py-4 text-center">
-                                            <span
-                                                class="px-2.5 py-1 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-[11px] font-bold text-zinc-600 dark:text-zinc-400">
-                                                {{ $bc->free_baggage_kg }} KG
-                                            </span>
-                                        </td>
-                                        <td class="py-4">
-                                            <div class="flex flex-wrap gap-1">
-                                                @foreach ($bc->facilities->take(3) as $f)
+                                @if (count($this->busClasses) > 0)
+                                    @foreach ($this->busClasses as $bc)
+                                        <tr wire:key="bc-{{ $bc->id }}"
+                                            class="border-b border-zinc-100 dark:border-zinc-800/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors">
+                                            <td class="py-4 pl-6">
+                                                <div class="flex flex-col">
                                                     <span
-                                                        class="p-1 rounded-lg bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-500"
-                                                        title="{{ $f->name }}">
-                                                        <x-dynamic-component :component="$f->icon" class="w-3.5 h-3.5" />
-                                                    </span>
-                                                @endforeach
-                                                @if ($bc->facilities->count() > 3)
+                                                        class="font-bold text-zinc-900 dark:text-white">{{ $bc->name }}</span>
                                                     <span
-                                                        class="text-[9px] font-bold text-zinc-400 flex items-center pl-1">+{{ $bc->facilities->count() - 3 }}</span>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <td class="py-4 text-center">
-                                            <div class="flex flex-col">
+                                                        class="text-[10px] text-zinc-400 max-w-xs truncate">{{ $bc->description ?? 'Deskripsi belum diisi.' }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-4 text-center">
                                                 <span
-                                                    class="text-sm font-black text-zinc-800 dark:text-zinc-200">{{ $bc->buses_count }}</span>
-                                                <span class="text-[9px] uppercase font-bold text-zinc-400">Armada</span>
-                                            </div>
-                                        </td>
-                                        <td class="py-4 text-right pr-6">
-                                            <div class="flex items-center justify-end gap-1">
-                                                <a wire:navigate href="{{ route('bus-classes.edit', $bc->id) }}"
-                                                    class="p-2 text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-lg transition-colors">
-                                                    <x-heroicon-o-pencil-square class="w-4 h-4" />
-                                                </a>
-                                                <button wire:click="confirmDeleteBusClass({{ $bc->id }})"
-                                                    class="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors">
-                                                    <x-heroicon-o-trash class="w-4 h-4" />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
+                                                    class="px-2.5 py-1 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-[11px] font-bold text-zinc-600 dark:text-zinc-400">
+                                                    {{ $bc->free_baggage_kg }} KG
+                                                </span>
+                                            </td>
+                                            <td class="py-4">
+                                                <div class="flex flex-wrap gap-1">
+                                                    @foreach ($bc->facilities->take(3) as $f)
+                                                        <span
+                                                            class="p-1 rounded-lg bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-500"
+                                                            title="{{ $f->name }}">
+                                                            <x-dynamic-component :component="$f->icon"
+                                                                class="w-3.5 h-3.5" />
+                                                        </span>
+                                                    @endforeach
+                                                    @if ($bc->facilities->count() > 3)
+                                                        <span
+                                                            class="text-[9px] font-bold text-zinc-400 flex items-center pl-1">+{{ $bc->facilities->count() - 3 }}</span>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <td class="py-4 text-center">
+                                                <div class="flex flex-col">
+                                                    <span
+                                                        class="text-sm font-black text-zinc-800 dark:text-zinc-200">{{ $bc->buses_count }}</span>
+                                                    <span
+                                                        class="text-[9px] uppercase font-bold text-zinc-400">Armada</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-4 text-right pr-6">
+                                                <div class="flex items-center justify-end gap-1">
+                                                    <a wire:navigate href="{{ route('bus-classes.edit', $bc->id) }}"
+                                                        class="p-2 text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-lg transition-colors">
+                                                        <x-heroicon-o-pencil-square class="w-4 h-4" />
+                                                    </a>
+                                                    <button wire:click="confirmDeleteBusClass({{ $bc->id }})"
+                                                        class="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors">
+                                                        <x-heroicon-o-trash class="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
                                         <td colspan="5" class="py-20 text-center text-zinc-500">
                                             <x-heroicon-o-star class="w-12 h-12 mx-auto mb-3 opacity-20" />
-                                            <p class="font-medium text-lg text-zinc-800 dark:text-white">Belum Ada Kelas
+                                            <p class="font-medium text-lg text-zinc-800 dark:text-white">Belum Ada
+                                                Kelas
                                             </p>
                                         </td>
                                     </tr>
-                                @endforelse
+                                @endif
                             </tbody>
                         </table>
                     </div>

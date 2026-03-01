@@ -66,7 +66,7 @@ class Index extends Component
             Location::find($this->locationIdBeingDeleted)->delete();
             $this->confirmingLocationDeletion = false;
             $this->locationIdBeingDeleted = null;
-            $this->dispatch('notify', message: 'Lokasi berhasil dihapus.', type: 'success');
+            $this->dispatch('notify', 'Lokasi berhasil dihapus.', 'success');
         }
     }
 

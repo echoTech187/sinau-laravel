@@ -129,117 +129,119 @@
                         </tr>
                     </thead>
                     <tbody class="text-sm divide-y divide-zinc-100 dark:divide-zinc-800/60">
-                        @forelse($this->shipments as $s)
-                            <tr wire:key="shipment-{{ $s->id }}"
-                                class="border-b border-zinc-100 dark:border-zinc-800/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors last:border-0 group">
-                                <td class="py-4 pl-4">
-                                    <div class="flex flex-col mt-0.5">
-                                        <div class="flex items-center gap-2 mb-1.5">
-                                            @if ($s->booking_id)
+                        @if (count($this->shipments) > 0)
+                            @foreach ($this->shipments as $s)
+                                <tr wire:key="shipment-{{ $s->id }}"
+                                    class="border-b border-zinc-100 dark:border-zinc-800/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors last:border-0 group">
+                                    <td class="py-4 pl-4">
+                                        <div class="flex flex-col mt-0.5">
+                                            <div class="flex items-center gap-2 mb-1.5">
+                                                @if ($s->booking_id)
+                                                    <span
+                                                        class="px-2 py-0.5 bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 text-[8px] font-black rounded border border-rose-100 dark:border-rose-800/50">BAGASI</span>
+                                                @else
+                                                    <span
+                                                        class="px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[8px] font-black rounded border border-indigo-100 dark:border-indigo-800/50">PAKET</span>
+                                                @endif
                                                 <span
-                                                    class="px-2 py-0.5 bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 text-[8px] font-black rounded border border-rose-100 dark:border-rose-800/50">BAGASI</span>
-                                            @else
+                                                    class="text-sm font-black text-zinc-900 dark:text-white group-hover:text-indigo-600 transition-colors leading-none tracking-tight">{{ $s->waybill_number }}</span>
+                                            </div>
+                                            <p
+                                                class="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium italic overflow-hidden whitespace-nowrap text-ellipsis max-w-[160px]">
+                                                "{{ $s->item_description }}"
+                                            </p>
+                                            <p
+                                                class="text-[9px] text-zinc-400 dark:text-zinc-500 font-black tracking-widest mt-0.5">
+                                                #{{ $s->barcode_number }}</p>
+                                        </div>
+                                    </td>
+                                    <td class="py-4">
+                                        <div class="space-y-2">
+                                            <div class="flex items-center gap-2">
+                                                <div
+                                                    class="w-6 h-6 bg-zinc-100 dark:bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-400 shrink-0">
+                                                    <x-heroicon-o-user class="w-3.5 h-3.5" />
+                                                </div>
                                                 <span
-                                                    class="px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[8px] font-black rounded border border-indigo-100 dark:border-indigo-800/50">PAKET</span>
+                                                    class="text-xs font-bold text-zinc-700 dark:text-zinc-300 truncate max-w-[120px]">{{ $s->sender_name }}</span>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <div
+                                                    class="w-6 h-6 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-indigo-400 shrink-0">
+                                                    <x-heroicon-o-truck class="w-3.5 h-3.5" />
+                                                </div>
+                                                <span
+                                                    class="text-xs font-bold text-indigo-600 dark:text-indigo-400 truncate max-w-[120px]">{{ $s->receiver_name }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4">
+                                        <div class="space-y-1.5">
+                                            <div
+                                                class="flex items-center gap-2 font-bold text-xs text-zinc-900 dark:text-white">
+                                                <span>{{ $s->origin->city }}</span>
+                                                <x-heroicon-o-chevron-double-right
+                                                    class="w-3 h-3 text-zinc-300 dark:text-zinc-600 shrink-0" />
+                                                <span
+                                                    class="text-indigo-600 dark:text-indigo-400">{{ $s->destination->city }}</span>
+                                            </div>
+                                            @if ($s->schedule)
+                                                <div
+                                                    class="inline-flex items-center gap-1.5 bg-zinc-50 dark:bg-zinc-900 px-2 py-1 rounded-lg border border-zinc-100 dark:border-zinc-800">
+                                                    <x-heroicon-s-truck class="w-3 h-3 text-zinc-400" />
+                                                    <span
+                                                        class="text-[9px] text-zinc-500 font-black">{{ $s->schedule->bus->fleet_code }}</span>
+                                                </div>
                                             @endif
-                                            <span
-                                                class="text-sm font-black text-zinc-900 dark:text-white group-hover:text-indigo-600 transition-colors leading-none tracking-tight">{{ $s->waybill_number }}</span>
                                         </div>
-                                        <p
-                                            class="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium italic overflow-hidden whitespace-nowrap text-ellipsis max-w-[160px]">
-                                            "{{ $s->item_description }}"
-                                        </p>
-                                        <p
-                                            class="text-[9px] text-zinc-400 dark:text-zinc-500 font-black tracking-widest mt-0.5">
-                                            #{{ $s->barcode_number }}</p>
-                                    </div>
-                                </td>
-                                <td class="py-4">
-                                    <div class="space-y-2">
-                                        <div class="flex items-center gap-2">
-                                            <div
-                                                class="w-6 h-6 bg-zinc-100 dark:bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-400 shrink-0">
-                                                <x-heroicon-o-user class="w-3.5 h-3.5" />
+                                    </td>
+                                    <td class="py-4">
+                                        <div class="space-y-1">
+                                            <div class="text-xs font-black text-zinc-900 dark:text-white">
+                                                {{ $s->actual_weight_kg }}
+                                                <small class="text-[9px] opacity-40">KG</small>
                                             </div>
-                                            <span
-                                                class="text-xs font-bold text-zinc-700 dark:text-zinc-300 truncate max-w-[120px]">{{ $s->sender_name }}</span>
+                                            <div class="text-[10px] text-indigo-600 dark:text-indigo-400 font-black">Rp
+                                                {{ number_format($s->shipping_cost, 0, ',', '.') }}</div>
                                         </div>
-                                        <div class="flex items-center gap-2">
-                                            <div
-                                                class="w-6 h-6 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-indigo-400 shrink-0">
-                                                <x-heroicon-o-truck class="w-3.5 h-3.5" />
-                                            </div>
-                                            <span
-                                                class="text-xs font-bold text-indigo-600 dark:text-indigo-400 truncate max-w-[120px]">{{ $s->receiver_name }}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-4">
-                                    <div class="space-y-1.5">
-                                        <div
-                                            class="flex items-center gap-2 font-bold text-xs text-zinc-900 dark:text-white">
-                                            <span>{{ $s->origin->city }}</span>
-                                            <x-heroicon-o-chevron-double-right
-                                                class="w-3 h-3 text-zinc-300 dark:text-zinc-600 shrink-0" />
-                                            <span
-                                                class="text-indigo-600 dark:text-indigo-400">{{ $s->destination->city }}</span>
-                                        </div>
-                                        @if ($s->schedule)
-                                            <div
-                                                class="inline-flex items-center gap-1.5 bg-zinc-50 dark:bg-zinc-900 px-2 py-1 rounded-lg border border-zinc-100 dark:border-zinc-800">
-                                                <x-heroicon-s-truck class="w-3 h-3 text-zinc-400" />
-                                                <span
-                                                    class="text-[9px] text-zinc-500 font-black">{{ $s->schedule->bus->fleet_code }}</span>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td class="py-4">
-                                    <div class="space-y-1">
-                                        <div class="text-xs font-black text-zinc-900 dark:text-white">
-                                            {{ $s->actual_weight_kg }}
-                                            <small class="text-[9px] opacity-40">KG</small>
-                                        </div>
-                                        <div class="text-[10px] text-indigo-600 dark:text-indigo-400 font-black">Rp
-                                            {{ number_format($s->shipping_cost, 0, ',', '.') }}</div>
-                                    </div>
-                                </td>
-                                <td class="py-4">
-                                    @php
-                                        $statusConfig = [
-                                            'received_at_agent' => ['label' => 'DITERIMA', 'color' => 'indigo'],
-                                            'loaded_to_bus' => ['label' => 'DALAM BUS', 'color' => 'amber'],
-                                            'in_transit' => ['label' => 'PERJALANAN', 'color' => 'blue'],
-                                            'inspected_by_checker' => ['label' => 'CHECKED', 'color' => 'emerald'],
-                                            'unloaded' => ['label' => 'BONGKAR', 'color' => 'rose'],
-                                            'claimed_by_receiver' => ['label' => 'SELESAI', 'color' => 'zinc'],
-                                        ][$s->status->value] ?? ['label' => $s->status->name, 'color' => 'zinc'];
-                                    @endphp
-                                    <span
-                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-{{ $statusConfig['color'] }}-50 dark:bg-{{ $statusConfig['color'] }}-900/20 text-{{ $statusConfig['color'] }}-700 dark:text-{{ $statusConfig['color'] }}-400 border border-{{ $statusConfig['color'] }}-100 dark:border-{{ $statusConfig['color'] }}-800/50 text-[9px] font-black shadow-sm">
+                                    </td>
+                                    <td class="py-4">
+                                        @php
+                                            $statusConfig = [
+                                                'received_at_agent' => ['label' => 'DITERIMA', 'color' => 'indigo'],
+                                                'loaded_to_bus' => ['label' => 'DALAM BUS', 'color' => 'amber'],
+                                                'in_transit' => ['label' => 'PERJALANAN', 'color' => 'blue'],
+                                                'inspected_by_checker' => ['label' => 'CHECKED', 'color' => 'emerald'],
+                                                'unloaded' => ['label' => 'BONGKAR', 'color' => 'rose'],
+                                                'claimed_by_receiver' => ['label' => 'SELESAI', 'color' => 'zinc'],
+                                            ][$s->status->value] ?? ['label' => $s->status->name, 'color' => 'zinc'];
+                                        @endphp
                                         <span
-                                            class="w-1.5 h-1.5 rounded-full bg-{{ $statusConfig['color'] }}-500"></span>
-                                        {{ $statusConfig['label'] }}
-                                    </span>
-                                </td>
-                                <td class="py-4 text-right pr-4">
-                                    <div
-                                        class="flex items-center justify-end gap-1 translate-x-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                                        <a wire:navigate href="{{ route('shipments.show', $s->id) }}"
-                                            class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 rounded-lg inline-flex items-center justify-center hover:text-indigo-500"
-                                            title="Lihat Detail">
-                                            <x-heroicon-o-eye class="w-4 h-4" />
-                                        </a>
-                                        <button wire:click="delete('{{ $s->id }}')"
-                                            wire:confirm="Yakin ingin menghapus kargo ini?"
-                                            class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 rounded-lg"
-                                            title="Hapus">
-                                            <x-heroicon-o-trash class="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-{{ $statusConfig['color'] }}-50 dark:bg-{{ $statusConfig['color'] }}-900/20 text-{{ $statusConfig['color'] }}-700 dark:text-{{ $statusConfig['color'] }}-400 border border-{{ $statusConfig['color'] }}-100 dark:border-{{ $statusConfig['color'] }}-800/50 text-[9px] font-black shadow-sm">
+                                            <span
+                                                class="w-1.5 h-1.5 rounded-full bg-{{ $statusConfig['color'] }}-500"></span>
+                                            {{ $statusConfig['label'] }}
+                                        </span>
+                                    </td>
+                                    <td class="py-4 text-right pr-4">
+                                        <div
+                                            class="flex items-center justify-end gap-1 translate-x-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                                            <a wire:navigate href="{{ route('shipments.show', $s->id) }}"
+                                                class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 rounded-lg inline-flex items-center justify-center hover:text-indigo-500"
+                                                title="Lihat Detail">
+                                                <x-heroicon-o-eye class="w-4 h-4" />
+                                            </a>
+                                            <button wire:click="delete('{{ $s->id }}')"
+                                                wire:confirm="Yakin ingin menghapus kargo ini?"
+                                                class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 rounded-lg"
+                                                title="Hapus">
+                                                <x-heroicon-o-trash class="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr>
                                 <td colspan="6" class="px-8 py-32 text-center text-zinc-400 dark:text-zinc-600">
                                     <div class="flex flex-col items-center gap-5">
@@ -257,7 +259,7 @@
                                     </div>
                                 </td>
                             </tr>
-                        @endforelse
+                        @endif
                     </tbody>
                 </table>
             </div>

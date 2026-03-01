@@ -20,7 +20,7 @@ class Edit extends Component
     {
         $this->form->update();
         
-        $this->dispatch('notify', message: 'Lokasi berhasil diperbarui.', type: 'success');
+        $this->dispatch('notify', 'Lokasi berhasil diperbarui.', 'success');
         
         return $this->redirect(route('locations.index'), navigate: true);
     }

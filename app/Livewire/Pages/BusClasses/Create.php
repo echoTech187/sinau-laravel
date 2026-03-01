@@ -14,7 +14,7 @@ class Create extends Component
     {
         $this->form->store();
         
-        $this->dispatch('notify', message: 'Kelas bus baru berhasil ditambahkan.', type: 'success');
+        $this->dispatch('notify', 'Kelas bus baru berhasil ditambahkan.', 'success');
         
         return $this->redirect(route('bus-classes.index'), navigate: true);
     }

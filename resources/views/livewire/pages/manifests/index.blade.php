@@ -48,39 +48,42 @@
                             </div>
                         </div>
                         <div class="max-h-[480px] overflow-y-auto p-3 space-y-1 custom-scrollbar">
-                            @forelse($this->availableSchedules as $schedule)
-                                <button wire:click="generateForSchedule({{ $schedule->id }})" @click="open = false"
-                                    class="w-full text-left p-4 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-2xl transition-all group flex items-center gap-4 border border-transparent hover:border-zinc-100 dark:hover:border-zinc-700">
-                                    <div
-                                        class="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                                        <x-heroicon-o-truck class="w-6 h-6" />
-                                    </div>
-                                    <div class="flex-1 min-w-0">
+                            @if (count($this->availableSchedules) > 0)
+                                @foreach ($this->availableSchedules as $schedule)
+                                    <button wire:click="generateForSchedule({{ $schedule->id }})" @click="open = false"
+                                        class="w-full text-left p-4 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-2xl transition-all group flex items-center gap-4 border border-transparent hover:border-zinc-100 dark:hover:border-zinc-700">
                                         <div
-                                            class="font-bold text-sm text-zinc-900 dark:text-white uppercase tracking-tight">
-                                            {{ $schedule->bus->fleet_code }}
+                                            class="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                                            <x-heroicon-o-truck class="w-6 h-6" />
                                         </div>
-                                        <div
-                                            class="text-[10px] text-zinc-500 font-semibold uppercase truncate tracking-wide mt-0.5">
-                                            {{ $schedule->route->name }}</div>
-                                        <div class="flex items-center gap-2 mt-2">
-                                            <span
-                                                class="text-[9px] bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 px-2 py-0.5 rounded-lg text-zinc-600 dark:text-zinc-400 font-bold uppercase shadow-sm">
-                                                {{ $schedule->departure_time->format('H:i') }}
-                                            </span>
-                                            <span
-                                                class="text-[9px] bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 px-2 py-0.5 rounded-lg text-zinc-600 dark:text-zinc-400 font-bold uppercase shadow-sm">
-                                                {{ $schedule->departure_date->format('d M Y') }}
-                                            </span>
+                                        <div class="flex-1 min-w-0">
+                                            <div
+                                                class="font-bold text-sm text-zinc-900 dark:text-white uppercase tracking-tight">
+                                                {{ $schedule->bus->fleet_code }}
+                                            </div>
+                                            <div
+                                                class="text-[10px] text-zinc-500 font-semibold uppercase truncate tracking-wide mt-0.5">
+                                                {{ $schedule->route->name }}</div>
+                                            <div class="flex items-center gap-2 mt-2">
+                                                <span
+                                                    class="text-[9px] bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 px-2 py-0.5 rounded-lg text-zinc-600 dark:text-zinc-400 font-bold uppercase shadow-sm">
+                                                    {{ $schedule->departure_time->format('H:i') }}
+                                                </span>
+                                                <span
+                                                    class="text-[9px] bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 px-2 py-0.5 rounded-lg text-zinc-600 dark:text-zinc-400 font-bold uppercase shadow-sm">
+                                                    {{ $schedule->departure_date->format('d M Y') }}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </button>
-                            @empty
+                                    </button>
+                                @endforeach
+                            @else
                                 <div class="py-12 text-center opacity-40">
                                     <x-heroicon-o-calendar-days class="w-12 h-12 text-zinc-300 mx-auto mb-3" />
-                                    <p class="text-zinc-400 font-bold uppercase tracking-widest text-[10px]">Kosong</p>
+                                    <p class="text-zinc-400 font-bold uppercase tracking-widest text-[10px]">Kosong
+                                    </p>
                                 </div>
-                            @endforelse
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -198,92 +201,95 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/60 text-sm">
-                            @forelse($this->manifests as $manifest)
-                                <tr wire:key="manifest-{{ $manifest->id }}"
-                                    class="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors border-b border-zinc-100 dark:border-zinc-800/50 last:border-0">
-                                    <td class="py-5 pl-6">
-                                        <div class="flex flex-col">
-                                            <span
-                                                class="font-bold text-zinc-900 dark:text-white">{{ $manifest->created_at->format('d M Y') }}</span>
-                                            <div class="flex items-center gap-2 mt-1">
+                            @if (count($this->manifests) > 0)
+                                @foreach ($this->manifests as $manifest)
+                                    <tr wire:key="manifest-{{ $manifest->id }}"
+                                        class="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors border-b border-zinc-100 dark:border-zinc-800/50 last:border-0">
+                                        <td class="py-5 pl-6">
+                                            <div class="flex flex-col">
                                                 <span
-                                                    class="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 text-[10px] font-mono font-bold border border-indigo-100 dark:border-indigo-800">
-                                                    {{ $manifest->schedule->departure_time->format('H:i') }}
-                                                </span>
-                                                <x-heroicon-o-chevron-double-right class="w-3 h-3 text-zinc-300" />
-                                                <span class="text-[10px] text-zinc-500 font-medium uppercase">ETA
-                                                    10:00</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="py-5">
-                                        <div class="flex flex-col">
-                                            <span
-                                                class="font-bold text-zinc-800 dark:text-zinc-200 text-xs">{{ $manifest->schedule->route->name }}</span>
-                                            <span
-                                                class="text-[10px] text-zinc-500 mt-0.5 font-bold tracking-tight uppercase">{{ $manifest->manifest_number }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-5 whitespace-nowrap">
-                                        <div class="flex items-center gap-3">
-                                            <div class="p-2 rounded-lg bg-sky-50 dark:bg-sky-900/20 text-sky-600">
-                                                <x-heroicon-o-truck class="w-4 h-4" />
-                                            </div>
-                                            <div>
-                                                <p
-                                                    class="text-[11px] font-bold text-zinc-800 dark:text-zinc-300 leading-tight">
-                                                    {{ $manifest->schedule->bus->fleet_code }}</p>
-                                                <p class="text-[9px] text-zinc-500 uppercase font-medium">
-                                                    {{ $manifest->schedule->bus->license_plate ?? 'B 7123 KGA' }}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="py-5">
-                                        <div class="flex -space-x-1.5 overflow-hidden">
-                                            @foreach ($manifest->schedule->crews as $crew)
-                                                <div class="inline-flex items-center justify-center size-6 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-white dark:border-zinc-900 text-[9px] font-bold text-zinc-600 dark:text-zinc-400"
-                                                    title="{{ $crew->crew->name }} ({{ $crew->position->name }})">
-                                                    {{ collect(explode(' ', $crew->crew->name))->take(1)->map(fn($w) => substr($w, 0, 1))->implode('') }}
+                                                    class="font-bold text-zinc-900 dark:text-white">{{ $manifest->created_at->format('d M Y') }}</span>
+                                                <div class="flex items-center gap-2 mt-1">
+                                                    <span
+                                                        class="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 text-[10px] font-mono font-bold border border-indigo-100 dark:border-indigo-800">
+                                                        {{ $manifest->schedule->departure_time->format('H:i') }}
+                                                    </span>
+                                                    <x-heroicon-o-chevron-double-right class="w-3 h-3 text-zinc-300" />
+                                                    <span class="text-[10px] text-zinc-500 font-medium uppercase">ETA
+                                                        10:00</span>
                                                 </div>
-                                            @endforeach
-                                        </div>
-                                    </td>
-                                    <td class="py-5">
-                                        @php
-                                            $statusStyle = match ($manifest->status->value) {
-                                                'draft'
-                                                    => 'bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800',
-                                                'approved'
-                                                    => 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800',
-                                                'rejected'
-                                                    => 'bg-red-50 text-red-600 border-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800',
-                                                default
-                                                    => 'bg-zinc-50 text-zinc-600 border-zinc-100 dark:bg-zinc-800/50 dark:text-zinc-400 dark:border-zinc-700',
-                                            };
-                                        @endphp
-                                        <span
-                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold border uppercase tracking-wider {{ $statusStyle }}">
-                                            {{ $manifest->status->value }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <div class="flex items-center justify-end gap-1">
-                                            <a wire:navigate href="{{ route('manifests.checklist', $manifest) }}"
-                                                class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-indigo-500 rounded-lg inline-flex items-center justify-center shadow-sm"
-                                                title="Cek P2H">
-                                                <x-heroicon-o-clipboard-document-check class="w-5 h-5" />
-                                            </a>
-                                            <button type="button"
-                                                wire:confirm="Hapus SJO {{ $manifest->manifest_number }}?"
-                                                wire:click="deleteManifest('{{ $manifest->id }}')"
-                                                class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 rounded-lg"
-                                                title="Hapus">
-                                                <x-heroicon-o-trash class="w-5 h-5" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
+                                            </div>
+                                        </td>
+                                        <td class="py-5">
+                                            <div class="flex flex-col">
+                                                <span
+                                                    class="font-bold text-zinc-800 dark:text-zinc-200 text-xs">{{ $manifest->schedule->route->name }}</span>
+                                                <span
+                                                    class="text-[10px] text-zinc-500 mt-0.5 font-bold tracking-tight uppercase">{{ $manifest->manifest_number }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-5 whitespace-nowrap">
+                                            <div class="flex items-center gap-3">
+                                                <div class="p-2 rounded-lg bg-sky-50 dark:bg-sky-900/20 text-sky-600">
+                                                    <x-heroicon-o-truck class="w-4 h-4" />
+                                                </div>
+                                                <div>
+                                                    <p
+                                                        class="text-[11px] font-bold text-zinc-800 dark:text-zinc-300 leading-tight">
+                                                        {{ $manifest->schedule->bus->fleet_code }}</p>
+                                                    <p class="text-[9px] text-zinc-500 uppercase font-medium">
+                                                        {{ $manifest->schedule->bus->license_plate ?? 'B 7123 KGA' }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-5">
+                                            <div class="flex -space-x-1.5 overflow-hidden">
+                                                @foreach ($manifest->schedule->crews as $crew)
+                                                    <div class="inline-flex items-center justify-center size-6 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-white dark:border-zinc-900 text-[9px] font-bold text-zinc-600 dark:text-zinc-400"
+                                                        title="{{ $crew->crew->name }} ({{ $crew->position->name }})">
+                                                        {{ collect(explode(' ', $crew->crew->name))->take(1)->map(fn($w) => substr($w, 0, 1))->implode('') }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </td>
+                                        <td class="py-5">
+                                            @php
+                                                $statusStyle = match ($manifest->status->value) {
+                                                    'draft'
+                                                        => 'bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800',
+                                                    'approved'
+                                                        => 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800',
+                                                    'rejected'
+                                                        => 'bg-red-50 text-red-600 border-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800',
+                                                    default
+                                                        => 'bg-zinc-50 text-zinc-600 border-zinc-100 dark:bg-zinc-800/50 dark:text-zinc-400 dark:border-zinc-700',
+                                                };
+                                            @endphp
+                                            <span
+                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold border uppercase tracking-wider {{ $statusStyle }}">
+                                                {{ $manifest->status->value }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <div class="flex items-center justify-end gap-1">
+                                                <a wire:navigate href="{{ route('manifests.checklist', $manifest) }}"
+                                                    class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-indigo-500 rounded-lg inline-flex items-center justify-center shadow-sm"
+                                                    title="Cek P2H">
+                                                    <x-heroicon-o-clipboard-document-check class="w-5 h-5" />
+                                                </a>
+                                                <button type="button"
+                                                    wire:confirm="Hapus SJO {{ $manifest->manifest_number }}?"
+                                                    wire:click="deleteManifest('{{ $manifest->id }}')"
+                                                    class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 rounded-lg"
+                                                    title="Hapus">
+                                                    <x-heroicon-o-trash class="w-5 h-5" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
                                 <tr>
                                     <td colspan="6" class="py-20 text-center text-zinc-500">
                                         <x-heroicon-o-document-magnifying-glass
@@ -291,7 +297,7 @@
                                         <p class="font-medium">Tidak ada SJO ditemukan</p>
                                     </td>
                                 </tr>
-                            @endforelse
+                            @endif
                         </tbody>
                     </table>
                 </div>

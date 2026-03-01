@@ -65,7 +65,7 @@ class Edit extends Component
     {
         $this->form->update();
         
-        $this->dispatch('notify', message: 'Layout kursi berhasil diperbarui.', type: 'success');
+        $this->dispatch('notify', 'Layout kursi berhasil diperbarui.', 'success');
         
         return $this->redirect(route('seat-layouts.index'), navigate: true);
     }

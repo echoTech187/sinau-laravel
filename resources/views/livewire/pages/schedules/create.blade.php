@@ -179,79 +179,87 @@
                         </div>
 
                         <div class="space-y-4">
-                            @forelse($form->crews as $index => $crew)
-                                <div wire:key="crew-{{ $index }}"
-                                    class="bg-zinc-50/50 dark:bg-zinc-800/20 border border-zinc-100 dark:border-zinc-800 p-4 rounded-2xl relative group">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div class="form-control">
-                                            <label class="label pb-0"><span
-                                                    class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Pilih
-                                                    Personel*</span></label>
-                                            <select wire:model="form.crews.{{ $index }}.crew_id"
-                                                class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
-                                                <option value="">-- Pilih Kru --</option>
-                                                @foreach ($this->crews as $c)
-                                                    <option value="{{ $c->id }}">{{ $c->name }}
-                                                        ({{ $c->nik }})
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('form.crews.' . $index . '.crew_id')
-                                                <span
-                                                    class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
-                                            @enderror
+                            @if (count($form->crews) > 0)
+                                @foreach ($form->crews as $index => $crew)
+                                    <div wire:key="crew-{{ $index }}"
+                                        class="bg-zinc-50/50 dark:bg-zinc-800/20 border border-zinc-100 dark:border-zinc-800 p-4 rounded-2xl relative group">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div class="form-control">
+                                                <label class="label pb-0"><span
+                                                        class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Pilih
+                                                        Personel*</span></label>
+                                                <select wire:model="form.crews.{{ $index }}.crew_id"
+                                                    class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
+                                                    <option value="">-- Pilih Kru --</option>
+                                                    @foreach ($this->crews as $c)
+                                                        <option value="{{ $c->id }}">{{ $c->name }}
+                                                            ({{ $c->nik }})
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('form.crews.' . $index . '.crew_id')
+                                                    <span
+                                                        class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                            <div class="form-control">
+                                                <label class="label pb-0"><span
+                                                        class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Jabatan
+                                                        Penugasan*</span></label>
+                                                <select
+                                                    wire:model="form.crews.{{ $index }}.assigned_position_id"
+                                                    class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
+                                                    <option value="">-- Pilih Jabatan --</option>
+                                                    @foreach ($this->positions as $pos)
+                                                        <option value="{{ $pos->id }}">{{ $pos->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('form.crews.' . $index . '.assigned_position_id')
+                                                    <span
+                                                        class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
+                                                @enderror
+                                            </div>
                                         </div>
-                                        <div class="form-control">
-                                            <label class="label pb-0"><span
-                                                    class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Jabatan
-                                                    Penugasan*</span></label>
-                                            <select wire:model="form.crews.{{ $index }}.assigned_position_id"
-                                                class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
-                                                <option value="">-- Pilih Jabatan --</option>
-                                                @foreach ($this->positions as $pos)
-                                                    <option value="{{ $pos->id }}">{{ $pos->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            @error('form.crews.' . $index . '.assigned_position_id')
-                                                <span
-                                                    class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
 
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                                        <div class="form-control">
-                                            <label class="label pb-0"><span
-                                                    class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Lokasi
-                                                    Naik (Boarding)*</span></label>
-                                            <select wire:model="form.crews.{{ $index }}.boarding_location_id"
-                                                class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
-                                                <option value="">-- Lokasi --</option>
-                                                @foreach ($this->locations as $loc)
-                                                    <option value="{{ $loc->id }}">{{ $loc->name }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                            <div class="form-control">
+                                                <label class="label pb-0"><span
+                                                        class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Lokasi
+                                                        Naik (Boarding)*</span></label>
+                                                <select
+                                                    wire:model="form.crews.{{ $index }}.boarding_location_id"
+                                                    class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
+                                                    <option value="">-- Lokasi --</option>
+                                                    @foreach ($this->locations as $loc)
+                                                        <option value="{{ $loc->id }}">{{ $loc->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-control">
+                                                <label class="label pb-0"><span
+                                                        class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Lokasi
+                                                        Turun (Dropoff)*</span></label>
+                                                <select
+                                                    wire:model="form.crews.{{ $index }}.dropoff_location_id"
+                                                    class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
+                                                    <option value="">-- Lokasi --</option>
+                                                    @foreach ($this->locations as $loc)
+                                                        <option value="{{ $loc->id }}">{{ $loc->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="form-control">
-                                            <label class="label pb-0"><span
-                                                    class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Lokasi
-                                                    Turun (Dropoff)*</span></label>
-                                            <select wire:model="form.crews.{{ $index }}.dropoff_location_id"
-                                                class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
-                                                <option value="">-- Lokasi --</option>
-                                                @foreach ($this->locations as $loc)
-                                                    <option value="{{ $loc->id }}">{{ $loc->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
 
-                                    <button type="button" wire:click="removeCrew({{ $index }})"
-                                        class="absolute -top-2 -right-2 btn btn-circle btn-xs bg-red-500 text-white border-0 shadow-lg hover:bg-red-600 transition-all opacity-0 group-hover:opacity-100">
-                                        <x-heroicon-o-x-mark class="w-3 h-3" />
-                                    </button>
-                                </div>
-                            @empty
+                                        <button type="button" wire:click="removeCrew({{ $index }})"
+                                            class="absolute -top-2 -right-2 btn btn-circle btn-xs bg-red-500 text-white border-0 shadow-lg hover:bg-red-600 transition-all opacity-0 group-hover:opacity-100">
+                                            <x-heroicon-o-x-mark class="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                @endforeach
+                            @else
                                 <div
                                     class="py-8 text-center border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-3xl">
                                     <p class="text-xs font-semibold text-zinc-400">Belum ada kru yang ditugaskan.</p>
@@ -259,7 +267,7 @@
                                         class="mt-4 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-widest hover:underline">Tugaskan
                                         Sekarang</button>
                                 </div>
-                            @endforelse
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -276,34 +284,37 @@
                         </div>
 
                         <div class="space-y-6 relative ml-3 border-l-2 border-white/20 pb-4">
-                            @forelse($form->stops as $index => $stop)
-                                <div wire:key="stop-{{ $index }}" class="relative pl-6">
-                                    <div
-                                        class="absolute -left-[11px] top-0 size-5 bg-white rounded-full flex items-center justify-center border-4 border-indigo-600 dark:border-indigo-900 group">
+                            @if (count($form->stops) > 0)
+                                @foreach ($form->stops as $index => $stop)
+                                    <div wire:key="stop-{{ $index }}" class="relative pl-6">
                                         <div
-                                            class="size-1.5 bg-indigo-600 rounded-full group-hover:scale-150 transition-all">
+                                            class="absolute -left-[11px] top-0 size-5 bg-white rounded-full flex items-center justify-center border-4 border-indigo-600 dark:border-indigo-900 group">
+                                            <div
+                                                class="size-1.5 bg-indigo-600 rounded-full group-hover:scale-150 transition-all">
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 hover:bg-white/20 transition-all cursor-default">
+                                            <p
+                                                class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">
+                                                {{ $index + 1 }}. {{ $stop['location_name'] }}</p>
+                                            <input type="time"
+                                                wire:model="form.stops.{{ $index }}.estimated_time"
+                                                class="input input-xs bg-white/10 border-white/20 text-white w-full font-bold focus:bg-white focus:text-zinc-900 transition-all" />
+                                            @error('form.stops.' . $index . '.estimated_time')
+                                                <span
+                                                    class="text-[9px] text-red-200 font-bold mt-1">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                     </div>
-                                    <div
-                                        class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 hover:bg-white/20 transition-all cursor-default">
-                                        <p class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">
-                                            {{ $index + 1 }}. {{ $stop['location_name'] }}</p>
-                                        <input type="time"
-                                            wire:model="form.stops.{{ $index }}.estimated_time"
-                                            class="input input-xs bg-white/10 border-white/20 text-white w-full font-bold focus:bg-white focus:text-zinc-900 transition-all" />
-                                        @error('form.stops.' . $index . '.estimated_time')
-                                            <span
-                                                class="text-[9px] text-red-200 font-bold mt-1">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            @empty
+                                @endforeach
+                            @else
                                 <div
                                     class="px-4 py-8 text-center bg-white/5 rounded-2xl border border-dashed border-white/10">
                                     <p class="text-[10px] font-bold text-indigo-200 uppercase tracking-widest italic">
                                         Pilih rute untuk melihat detail estimasi per stop.</p>
                                 </div>
-                            @endforelse
+                            @endif
                         </div>
                     </div>
 

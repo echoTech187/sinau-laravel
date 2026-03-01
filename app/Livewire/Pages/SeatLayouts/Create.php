@@ -67,7 +67,7 @@ class Create extends Component
     {
         $this->form->store();
         
-        $this->dispatch('notify', message: 'Layout kursi baru berhasil disimpan.', type: 'success');
+        $this->dispatch('notify', 'Layout kursi baru berhasil disimpan.', 'success');
         
         return $this->redirect(route('seat-layouts.index'), navigate: true);
     }

@@ -62,13 +62,13 @@ class Index extends Component
         $this->newFacilityName = '';
         $this->newFacilityIcon = '';
         $this->showingFacilityModal = false;
-        $this->dispatch('notify', message: 'Fasilitas baru berhasil ditambahkan.', type: 'success');
+        $this->dispatch('notify', 'Fasilitas baru berhasil ditambahkan.', 'success');
     }
 
     public function deleteFacility($id)
     {
         Facility::find($id)->delete();
-        $this->dispatch('notify', message: 'Fasilitas berhasil dihapus.', type: 'info');
+        $this->dispatch('notify', 'Fasilitas berhasil dihapus.', 'info');
     }
 
     public function confirmDeleteBusClass($id)
@@ -83,7 +83,7 @@ class Index extends Component
             BusClass::find($this->busClassIdBeingDeleted)->delete();
             $this->confirmingBusClassDeletion = false;
             $this->busClassIdBeingDeleted = null;
-            $this->dispatch('notify', message: 'Kelas Bus berhasil dihapus.', type: 'success');
+            $this->dispatch('notify', 'Kelas Bus berhasil dihapus.', 'success');
         }
     }
 

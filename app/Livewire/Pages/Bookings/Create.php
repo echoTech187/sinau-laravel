@@ -2,17 +2,15 @@
 
 namespace App\Livewire\Pages\Bookings;
 
-use App\Models\Location;
-use App\Models\Schedule;
+use App\Enums\PaymentStatus;
 use App\Models\Booking;
 use App\Models\BookingTicket;
-use App\Models\SeatLayout;
-use Livewire\Component;
-use Livewire\Attributes\Computed;
+use App\Models\Location;
+use App\Models\Schedule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use App\Enums\PaymentStatus;
-use Carbon\Carbon;
+use Livewire\Attributes\Computed;
+use Livewire\Component;
 
 class Create extends Component
 {
@@ -21,16 +19,21 @@ class Create extends Component
 
     // Search fields
     public ?int $origin_id = null;
+
     public ?int $destination_id = null;
+
     public $departure_date;
 
     // Selection fields
     public ?int $selected_schedule_id = null;
+
     public array $selected_seats = []; // Array of seat numbers
+
     public array $passengers = []; // [seat_number => ['name' => '', 'price' => 0]]
 
     // Customer fields
     public string $customer_name = '';
+
     public string $customer_phone = '';
 
     public function mount()
@@ -47,7 +50,7 @@ class Create extends Component
     #[Computed]
     public function schedules()
     {
-        if (!$this->origin_id || !$this->destination_id || !$this->departure_date) {
+        if (! $this->origin_id || ! $this->destination_id || ! $this->departure_date) {
             return collect();
         }
 
@@ -56,27 +59,31 @@ class Create extends Component
         // Or if they are in the route stops.
         return Schedule::query()
             ->whereDate('departure_date', $this->departure_date)
-            ->whereHas('route', function($q) {
-                $q->where(function($q2) {
+            ->whereHas('route', function ($q) {
+                $q->where(function ($q2) {
                     $q2->where('origin_location_id', $this->origin_id)
-                       ->where('destination_location_id', $this->destination_id);
-                })->orWhere(function($q2) {
+                        ->where('destination_location_id', $this->destination_id);
+                })->orWhere(function ($q2) {
                     // Also check if both locations exist in route stops
-                    $q2->whereHas('stops', fn($s) => $s->where('location_id', $this->origin_id))
-                       ->whereHas('stops', fn($s) => $s->where('location_id', $this->destination_id));
+                    $q2->whereHas('stops', fn ($s) => $s->where('location_id', $this->origin_id))
+                        ->whereHas('stops', fn ($s) => $s->where('location_id', $this->destination_id));
                 });
             })
             ->with(['route.origin', 'route.destination', 'bus.busClass'])
             ->get()
-            ->filter(function($schedule) {
+            ->filter(function ($schedule) {
                 // Ensure origin comes before destination in the stops sequence
                 $stops = $schedule->route->stops()->orderBy('stop_order')->get();
-                $originIndex = $stops->search(fn($s) => $s->location_id == $this->origin_id);
-                $destIndex = $stops->search(fn($s) => $s->location_id == $this->destination_id);
-                
+                $originIndex = $stops->search(fn ($s) => $s->location_id == $this->origin_id);
+                $destIndex = $stops->search(fn ($s) => $s->location_id == $this->destination_id);
+
                 // If it's a direct route (no stops matching but overall origin/dest match)
-                if ($originIndex === false && $schedule->route->origin_location_id == $this->origin_id) $originIndex = -1;
-                if ($destIndex === false && $schedule->route->destination_location_id == $this->destination_id) $destIndex = 999;
+                if ($originIndex === false && $schedule->route->origin_location_id == $this->origin_id) {
+                    $originIndex = -1;
+                }
+                if ($destIndex === false && $schedule->route->destination_location_id == $this->destination_id) {
+                    $destIndex = 999;
+                }
 
                 return $originIndex !== false && $destIndex !== false && $originIndex < $destIndex;
             });
@@ -91,11 +98,13 @@ class Create extends Component
     #[Computed]
     public function takenSeats()
     {
-        if (!$this->selected_schedule_id) return [];
+        if (! $this->selected_schedule_id) {
+            return [];
+        }
 
-        return BookingTicket::whereHas('booking', function($q) {
+        return BookingTicket::whereHas('booking', function ($q) {
             $q->where('schedule_id', $this->selected_schedule_id)
-              ->whereIn('payment_status', [PaymentStatus::PAID, PaymentStatus::UNPAID]);
+                ->whereIn('payment_status', [PaymentStatus::PAID, PaymentStatus::UNPAID]);
         })->pluck('seat_number')->toArray();
     }
 
@@ -106,9 +115,18 @@ class Create extends Component
         $this->selected_seats = [];
     }
 
+    public function swapLocations()
+    {
+        $temp = $this->origin_id;
+        $this->origin_id = $this->destination_id;
+        $this->destination_id = $temp;
+    }
+
     public function toggleSeat($seatNumber)
     {
-        if (in_array($seatNumber, $this->takenSeats())) return;
+        if (in_array($seatNumber, $this->takenSeats())) {
+            return;
+        }
 
         if (in_array($seatNumber, $this->selected_seats)) {
             $this->selected_seats = array_diff($this->selected_seats, [$seatNumber]);
@@ -122,7 +140,8 @@ class Create extends Component
     public function goToStep4()
     {
         if (empty($this->selected_seats)) {
-            $this->dispatch('notify', message: 'Silakan pilih setidaknya satu kursi.', type: 'error');
+            $this->dispatch('notify', 'Silakan pilih setidaknya satu kursi.', 'error');
+
             return;
         }
         $this->step = 4;
@@ -137,9 +156,9 @@ class Create extends Component
         ]);
 
         try {
-            DB::transaction(function() {
+            DB::transaction(function () {
                 $booking = Booking::create([
-                    'booking_code' => 'BK-' . strtoupper(Str::random(8)),
+                    'booking_code' => 'BK-'.strtoupper(Str::random(8)),
                     'customer_name' => $this->customer_name,
                     'customer_phone' => $this->customer_phone,
                     'schedule_id' => $this->selected_schedule_id,
@@ -163,7 +182,7 @@ class Create extends Component
                 $this->redirect(route('bookings.show', $booking->id), navigate: true);
             });
         } catch (\Exception $e) {
-            $this->dispatch('notify', message: 'Terjadi kesalahan: ' . $e->getMessage(), type: 'error');
+            $this->dispatch('notify', 'Terjadi kesalahan: '.$e->getMessage(), 'error');
         }
     }
 

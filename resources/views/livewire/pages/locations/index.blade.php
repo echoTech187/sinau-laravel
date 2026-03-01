@@ -100,66 +100,71 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/60 text-sm">
-                        @forelse($this->locations as $location)
-                            <tr wire:key="location-{{ $location->id }}"
-                                class="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors border-b border-zinc-100 dark:border-zinc-800/50 last:border-0 group">
-                                <td class="py-4 pl-6">
-                                    <div class="flex flex-col">
-                                        <span
-                                            class="font-bold text-zinc-900 dark:text-white group-hover:text-indigo-600 transition-colors">{{ $location->name }}</span>
-                                        <span
-                                            class="text-[10px] text-zinc-400 font-mono mt-0.5 tracking-widest">{{ $location->qr_code_gate ?? 'NO-GATE-QR' }}</span>
-                                    </div>
-                                </td>
-                                <td class="py-4">
-                                    <div class="flex flex-col">
-                                        <span
-                                            class="font-medium text-zinc-800 dark:text-zinc-200">{{ $location->city }}</span>
-                                        <span class="text-[10px] text-zinc-500 mt-0.5">{{ $location->province }}</span>
-                                    </div>
-                                </td>
-                                <td class="py-4 max-w-xs truncate text-[11px] text-zinc-500 leading-relaxed italic">
-                                    {{ $location->address }}
-                                </td>
-                                <td class="py-4">
-                                    <div class="flex flex-wrap gap-1">
-                                        @forelse($location->roles as $role)
+                        @if (count($this->locations) > 0)
+                            @foreach ($this->locations as $location)
+                                <tr wire:key="location-{{ $location->id }}"
+                                    class="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors border-b border-zinc-100 dark:border-zinc-800/50 last:border-0 group">
+                                    <td class="py-4 pl-6">
+                                        <div class="flex flex-col">
                                             <span
-                                                class="px-2 py-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[9px] font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-tighter">
-                                                {{ $role->name }}
-                                            </span>
-                                        @empty
-                                            <span class="text-[10px] text-zinc-400">Umum</span>
-                                        @endforelse
-                                    </div>
-                                </td>
-                                <td class="py-4">
-                                    @if ($location->has_maintenance_facility)
-                                        <div
-                                            class="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 text-[10px] font-bold uppercase tracking-tight">
-                                            <div class="size-1.5 rounded-full bg-amber-500"></div>
-                                            Maintenance Ready
+                                                class="font-bold text-zinc-900 dark:text-white group-hover:text-indigo-600 transition-colors">{{ $location->name }}</span>
+                                            <span
+                                                class="text-[10px] text-zinc-400 font-mono mt-0.5 tracking-widest">{{ $location->qr_code_gate ?? 'NO-GATE-QR' }}</span>
                                         </div>
-                                    @else
-                                        <span class="text-[10px] text-zinc-400">Standar</span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <div class="flex items-center justify-end gap-1">
-                                        <a wire:navigate href="{{ route('locations.edit', $location->id) }}"
-                                            class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-indigo-500 rounded-lg inline-flex items-center justify-center"
-                                            title="Edit Data">
-                                            <x-heroicon-o-pencil-square class="w-4 h-4" />
-                                        </a>
-                                        <button wire:click="confirmDeleteLocation({{ $location->id }})"
-                                            class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 rounded-lg"
-                                            title="Hapus">
-                                            <x-heroicon-o-trash class="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
+                                    </td>
+                                    <td class="py-4">
+                                        <div class="flex flex-col">
+                                            <span
+                                                class="font-medium text-zinc-800 dark:text-zinc-200">{{ $location->city }}</span>
+                                            <span
+                                                class="text-[10px] text-zinc-500 mt-0.5">{{ $location->province }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 max-w-xs truncate text-[11px] text-zinc-500 leading-relaxed italic">
+                                        {{ $location->address }}
+                                    </td>
+                                    <td class="py-4">
+                                        <div class="flex flex-wrap gap-1">
+                                            @if (count($location->roles) > 0)
+                                                @foreach ($location->roles as $role)
+                                                    <span
+                                                        class="px-2 py-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[9px] font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-tighter">
+                                                        {{ $role->name }}
+                                                    </span>
+                                                @endforeach
+                                            @else
+                                                <span class="text-[10px] text-zinc-400">Umum</span>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="py-4">
+                                        @if ($location->has_maintenance_facility)
+                                            <div
+                                                class="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 text-[10px] font-bold uppercase tracking-tight">
+                                                <div class="size-1.5 rounded-full bg-amber-500"></div>
+                                                Maintenance Ready
+                                            </div>
+                                        @else
+                                            <span class="text-[10px] text-zinc-400">Standar</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex items-center justify-end gap-1">
+                                            <a wire:navigate href="{{ route('locations.edit', $location->id) }}"
+                                                class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-indigo-500 rounded-lg inline-flex items-center justify-center"
+                                                title="Edit Data">
+                                                <x-heroicon-o-pencil-square class="w-4 h-4" />
+                                            </a>
+                                            <button wire:click="confirmDeleteLocation({{ $location->id }})"
+                                                class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-red-500 rounded-lg"
+                                                title="Hapus">
+                                                <x-heroicon-o-trash class="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr>
                                 <td colspan="6" class="py-20 text-center text-zinc-500">
                                     <div
@@ -171,7 +176,7 @@
                                     <p class="text-sm mt-1">Ganti filter atau tambahkan lokasi operasional baru.</p>
                                 </td>
                             </tr>
-                        @endforelse
+                        @endif
                     </tbody>
                 </table>
             </div>

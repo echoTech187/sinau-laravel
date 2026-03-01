@@ -14,7 +14,7 @@ class Create extends Component
     {
         $this->form->store();
         
-        $this->dispatch('notify', message: 'Lokasi baru berhasil ditambahkan.', type: 'success');
+        $this->dispatch('notify', 'Lokasi baru berhasil ditambahkan.', 'success');
         
         return $this->redirect(route('locations.index'), navigate: true);
     }

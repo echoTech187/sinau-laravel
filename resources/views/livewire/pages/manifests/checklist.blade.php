@@ -163,80 +163,82 @@
 
                 <!-- Items List -->
                 <div class="p-4 flex-1 space-y-3 overflow-y-auto">
-                    @forelse($this->currentItems as $index => $item)
-                        @php $resultVal = $responses[$item->id]['result'] ?? ''; @endphp
-                        <div
-                            class="p-4 bg-white/80 dark:bg-zinc-900/30 rounded-xl border transition-all duration-300 relative group/card {{ $resultVal === 'fail' ? 'border-rose-200 dark:border-rose-500/20 bg-rose-50/10' : ($resultVal === 'pass' ? 'border-emerald-200 dark:border-emerald-500/20' : 'border-zinc-100 dark:border-zinc-800') }}">
+                    @if (count($this->currentItems) > 0)
+                        @foreach ($this->currentItems as $index => $item)
+                            @php $resultVal = $responses[$item->id]['result'] ?? ''; @endphp
+                            <div
+                                class="p-4 bg-white/80 dark:bg-zinc-900/30 rounded-xl border transition-all duration-300 relative group/card {{ $resultVal === 'fail' ? 'border-rose-200 dark:border-rose-500/20 bg-rose-50/10' : ($resultVal === 'pass' ? 'border-emerald-200 dark:border-emerald-500/20' : 'border-zinc-100 dark:border-zinc-800') }}">
 
-                            @if ($item->is_critical)
-                                <div
-                                    class="absolute top-0 right-6 -translate-y-1/2 px-3 py-0.5 bg-rose-600 text-white text-[9px] font-black uppercase tracking-widest rounded-full z-20">
-                                    🚨 KRITIS
-                                </div>
-                            @endif
-
-                            <div class="flex flex-col gap-3">
-                                <!-- Item Header -->
-                                <div class="flex items-center gap-3">
-                                    <span
-                                        class="w-6 h-6 rounded-md bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 flex items-center justify-center text-[10px] font-black shrink-0">
-                                        {{ $index + 1 }}
-                                    </span>
-                                    <h3
-                                        class="text-sm font-black text-zinc-900 dark:text-white tracking-tight leading-tight flex-1 group-hover/card:text-indigo-600 transition-colors">
-                                        {{ $item->item_name }}
-                                    </h3>
-                                    <span
-                                        class="text-[9px] font-black text-zinc-400 uppercase tracking-widest shrink-0">{{ $item->max_score }}
-                                        pts</span>
-                                </div>
-
-                                <!-- Radio Buttons -->
-                                <div class="grid grid-cols-4 gap-2">
-                                    @foreach (\App\Enums\ManifestResult::cases() as $res)
-                                        @php
-                                            $isSelected = $resultVal === $res->value;
-                                            $colorStyles = match ($res->value) {
-                                                'pass' => $isSelected
-                                                    ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-500/20 ring-2 ring-emerald-100 dark:ring-emerald-500/10'
-                                                    : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-400 hover:border-emerald-400 hover:text-emerald-600',
-                                                'pass_with_note' => $isSelected
-                                                    ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/20 ring-2 ring-amber-100 dark:ring-amber-500/10'
-                                                    : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-400 hover:border-amber-400 hover:text-amber-600',
-                                                'fail' => $isSelected
-                                                    ? 'bg-rose-600 text-white shadow-sm shadow-rose-500/20 ring-2 ring-rose-100 dark:ring-rose-500/10'
-                                                    : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-400 hover:border-rose-400 hover:text-rose-600',
-                                                'n_a' => $isSelected
-                                                    ? 'bg-zinc-600 text-white shadow-sm ring-2 ring-zinc-100 dark:ring-zinc-500/10'
-                                                    : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-400 hover:border-zinc-400 hover:text-zinc-600',
-                                            };
-                                        @endphp
-                                        <label class="cursor-pointer">
-                                            <input type="radio"
-                                                wire:model.live="responses.{{ $item->id }}.result"
-                                                value="{{ $res->value }}" class="sr-only">
-                                            <div
-                                                class="h-9 flex items-center justify-center border-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all duration-300 {{ $colorStyles }}">
-                                                {{ $res->value === 'pass_with_note' ? 'NOTA' : ($res->value === 'n_a' ? 'N/A' : strtoupper($res->name)) }}
-                                            </div>
-                                        </label>
-                                    @endforeach
-                                </div>
-
-                                @if ($resultVal === 'pass_with_note' || $resultVal === 'fail')
-                                    <div class="pt-3 border-t border-dashed border-zinc-100 dark:border-zinc-800">
-                                        <textarea wire:model.blur="responses.{{ $item->id }}.notes" placeholder="Jelaskan kondisi detail..."
-                                            class="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs font-bold text-zinc-700 dark:text-zinc-300 placeholder-zinc-300 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none h-20 resize-none transition-all"></textarea>
+                                @if ($item->is_critical)
+                                    <div
+                                        class="absolute top-0 right-6 -translate-y-1/2 px-3 py-0.5 bg-rose-600 text-white text-[9px] font-black uppercase tracking-widest rounded-full z-20">
+                                        🚨 KRITIS
                                     </div>
                                 @endif
+
+                                <div class="flex flex-col gap-3">
+                                    <!-- Item Header -->
+                                    <div class="flex items-center gap-3">
+                                        <span
+                                            class="w-6 h-6 rounded-md bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 flex items-center justify-center text-[10px] font-black shrink-0">
+                                            {{ $index + 1 }}
+                                        </span>
+                                        <h3
+                                            class="text-sm font-black text-zinc-900 dark:text-white tracking-tight leading-tight flex-1 group-hover/card:text-indigo-600 transition-colors">
+                                            {{ $item->item_name }}
+                                        </h3>
+                                        <span
+                                            class="text-[9px] font-black text-zinc-400 uppercase tracking-widest shrink-0">{{ $item->max_score }}
+                                            pts</span>
+                                    </div>
+
+                                    <!-- Radio Buttons -->
+                                    <div class="grid grid-cols-4 gap-2">
+                                        @foreach (\App\Enums\ManifestResult::cases() as $res)
+                                            @php
+                                                $isSelected = $resultVal === $res->value;
+                                                $colorStyles = match ($res->value) {
+                                                    'pass' => $isSelected
+                                                        ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-500/20 ring-2 ring-emerald-100 dark:ring-emerald-500/10'
+                                                        : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-400 hover:border-emerald-400 hover:text-emerald-600',
+                                                    'pass_with_note' => $isSelected
+                                                        ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/20 ring-2 ring-amber-100 dark:ring-amber-500/10'
+                                                        : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-400 hover:border-amber-400 hover:text-amber-600',
+                                                    'fail' => $isSelected
+                                                        ? 'bg-rose-600 text-white shadow-sm shadow-rose-500/20 ring-2 ring-rose-100 dark:ring-rose-500/10'
+                                                        : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-400 hover:border-rose-400 hover:text-rose-600',
+                                                    'n_a' => $isSelected
+                                                        ? 'bg-zinc-600 text-white shadow-sm ring-2 ring-zinc-100 dark:ring-zinc-500/10'
+                                                        : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-400 hover:border-zinc-400 hover:text-zinc-600',
+                                                };
+                                            @endphp
+                                            <label class="cursor-pointer">
+                                                <input type="radio"
+                                                    wire:model.live="responses.{{ $item->id }}.result"
+                                                    value="{{ $res->value }}" class="sr-only">
+                                                <div
+                                                    class="h-9 flex items-center justify-center border-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all duration-300 {{ $colorStyles }}">
+                                                    {{ $res->value === 'pass_with_note' ? 'NOTA' : ($res->value === 'n_a' ? 'N/A' : strtoupper($res->name)) }}
+                                                </div>
+                                            </label>
+                                        @endforeach
+                                    </div>
+
+                                    @if ($resultVal === 'pass_with_note' || $resultVal === 'fail')
+                                        <div class="pt-3 border-t border-dashed border-zinc-100 dark:border-zinc-800">
+                                            <textarea wire:model.blur="responses.{{ $item->id }}.notes" placeholder="Jelaskan kondisi detail..."
+                                                class="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs font-bold text-zinc-700 dark:text-zinc-300 placeholder-zinc-300 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none h-20 resize-none transition-all"></textarea>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
-                    @empty
+                        @endforeach
+                    @else
                         <div class="flex flex-col items-center justify-center py-20 opacity-30 gap-4">
                             <x-heroicon-o-document-magnifying-glass class="w-14 h-14" />
                             <p class="text-sm font-black uppercase tracking-widest">Checklist Kosong</p>
                         </div>
-                    @endforelse
+                    @endif
                 </div>
 
                 <!-- Footer Action -->

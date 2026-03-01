@@ -135,81 +135,85 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/60">
-                        @forelse($this->bookings as $b)
-                            <tr wire:key="booking-{{ $b->id }}"
-                                class="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors border-b border-zinc-100 dark:border-zinc-800/50 last:border-0 group">
-                                <td class="py-6">
-                                    <span
-                                        class="text-sm font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter">#{{ $b->booking_code }}</span>
-                                    <p
-                                        class="text-[9px] font-bold text-zinc-400 mt-0.5 truncate uppercase tracking-widest">
-                                        {{ $b->created_at->format('d M Y, H:i') }}</p>
-                                </td>
-                                <td class="py-6">
-                                    <div class="flex flex-col">
+                        @if (count($this->bookings) > 0)
+                            @foreach ($this->bookings as $b)
+                                <tr wire:key="booking-{{ $b->id }}"
+                                    class="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors border-b border-zinc-100 dark:border-zinc-800/50 last:border-0 group">
+                                    <td class="py-6">
                                         <span
-                                            class="text-sm font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-tight">{{ $b->customer_name }}</span>
-                                        <span
-                                            class="text-[10px] font-medium text-zinc-500 lowercase mt-0.5 italic">{{ $b->customer_phone }}</span>
-                                    </div>
-                                </td>
-                                <td class="py-6">
-                                    <div class="flex flex-col gap-1 items-start">
-                                        <div class="flex items-center gap-2 group/route text-pretty transition-all">
+                                            class="text-sm font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter">#{{ $b->booking_code }}</span>
+                                        <p
+                                            class="text-[9px] font-bold text-zinc-400 mt-0.5 truncate uppercase tracking-widest">
+                                            {{ $b->created_at->format('d M Y, H:i') }}</p>
+                                    </td>
+                                    <td class="py-6">
+                                        <div class="flex flex-col">
                                             <span
-                                                class="text-xs font-black text-zinc-800 dark:text-white uppercase truncate max-w-[120px]">{{ $b->schedule->route->origin->name }}</span>
-                                            <x-heroicon-o-arrow-right
-                                                class="w-3 h-3 text-zinc-300 dark:text-zinc-600 group-hover/route:text-indigo-500" />
+                                                class="text-sm font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-tight">{{ $b->customer_name }}</span>
                                             <span
-                                                class="text-xs font-black text-zinc-800 dark:text-white uppercase truncate max-w-[120px] text-pretty">{{ $b->schedule->route->destination->name }}</span>
+                                                class="text-[10px] font-medium text-zinc-500 lowercase mt-0.5 italic">{{ $b->customer_phone }}</span>
                                         </div>
+                                    </td>
+                                    <td class="py-6">
+                                        <div class="flex flex-col gap-1 items-start">
+                                            <div class="flex items-center gap-2 group/route text-pretty transition-all">
+                                                <span
+                                                    class="text-xs font-black text-zinc-800 dark:text-white uppercase truncate max-w-[120px]">{{ $b->schedule->route->origin->name }}</span>
+                                                <x-heroicon-o-arrow-right
+                                                    class="w-3 h-3 text-zinc-300 dark:text-zinc-600 group-hover/route:text-indigo-500" />
+                                                <span
+                                                    class="text-xs font-black text-zinc-800 dark:text-white uppercase truncate max-w-[120px] text-pretty">{{ $b->schedule->route->destination->name }}</span>
+                                            </div>
+                                            <span
+                                                class="text-[9px] font-black text-indigo-500 uppercase tracking-widest bg-indigo-50/50 dark:bg-indigo-500/10 px-2 py-0.5 rounded-md">{{ $b->schedule->bus->busClass->name }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-6 text-center">
+                                        <div
+                                            class="inline-flex size-8 rounded-xl bg-zinc-100 dark:bg-zinc-800 items-center justify-center text-xs font-black text-zinc-600 dark:text-zinc-400 shadow-inner">
+                                            {{ $b->total_seats }}
+                                        </div>
+                                    </td>
+                                    <td class="py-6">
+                                        <span class="text-sm font-black text-zinc-900 dark:text-white tracking-tight">Rp
+                                            {{ number_format($b->total_amount, 0, ',', '.') }}</span>
+                                    </td>
+                                    <td class="py-6 text-center">
                                         <span
-                                            class="text-[9px] font-black text-indigo-500 uppercase tracking-widest bg-indigo-50/50 dark:bg-indigo-500/10 px-2 py-0.5 rounded-md">{{ $b->schedule->bus->busClass->name }}</span>
-                                    </div>
-                                </td>
-                                <td class="py-6 text-center">
-                                    <div
-                                        class="inline-flex size-8 rounded-xl bg-zinc-100 dark:bg-zinc-800 items-center justify-center text-xs font-black text-zinc-600 dark:text-zinc-400 shadow-inner">
-                                        {{ $b->total_seats }}
-                                    </div>
-                                </td>
-                                <td class="py-6">
-                                    <span class="text-sm font-black text-zinc-900 dark:text-white tracking-tight">Rp
-                                        {{ number_format($b->total_amount, 0, ',', '.') }}</span>
-                                </td>
-                                <td class="py-6 text-center">
-                                    <span
-                                        class="px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest
+                                            class="px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest
                                         @if ($b->payment_status->value === 'paid') bg-emerald-500/10 text-emerald-600 border border-emerald-500/20
                                         @elseif($b->payment_status->value === 'unpaid') bg-amber-500/10 text-amber-600 border border-amber-500/20
                                         @else bg-zinc-500/10 text-zinc-500 border border-zinc-500/20 @endif
                                     ">
-                                        {{ $b->payment_status->name }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <div class="flex items-center justify-end">
-                                        <a wire:navigate href="{{ route('bookings.show', $b->id) }}"
-                                            class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 rounded-lg inline-flex items-center justify-center shadow-sm"
-                                            title="Lihat Detail">
-                                            <x-heroicon-o-eye class="w-5 h-5" />
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
+                                            {{ $b->payment_status->name }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex items-center justify-end">
+                                            <a wire:navigate href="{{ route('bookings.show', $b->id) }}"
+                                                class="btn btn-ghost btn-xs btn-square hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 rounded-lg inline-flex items-center justify-center shadow-sm"
+                                                title="Lihat Detail">
+                                                <x-heroicon-o-eye class="w-5 h-5" />
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr>
                                 <td colspan="7" class="py-24 text-center">
                                     <div class="flex flex-col items-center justify-center opacity-30">
                                         <x-heroicon-o-clipboard-document-list class="w-16 h-16 mb-4" />
-                                        <p class="text-sm font-black uppercase tracking-widest">Belum Ada Data Booking
+                                        <p class="text-sm font-black uppercase tracking-widest">Belum Ada Data
+                                            Booking
                                         </p>
-                                        <p class="text-xs italic mt-1 leading-relaxed">Gunakan tombol 'Reservasi Baru'
+                                        <p class="text-xs italic mt-1 leading-relaxed">Gunakan tombol 'Reservasi
+                                            Baru'
                                             untuk memulai.</p>
                                     </div>
                                 </td>
                             </tr>
-                        @endforelse
+                        @endif
                     </tbody>
                 </table>
             </div>

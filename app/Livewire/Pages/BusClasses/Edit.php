@@ -20,7 +20,7 @@ class Edit extends Component
     {
         $this->form->update();
         
-        $this->dispatch('notify', message: 'Kelas bus berhasil diperbarui.', type: 'success');
+        $this->dispatch('notify', 'Kelas bus berhasil diperbarui.', 'success');
         
         return $this->redirect(route('bus-classes.index'), navigate: true);
     }
