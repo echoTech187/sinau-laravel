@@ -1,4 +1,4 @@
-﻿@php /** @var \App\Livewire\Pages\Crews\Create $this */ @endphp
+﻿
 <div class="container relative min-h-screen pb-10">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div
@@ -36,7 +36,7 @@
 
         <div class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 md:p-8 shadow-sm animate-fade-in-up"
             style="animation-delay: 0.1s">
-            <form id="crewForm" wire:submit="saveCrew" class="space-y-8">
+            <form id="crewForm" wire:submit="saveCrew" class="space-y-8" novalidate>
                 <div>
                     <h4
                         class="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-4 flex items-center gap-2 pb-2 border-b border-zinc-100 dark:border-zinc-800">

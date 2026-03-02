@@ -112,7 +112,7 @@
                             @endphp
 
                             @if ($visibleChildren->isNotEmpty())
-                                <div class="space-y-1">
+                                <div class="space-y-1" x-data="{ open: false }" wire:key="root_{{ $root->id }}">
                                     <h3 x-show="!sidebarCollapsed" x-transition.opacity
                                         class="px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500 whitespace-nowrap overflow-hidden">
                                         {{ __($root->name) }}
@@ -133,7 +133,7 @@
                                                 $iconComponent = 'heroicon-o-' . $childIcon;
                                             @endphp
                                             <a href="{{ $child->route && \Illuminate\Support\Facades\Route::has($child->route) ? route($child->route) : '#' }}"
-                                                wire:navigate
+                                                wire:navigate wire:key="child_{{ $child->id }}"
                                                 @mouseenter="showTooltip($event, '{{ __($child->name) }}')"
                                                 @mouseleave="hideTooltip()"
                                                 :class="sidebarCollapsed ? 'justify-center px-0 py-2.5' : 'gap-3 px-3 py-2'"
@@ -276,7 +276,6 @@
         </main>
     </div>
 
-    @livewireScripts
     <style>
         .custom-scrollbar::-webkit-scrollbar {
             width: 4px;

@@ -73,4 +73,6 @@
             </div>
         </template>
     </div>
+    {{-- @livewireScripts --}}
+    @fluxScripts()
 </x-layouts::app.sidebar>
