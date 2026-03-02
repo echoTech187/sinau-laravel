@@ -109,7 +109,8 @@
                                 class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.bus_class_id')  @enderror">
                                 <option value="">Pilih Kelas</option>
                                 @foreach ($this->busClasses as $bc)
-                                    <option value="{{ $bc->id }}">{{ $bc->name }}</option>
+                                    <option wire:key="bc-{{ $bc->id }}" value="{{ $bc->id }}">
+                                        {{ $bc->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -124,7 +125,8 @@
                                 class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.seat_layout_id')  @enderror">
                                 <option value="">Pilih Layout</option>
                                 @foreach ($this->seatLayouts as $sl)
-                                    <option value="{{ $sl->id }}">{{ $sl->name }} ({{ $sl->total_seats }}
+                                    <option wire:key="sl-{{ $sl->id }}" value="{{ $sl->id }}">
+                                        {{ $sl->name }} ({{ $sl->total_seats }}
                                         Kursi)</option>
                                 @endforeach
                             </select>
@@ -140,7 +142,8 @@
                                 class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.base_pool_id')  @enderror">
                                 <option value="">Pilih Garasi</option>
                                 @foreach ($this->basePools as $pool)
-                                    <option value="{{ $pool->id }}">{{ $pool->name }} ({{ $pool->city }})
+                                    <option wire:key="bp-{{ $pool->id }}" value="{{ $pool->id }}">
+                                        {{ $pool->name }} ({{ $pool->city }})
                                     </option>
                                 @endforeach
                             </select>

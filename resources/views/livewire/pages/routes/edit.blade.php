@@ -85,7 +85,8 @@
                             class="select select-bordered bg-white dark:bg-zinc-950 border-emerald-200 dark:border-emerald-900/50 rounded-xl shadow-sm focus:ring-2 focus:ring-emerald-500 transition-all @error('form.origin_location_id') @enderror">
                             <option value="">-- Pilih Asal Keberangkatan --</option>
                             @foreach ($this->locations as $loc)
-                                <option value="{{ $loc->id }}">{{ $loc->name }}</option>
+                                <option wire:key="loc-org-{{ $loc->id }}" value="{{ $loc->id }}">
+                                    {{ $loc->name }}</option>
                             @endforeach
                         </select>
                         @error('form.origin_location_id')
@@ -104,7 +105,8 @@
                             class="select select-bordered bg-white dark:bg-zinc-950 dark:border-red-900/50 rounded-xl shadow-sm focus:ring-2 focus:ring-red-500 transition-all @error('form.destination_location_id')  @enderror">
                             <option value="">-- Pilih Tujuan Akhir --</option>
                             @foreach ($this->locations as $loc)
-                                <option value="{{ $loc->id }}">{{ $loc->name }}</option>
+                                <option wire:key="loc-dest-{{ $loc->id }}" value="{{ $loc->id }}">
+                                    {{ $loc->name }}</option>
                             @endforeach
                         </select>
                         @error('form.destination_location_id')
@@ -167,7 +169,8 @@
                                         class="select select-bordered select-sm w-full bg-white dark:bg-zinc-900 @error('form.stops.' . $index . '.location_id')  @enderror shadow-sm">
                                         <option value="">Pilih Titik Lokasi / Agen</option>
                                         @foreach ($this->locations as $loc)
-                                            <option value="{{ $loc->id }}">{{ $loc->name }}</option>
+                                            <option wire:key="stop-loc-{{ $index }}-{{ $loc->id }}"
+                                                value="{{ $loc->id }}">{{ $loc->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('form.stops.' . $index . '.location_id')

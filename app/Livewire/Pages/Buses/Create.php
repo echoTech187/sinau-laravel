@@ -16,13 +16,13 @@ class Create extends Component
 {
     public BusForm $form;
 
-    #[Computed]
+    #[Computed(persist: true)]
     public function busClasses()
     {
         return BusClass::all();
     }
 
-    #[Computed]
+    #[Computed(persist: true)]
     public function seatLayouts()
     {
         return SeatLayout::all();
@@ -54,3 +54,4 @@ class Create extends Component
         return view('livewire.pages.buses.create');
     }
 }
+

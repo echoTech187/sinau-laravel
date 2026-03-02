@@ -1,4 +1,4 @@
-﻿@php
+@php
     /** @var \App\Livewire\Pages\Locations\Index $this */
 @endphp
 <div class="relative min-h-full">
@@ -22,7 +22,9 @@
                 <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">Manajemen titik pemberhentian, agen, pool, dan
                     checkpoint operasional.</p>
             </div>
-            <div class="flex items-center gap-3">
+            <!-- Action Buttons -->
+            <div
+                class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
                 <a wire:navigate href="{{ route('locations.create') }}"
                     class="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-xl transition-all hover:-translate-y-0.5 font-bold">
                     <x-heroicon-o-plus class="w-4 h-4" />
@@ -130,7 +132,7 @@
                                         <div class="flex flex-wrap gap-1">
                                             @if (count($location->roles) > 0)
                                                 @foreach ($location->roles as $role)
-                                                    <span
+                                                    <span wire:key="loc-role-{{ $location->id }}-{{ $role->id }}"
                                                         class="px-2 py-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[9px] font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-tighter">
                                                         {{ $role->name }}
                                                     </span>

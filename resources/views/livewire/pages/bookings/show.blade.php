@@ -1,4 +1,4 @@
-﻿@php
+@php
     /** @var \App\Livewire\Pages\Bookings\Show $this */
 @endphp
 <div class="container relative min-h-full pb-20">
@@ -108,7 +108,7 @@
                     <h2 class="text-xs font-black uppercase tracking-[.4em] text-zinc-400 px-4">Daftar Tiket & Penumpang
                     </h2>
                     @foreach ($booking->tickets as $ticket)
-                        <div
+                        <div wire:key="ticket-{{ $ticket->id }}"
                             class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-4xl p-6 shadow-sm flex flex-col md:flex-row items-center gap-6 group hover:translate-x-1 transition-all relative overflow-hidden">
                             <div
                                 class="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-500 opacity-20 group-hover:opacity-100 transition-opacity">

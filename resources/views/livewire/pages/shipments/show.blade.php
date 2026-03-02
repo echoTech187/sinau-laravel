@@ -1,4 +1,4 @@
-﻿@php
+@php
     /** @var \App\Livewire\Pages\Shipments\Show $this */
 @endphp
 <div class="container relative min-h-full pb-20">
@@ -165,7 +165,8 @@
                             $found = false;
                         @endphp
                         @foreach ($statuses as $key => $label)
-                            <div class="relative flex items-center justify-between group">
+                            <div wire:key="status-timeline-{{ $key }}"
+                                class="relative flex items-center justify-between group">
                                 <div class="flex items-center">
                                     <div
                                         class="flex items-center justify-center size-10 rounded-full {{ $currentStatus === $key ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-300' }} z-10 transition-all group-hover:scale-110">

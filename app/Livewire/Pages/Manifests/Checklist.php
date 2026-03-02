@@ -2,24 +2,29 @@
 
 namespace App\Livewire\Pages\Manifests;
 
-use App\Models\OperationalManifest;
+use App\Enums\ApprovalStatus;
+use App\Enums\ManifestResult;
+use App\Enums\OperationalManifestStatus;
 use App\Models\InspectionCategory;
 use App\Models\InspectionItem;
-use App\Models\ManifestChecklist;
 use App\Models\ManifestApproval;
-use App\Enums\ManifestResult;
-use App\Enums\ApprovalStatus;
-use App\Enums\OperationalManifestStatus;
-use Livewire\Component;
-use Livewire\Attributes\Computed;
+use App\Models\ManifestChecklist;
+use App\Models\OperationalManifest;
 use Illuminate\Support\Facades\Auth;
-
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Title;
+use Livewire\Component;
+use Livewire\Attributes\Layout;
+    
+#[Layout('layouts::app')]
 class Checklist extends Component
 {
     public OperationalManifest $manifest;
+
     public $selectedCategoryId = null;
+
     public $responses = []; // [item_id => ['result' => 'pass', 'notes' => '']]
-    
+
     public function mount(OperationalManifest $manifest)
     {
         $this->manifest = $manifest;
@@ -37,7 +42,7 @@ class Checklist extends Component
     {
         $this->responses = [];
         $existing = ManifestChecklist::where('manifest_id', '=', $this->manifest->id, 'and')
-            ->whereIn('inspection_item_id', function($q) {
+            ->whereIn('inspection_item_id', function ($q) {
                 $q->select('id')->from('inspection_items')->where('category_id', '=', $this->selectedCategoryId, 'and');
             })
             ->get();
@@ -52,7 +57,7 @@ class Checklist extends Component
         // Fill remaining with null/default if needed
         $items = InspectionItem::where('category_id', '=', $this->selectedCategoryId, 'and')->get();
         foreach ($items as $item) {
-            if (!isset($this->responses[$item->id])) {
+            if (! isset($this->responses[$item->id])) {
                 $this->responses[$item->id] = ['result' => '', 'notes' => ''];
             }
         }
@@ -79,9 +84,10 @@ class Checklist extends Component
 
         foreach ($items as $item) {
             $response = $this->responses[$item->id] ?? null;
-            
-            if (!$response || empty($response['result'])) {
+
+            if (! $response || empty($response['result'])) {
                 $this->dispatch('notify', "Harap isi semua item: {$item->item_name}", 'error');
+
                 return;
             }
 
@@ -119,7 +125,7 @@ class Checklist extends Component
         // Calculate achieved percentage
         $percentage = ($totalMaxScore > 0) ? ($totalEarnedScore / $totalMaxScore) * 100 : 100;
         $category = InspectionCategory::find($this->selectedCategoryId, ['*']);
-        
+
         $status = ApprovalStatus::APPROVED;
         if ($hasCriticalFail || $percentage < $category->min_passing_percentage) {
             $status = ApprovalStatus::REJECTED;
@@ -154,8 +160,10 @@ class Checklist extends Component
         }
     }
 
+    #[Title('Monitoring SJO & P2H')]
     public function render()
     {
         return view('livewire.pages.manifests.checklist');
     }
 }
+

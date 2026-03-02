@@ -124,7 +124,8 @@
                                 class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-bold">
                                 <option value="">Tanpa Titik Lokasi Peta</option>
                                 @foreach ($this->locations as $loc)
-                                    <option value="{{ $loc->id }}">{{ $loc->name }}</option>
+                                    <option wire:key="loc-{{ $loc->id }}" value="{{ $loc->id }}">
+                                        {{ $loc->name }}</option>
                                 @endforeach
                             </select>
                             @error('form.location_id')
@@ -152,7 +153,8 @@
                                 class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-bold">
                                 <option value="">Berdiri Sendiri (Pusat)</option>
                                 @foreach ($this->branchOffices as $branch)
-                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                    <option wire:key="branch-{{ $branch->id }}" value="{{ $branch->id }}">
+                                        {{ $branch->name }}</option>
                                 @endforeach
                             </select>
                             @error('form.parent_branch_id')

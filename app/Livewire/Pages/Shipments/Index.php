@@ -72,3 +72,4 @@ class Index extends Component
         return view('livewire.pages.shipments.index');
     }
 }
+

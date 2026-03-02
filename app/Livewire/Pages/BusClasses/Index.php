@@ -34,7 +34,7 @@ class Index extends Component
         $this->resetPage();
     }
 
-    #[Computed]
+    #[Computed(persist: true)]
     public function busClasses()
     {
         return BusClass::query()
@@ -45,7 +45,7 @@ class Index extends Component
             ->paginate(10);
     }
 
-    #[Computed]
+    #[Computed(persist: true)]
     public function facilities()
     {
         return Facility::all();
@@ -96,3 +96,4 @@ class Index extends Component
         return view('livewire.pages.bus-classes.index');
     }
 }
+

@@ -113,3 +113,4 @@ class Index extends Component
         return view('livewire.pages.agents.index');
     }
 }
+

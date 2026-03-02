@@ -62,17 +62,25 @@ class Index extends Component
     #[Computed]
     public function buses()
     {
-        return Bus::orderBy('name', 'asc')->get();
+        return Bus::query()->where('status', '=', 'active', 'and')->orderBy('name', 'asc')->get();
     }
 
     #[Computed]
     public function stats()
     {
+        /** @var object|null $stats */
+        $stats = Schedule::toBase()
+            ->selectRaw('COUNT(id) as total')
+            ->selectRaw("SUM(CASE WHEN status = 'scheduled' THEN 1 ELSE 0 END) as scheduled")
+            ->selectRaw("SUM(CASE WHEN status = 'on_the_way' THEN 1 ELSE 0 END) as on_the_way")
+            ->selectRaw("SUM(CASE WHEN status = 'arrived' THEN 1 ELSE 0 END) as arrived")
+            ->first();
+
         return [
-            'total' => Schedule::count('id'),
-            'scheduled' => Schedule::where('status', '=', 'cancelled', 'and')->count(),
-            'on_the_way' => Schedule::where('status', '=', 'on_the_way', 'and')->count(),
-            'arrived' => Schedule::where('status', '=', 'arrived', 'and')->count(),
+            'total' => $stats?->total ?? 0,
+            'scheduled' => $stats?->scheduled ?? 0,
+            'on_the_way' => $stats?->on_the_way ?? 0,
+            'arrived' => $stats?->arrived ?? 0,
         ];
     }
 
@@ -89,3 +97,4 @@ class Index extends Component
         return view('livewire.pages.schedules.index');
     }
 }
+

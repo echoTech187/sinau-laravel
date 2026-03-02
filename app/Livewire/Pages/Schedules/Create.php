@@ -104,3 +104,4 @@ class Create extends Component
         return view('livewire.pages.schedules.create');
     }
 }
+

@@ -97,10 +97,21 @@ trait HasPermissions
             return [];
         }
 
-        $permissions = $role->permissions()->pluck('slug')->toArray();
+        // Eager load permissions to avoid N+1 queries
+        if (!$role->relationLoaded('permissions')) {
+            $role->load('permissions');
+        }
 
-        if ($role->parent_id && $role->parent) {
-            $permissions = array_merge($permissions, $this->getPermissionsRecursive($role->parent));
+        $permissions = $role->permissions->pluck('slug')->toArray();
+
+        if ($role->parent_id) {
+            // Eager load parent role with its permissions
+            if (!$role->relationLoaded('parent')) {
+                $role->load('parent.permissions');
+            }
+            if ($role->parent) {
+                $permissions = array_merge($permissions, $this->getPermissionsRecursive($role->parent));
+            }
         }
 
         return $permissions;

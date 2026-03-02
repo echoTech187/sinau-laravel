@@ -1,4 +1,4 @@
-﻿@php
+@php
     /** @var \App\Livewire\Pages\Buses\Index $this */
 @endphp
 <div class="relative min-h-full">
@@ -14,7 +14,7 @@
     <div class="relative z-10 space-y-8">
         <div class="animate-fade-in-up">
             <header
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 dark:border-zinc-700/50 pb-4">
+                class="flex flex-col justify-end xl:flex-row xl:items-center xl:justify-between gap-4 border-b border-zinc-200 dark:border-zinc-700/50 pb-4">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
@@ -29,7 +29,8 @@
                     </p>
                 </div>
                 <!-- Action Buttons -->
-                <div class="flex items-center gap-3">
+                <div
+                    class="flex  justify-end sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
                     <button
                         class="btn btn-sm bg-white/50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl transition-all">
                         <x-heroicon-o-arrow-path class="w-4 h-4" />
@@ -99,19 +100,26 @@
                 <div
                     class="flex gap-2 p-1 bg-zinc-100/80 dark:bg-zinc-800/80 backdrop-blur rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 w-full md:w-auto overflow-x-auto">
                     <select wire:model.live="classFilter"
-                        class="select select-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium">
-                        <option value="">Semua Kelas</option>
+                        class="select select-sm border-0 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium">
+                        <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua
+                            Kelas</option>
                         @foreach ($this->busClasses as $bc)
-                            <option value="{{ $bc->id }}">{{ $bc->name }}</option>
+                            <option value="{{ $bc->id }}"
+                                class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">{{ $bc->name }}
+                            </option>
                         @endforeach
                     </select>
                     <div class="w-px h-6 bg-zinc-300 dark:bg-zinc-700 my-auto"></div>
                     <select wire:model.live="statusFilter"
-                        class="select select-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium">
-                        <option value="">Semua Status</option>
-                        <option value="active">Active</option>
-                        <option value="maintenance">Maintenance</option>
-                        <option value="inactive">Inactive</option>
+                        class="select select-sm border-0 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium">
+                        <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua
+                            Status</option>
+                        <option value="active" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Active
+                        </option>
+                        <option value="maintenance" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">
+                            Maintenance</option>
+                        <option value="inactive" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">
+                            Inactive</option>
                     </select>
                 </div>
 

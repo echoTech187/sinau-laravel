@@ -44,7 +44,7 @@ class Index extends Component
             ->paginate(10);
     }
 
-    #[Computed]
+    #[Computed(persist: true)]
     public function busClasses()
     {
         return BusClass::all();
@@ -53,11 +53,19 @@ class Index extends Component
     #[Computed]
     public function stats()
     {
+        /** @var object|null $stats */
+        $stats = Bus::toBase()
+            ->selectRaw('COUNT(id) as total')
+            ->selectRaw('SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as active', [BusStatus::ACTIVE->value])
+            ->selectRaw('SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as maintenance', [BusStatus::MAINTENANCE->value])
+            ->selectRaw('SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as inactive', [BusStatus::INACTIVE->value])
+            ->first();
+
         return [
-            'total' => Bus::count('id'),
-            'active'      => Bus::where('status', '=', BusStatus::ACTIVE->value, 'and')->count('id'),
-            'maintenance' => Bus::where('status', '=', BusStatus::MAINTENANCE->value, 'and')->count('id'),
-            'inactive'    => Bus::where('status', '=', BusStatus::INACTIVE->value, 'and')->count('id'),
+            'total' => $stats?->total ?? 0,
+            'active'      => $stats?->active ?? 0,
+            'maintenance' => $stats?->maintenance ?? 0,
+            'inactive'    => $stats?->inactive ?? 0,
         ];
     }
 
@@ -82,3 +90,4 @@ class Index extends Component
         }
     }
 }
+

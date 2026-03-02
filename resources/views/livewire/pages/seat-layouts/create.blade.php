@@ -124,7 +124,7 @@
                         style="grid-template-columns: repeat({{ $form->grid_columns }}, minmax(0, 1fr));">
 
                         @foreach ($form->layout_mapping as $index => $seat)
-                            <div wire:click="toggleSeat({{ $index }})"
+                            <div wire:key="grid-seat-{{ $index }}" wire:click="toggleSeat({{ $index }})"
                                 class="size-16 sm:size-20 rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all hover:scale-105 active:scale-95 shadow-sm border-2 
                                  {{ $seat['type'] === 'available' ? 'bg-zinc-50 dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800' : '' }}
                                  {{ $seat['type'] === 'seat' ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20' : '' }}

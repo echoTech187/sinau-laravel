@@ -56,7 +56,8 @@
                                     class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.route_id')  @enderror">
                                     <option value="">-- Pilih Rute --</option>
                                     @foreach ($this->routes as $route)
-                                        <option value="{{ $route->id }}">{{ $route->name }}
+                                        <option wire:key="opt-route-{{ $route->id }}" value="{{ $route->id }}">
+                                            {{ $route->name }}
                                             ({{ $route->route_code }})
                                         </option>
                                     @endforeach
@@ -76,7 +77,8 @@
                                     class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.bus_id')  @enderror">
                                     <option value="">-- Pilih Bus --</option>
                                     @foreach ($this->buses as $bus)
-                                        <option value="{{ $bus->id }}">{{ $bus->name }}
+                                        <option wire:key="opt-bus-{{ $bus->id }}" value="{{ $bus->id }}">
+                                            {{ $bus->name }}
                                             ({{ $bus->plate_number }})
                                         </option>
                                     @endforeach
@@ -193,7 +195,9 @@
                                                     class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
                                                     <option value="">-- Pilih Kru --</option>
                                                     @foreach ($this->crews as $c)
-                                                        <option value="{{ $c->id }}">{{ $c->name }}
+                                                        <option
+                                                            wire:key="opt-crew-{{ $index }}-{{ $c->id }}"
+                                                            value="{{ $c->id }}">{{ $c->name }}
                                                             ({{ $c->nik }})
                                                         </option>
                                                     @endforeach
@@ -208,7 +212,9 @@
                                                     class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
                                                     <option value="">-- Pilih Jabatan --</option>
                                                     @foreach ($this->positions as $pos)
-                                                        <option value="{{ $pos->id }}">{{ $pos->name }}
+                                                        <option
+                                                            wire:key="opt-pos-{{ $index }}-{{ $pos->id }}"
+                                                            value="{{ $pos->id }}">{{ $pos->name }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -225,7 +231,9 @@
                                                     class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
                                                     <option value="">-- Lokasi --</option>
                                                     @foreach ($this->locations as $loc)
-                                                        <option value="{{ $loc->id }}">{{ $loc->name }}
+                                                        <option
+                                                            wire:key="opt-boarding-{{ $index }}-{{ $loc->id }}"
+                                                            value="{{ $loc->id }}">{{ $loc->name }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -239,7 +247,9 @@
                                                     class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
                                                     <option value="">-- Lokasi --</option>
                                                     @foreach ($this->locations as $loc)
-                                                        <option value="{{ $loc->id }}">{{ $loc->name }}
+                                                        <option
+                                                            wire:key="opt-dropoff-{{ $index }}-{{ $loc->id }}"
+                                                            value="{{ $loc->id }}">{{ $loc->name }}
                                                         </option>
                                                     @endforeach
                                                 </select>

@@ -1,4 +1,4 @@
-﻿@php
+@php
     /** @var \App\Livewire\Pages\Routes\Index $this */
 @endphp
 <div class="relative min-h-full">
@@ -29,7 +29,8 @@
                     </p>
                 </div>
                 <!-- Action Buttons -->
-                <div class="flex items-center gap-3">
+                <div
+                    class="flex flex-wrap sm:flex-nowrap justify-start sm:justify-end items-center gap-3 w-full sm:w-auto mt-4 sm:mt-0">
                     <button
                         class="btn btn-sm bg-white/50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl transition-all">
                         <x-heroicon-o-arrow-path class="w-4 h-4" />
@@ -77,18 +78,24 @@
                 <div
                     class="flex flex-wrap gap-2 p-1 bg-zinc-100/80 dark:bg-zinc-800/80 backdrop-blur rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 w-full md:w-auto overflow-x-auto">
                     <select wire:model.live="originFilter"
-                        class="select select-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium">
-                        <option value="">Semua Terminal Asal</option>
+                        class="select select-sm border-0 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium">
+                        <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua
+                            Terminal Asal</option>
                         @foreach ($this->terminals as $loc)
-                            <option value="{{ $loc->id }}">{{ $loc->name }}</option>
+                            <option value="{{ $loc->id }}"
+                                class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">{{ $loc->name }}
+                            </option>
                         @endforeach
                     </select>
                     <div class="w-px h-6 bg-zinc-300 dark:bg-zinc-700 my-auto hidden sm:block"></div>
                     <select wire:model.live="destFilter"
-                        class="select select-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium whitespace-nowrap">
-                        <option value="">Semua Terminal Tujuan</option>
+                        class="select select-sm border-0 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium whitespace-nowrap">
+                        <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua
+                            Terminal Tujuan</option>
                         @foreach ($this->terminals as $loc)
-                            <option value="{{ $loc->id }}">{{ $loc->name }}</option>
+                            <option value="{{ $loc->id }}"
+                                class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">{{ $loc->name }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -197,7 +204,8 @@
                                 <td colspan="6" class="py-12 text-center text-zinc-500 dark:text-zinc-400">
                                     <x-heroicon-o-map class="w-12 h-12 mx-auto mb-3 opacity-20" />
                                     <p class="font-medium text-lg">Tidak ada data rute ditemukan</p>
-                                    <p class="text-xs mt-1">Tambahkan jalur operasional trayek baru terlebih dahulu.</p>
+                                    <p class="text-xs mt-1">Tambahkan jalur operasional trayek baru terlebih dahulu.
+                                    </p>
                                 </td>
                             </tr>
                         @endif
@@ -238,3 +246,4 @@
             wire:click="$set('confirmingRouteDeletion', false)"></div>
     </div>
 </div>
+

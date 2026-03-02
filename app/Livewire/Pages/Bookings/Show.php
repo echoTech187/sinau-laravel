@@ -19,3 +19,4 @@ class Show extends Component
         return view('livewire.pages.bookings.show');
     }
 }
+

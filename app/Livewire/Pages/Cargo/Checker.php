@@ -44,3 +44,4 @@ class Checker extends Component
         return view('livewire.pages.cargo.checker');
     }
 }
+

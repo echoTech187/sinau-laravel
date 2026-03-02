@@ -1,4 +1,4 @@
-﻿@php
+@php
     /** @var \App\Livewire\Pages\Cargo\Checker $this */
 @endphp
 <div class="relative min-h-full">

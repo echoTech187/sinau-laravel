@@ -105,7 +105,7 @@
 
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                         @foreach ($facilities as $f)
-                            <label
+                            <label wire:key="fac-{{ $f->id }}"
                                 class="group relative flex items-center gap-3 p-4 rounded-2xl border-2 transition-all cursor-pointer {{ in_array($f->id, $form->facility_ids) ? 'bg-indigo-50/50 dark:bg-indigo-950/20 border-indigo-500/50' : 'bg-white dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700' }}">
                                 <input type="checkbox" wire:model="form.facility_ids" value="{{ $f->id }}"
                                     class="hidden" />

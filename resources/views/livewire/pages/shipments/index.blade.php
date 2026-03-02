@@ -1,4 +1,4 @@
-﻿@php
+@php
     /** @var \App\Livewire\Pages\Shipments\Index $this */
 @endphp
 <div class="relative min-h-full">
@@ -28,7 +28,8 @@
                     </p>
                 </div>
                 <!-- Action Buttons -->
-                <div class="flex items-center gap-3">
+                <div
+                    class="flex flex-wrap sm:flex-nowrap justify-start sm:justify-end items-center gap-3 w-full sm:w-auto mt-4 sm:mt-0">
                     <a wire:navigate href="{{ route('shipments.create') }}"
                         class="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-xl transition-all hover:-translate-y-0.5 font-bold">
                         <x-heroicon-o-plus class="w-4 h-4" />
@@ -96,7 +97,8 @@
                 <div
                     class="flex gap-2 p-1 bg-zinc-100/80 dark:bg-zinc-800/80 backdrop-blur rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 w-full md:w-auto overflow-x-auto">
                     @foreach (['' => 'Semua', 'received_at_agent' => 'Diterima', 'in_transit' => 'Dalam Bus'] as $key => $label)
-                        <button wire:click="$set('status', '{{ $key }}')"
+                        <button wire:key="status-filter-{{ $key }}"
+                            wire:click="$set('status', '{{ $key }}')"
                             class="flex-1 px-4 py-2 rounded-lg text-[10px] font-black tracking-[0.15em] uppercase transition-all {{ $status === $key ? 'bg-white dark:bg-zinc-700 shadow-md text-indigo-600 dark:text-indigo-400 border border-zinc-100 dark:border-zinc-600' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300' }}">
                             {{ $label }}
                         </button>

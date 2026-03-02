@@ -1,4 +1,4 @@
-﻿@php
+@php
     /** @var \App\Livewire\Pages\Manifests\Index $this */
 @endphp
 <div class="relative min-h-full">
@@ -41,7 +41,7 @@
                         x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 scale-95 translate-y-4"
                         x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                        class="absolute right-0 top-full mt-4 w-[420px] bg-white dark:bg-zinc-900 rounded-[2rem] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.14)] border border-zinc-200 dark:border-zinc-800 overflow-hidden z-50">
+                        class="absolute right-0 top-full mt-4 w-105 bg-white dark:bg-zinc-900 rounded-4xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.14)] border border-zinc-200 dark:border-zinc-800 overflow-hidden z-50">
                         <div
                             class="p-6 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 flex items-center justify-between">
                             <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Pilih Jadwal</span>
@@ -49,10 +49,11 @@
                                 <span class="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
                             </div>
                         </div>
-                        <div class="max-h-[480px] overflow-y-auto p-3 space-y-1 custom-scrollbar">
+                        <div class="max-h-md overflow-y-auto p-3 space-y-1 custom-scrollbar">
                             @if (count($this->availableSchedules) > 0)
                                 @foreach ($this->availableSchedules as $schedule)
-                                    <button wire:click="generateForSchedule({{ $schedule->id }})" @click="open = false"
+                                    <button wire:key="sched-item-{{ $schedule->id }}"
+                                        wire:click="generateForSchedule({{ $schedule->id }})" @click="open = false"
                                         class="w-full text-left p-4 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-2xl transition-all group flex items-center gap-4 border border-transparent hover:border-zinc-100 dark:hover:border-zinc-700">
                                         <div
                                             class="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition-all">
@@ -145,44 +146,47 @@
             </div>
         </div>
 
-        <!-- Toolbar & Filter -->
-        <div class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-3xl p-4 shadow-sm animate-fade-in-up"
-            style="animation-delay: 0.2s">
-            <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
-                <!-- Status Filter Pill -->
-                <div
-                    class="flex gap-2 p-1 bg-zinc-100/80 dark:bg-zinc-800/80 backdrop-blur rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 w-full md:w-auto">
-                    <select wire:model.live="status"
-                        class="select select-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium">
-                        <option value="">Semua Status</option>
-                        <option value="draft">Draft</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                    </select>
-                    <div class="w-px h-5 bg-zinc-300 dark:bg-zinc-700 my-auto"></div>
-                    <input type="date"
-                        class="input input-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium" />
-                    <div class="w-px h-5 bg-zinc-300 dark:bg-zinc-700 my-auto"></div>
-                    <input type="date"
-                        class="input input-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium" />
-                </div>
-
-                <!-- Search -->
-                <div class="relative w-full md:w-80 group">
-                    <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                        <x-heroicon-o-magnifying-glass
-                            class="w-4 h-4 text-zinc-400 group-focus-within:text-indigo-500 transition-colors" />
-                    </div>
-                    <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari Rute, atau Kode..."
-                        class="input input-sm w-full pl-11 bg-white/50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-indigo-500/20" />
-                </div>
-            </div>
-        </div>
 
         <!-- Data Table -->
         <div class="animate-fade-in-up" style="animation-delay: 0.3s">
-            <div
-                class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-sm">
+            <div class="bg-white/60 dark:bg-zinc-900/40 rounded-3xl overflow-hidden">
+                <!-- Toolbar & Filter -->
+                <div class="bg-transparent rounded-t-3xl p-4 animate-fade-in-up" style="animation-delay: 0.2s">
+                    <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
+                        <!-- Status Filter Pill -->
+                        <div
+                            class="flex gap-2 p-1 bg-zinc-100/80 dark:bg-zinc-800/80 backdrop-blur rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 w-full md:w-auto">
+                            <select wire:model.live="status"
+                                class="select select-sm border-0 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium">
+                                <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">
+                                    Semua Status</option>
+                                <option value="draft" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">
+                                    Draft</option>
+                                <option value="approved"
+                                    class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Approved</option>
+                                <option value="rejected"
+                                    class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Rejected</option>
+                            </select>
+                            <div class="w-px h-5 bg-zinc-300 dark:bg-zinc-700 my-auto"></div>
+                            <input type="date"
+                                class="input input-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium" />
+                            <div class="w-px h-5 bg-zinc-300 dark:bg-zinc-700 my-auto"></div>
+                            <input type="date"
+                                class="input input-sm border-0 bg-transparent focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium" />
+                        </div>
+
+                        <!-- Search -->
+                        <div class="relative w-full md:w-80 group">
+                            <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                                <x-heroicon-o-magnifying-glass
+                                    class="w-4 h-4 text-zinc-400 group-focus-within:text-indigo-500 transition-colors" />
+                            </div>
+                            <input type="text" wire:model.live.debounce.300ms="search"
+                                placeholder="Cari Rute, atau Kode..."
+                                class="input input-sm w-full pl-11 bg-white/50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-indigo-500/20" />
+                        </div>
+                    </div>
+                </div>
                 <div class="overflow-x-auto">
                     <table class="table table-sm w-full">
                         <thead>
@@ -248,7 +252,8 @@
                                         <td class="py-5">
                                             <div class="flex -space-x-1.5 overflow-hidden">
                                                 @foreach ($manifest->schedule->crews as $crew)
-                                                    <div class="inline-flex items-center justify-center size-6 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-white dark:border-zinc-900 text-[9px] font-bold text-zinc-600 dark:text-zinc-400"
+                                                    <div wire:key="manifest-crew-{{ $crew->id }}"
+                                                        class="inline-flex items-center justify-center size-6 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-white dark:border-zinc-900 text-[9px] font-bold text-zinc-600 dark:text-zinc-400"
                                                         title="{{ $crew->crew->name }} ({{ $crew->position->name }})">
                                                         {{ collect(explode(' ', $crew->crew->name))->take(1)->map(fn($w) => substr($w, 0, 1))->implode('') }}
                                                     </div>

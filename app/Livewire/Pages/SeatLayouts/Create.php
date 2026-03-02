@@ -80,3 +80,4 @@ class Create extends Component
         return view('livewire.pages.seat-layouts.create');
     }
 }
+

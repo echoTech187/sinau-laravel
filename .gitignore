@@ -26,3 +26,7 @@ yarn-error.log
 test_*.*
 /tests/*
 *_desc.*
+/*.php
+/*.html
+roles_desc.json
+

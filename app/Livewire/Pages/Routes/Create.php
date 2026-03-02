@@ -48,3 +48,4 @@ class Create extends Component
         return view('livewire.pages.routes.create');
     }
 }
+

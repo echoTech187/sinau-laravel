@@ -1,4 +1,4 @@
-﻿@php
+@php
     /** @var \App\Livewire\Pages\BusClasses\Index $this */
 @endphp
 <div class="container relative min-h-full pb-20">
@@ -20,7 +20,9 @@
                 <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">Pengaturan kelas layanan bus dan daftar
                     fasilitas pendukung kenyamanan penumpang.</p>
             </div>
-            <div class="flex items-center gap-3">
+            <!-- Action Buttons -->
+            <div
+                class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
                 <button wire:click="$set('showingFacilityModal', true)"
                     class="btn btn-md bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-2xl shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all font-bold">
                     <x-heroicon-o-sparkles class="w-5 h-5 text-sky-500" />
@@ -73,7 +75,7 @@
                                             <td class="py-4">
                                                 <div class="flex flex-wrap gap-1">
                                                     @foreach ($bc->facilities->take(3) as $f)
-                                                        <span
+                                                        <span wire:key="bc-fac-{{ $bc->id }}-{{ $f->id }}"
                                                             class="p-1 rounded-lg bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-500"
                                                             title="{{ $f->name }}">
                                                             <x-dynamic-component :component="$f->icon"
@@ -134,7 +136,7 @@
                     </h2>
                     <div class="grid grid-cols-2 gap-3">
                         @foreach ($this->facilities as $f)
-                            <div
+                            <div wire:key="fac-item-{{ $f->id }}"
                                 class="flex items-center gap-2 p-2 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 group relative">
                                 <div class="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-900 text-zinc-500">
                                     <x-dynamic-component :component="$f->icon" class="w-4 h-4" />

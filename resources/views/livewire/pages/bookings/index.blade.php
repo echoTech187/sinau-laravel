@@ -1,4 +1,4 @@
-﻿@php
+@php
     /** @var \App\Livewire\Pages\Bookings\Index $this */
 @endphp
 <div class="container relative min-h-full pb-20">
@@ -103,9 +103,11 @@
             <div class="flex items-center gap-2">
                 <select wire:model.live="status"
                     class="select select-bordered bg-white/50 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-700 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 font-bold">
-                    <option value="">Semua Status</option>
+                    <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua Status
+                    </option>
                     @foreach (\App\Enums\PaymentStatus::cases() as $s)
-                        <option value="{{ $s->value }}">{{ $s->name }}</option>
+                        <option wire:key="pstatus-{{ $s->value }}" value="{{ $s->value }}"
+                            class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">{{ $s->name }}</option>
                     @endforeach
                 </select>
             </div>

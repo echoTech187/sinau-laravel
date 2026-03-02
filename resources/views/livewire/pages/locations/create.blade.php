@@ -191,7 +191,7 @@
                     </h4>
                     <div class="flex flex-col gap-2">
                         @foreach ($locationRoles as $role)
-                            <label
+                            <label wire:key="loc-role-{{ $role->id }}"
                                 class="flex items-start gap-4 p-4 rounded-2xl bg-white/50 dark:bg-zinc-950/50 hover:bg-zinc-50 dark:hover:bg-zinc-800/80 cursor-pointer transition-all border border-zinc-200 dark:border-zinc-800">
                                 <input type="checkbox" wire:model="form.role_ids" value="{{ $role->id }}"
                                     class="checkbox checkbox-sm checkbox-primary rounded-lg mt-0.5" />

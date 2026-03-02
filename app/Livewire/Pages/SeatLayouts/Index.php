@@ -26,7 +26,7 @@ class Index extends Component
         $this->resetPage();
     }
 
-    #[Computed]
+    #[Computed(persist: true)]
     public function seatLayouts()
     {
         return SeatLayout::query()
@@ -57,3 +57,4 @@ class Index extends Component
         return view('livewire.pages.seat-layouts.index');
     }
 }
+

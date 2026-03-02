@@ -50,3 +50,4 @@ class Edit extends Component
         return view('livewire.pages.crews.edit');
     }
 }
+

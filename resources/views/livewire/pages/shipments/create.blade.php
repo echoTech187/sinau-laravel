@@ -217,7 +217,8 @@
                                 class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-medium text-zinc-900 dark:text-white">
                                 <option value="">Pilih Asal</option>
                                 @foreach ($this->locations as $loc)
-                                    <option value="{{ $loc->id }}">{{ $loc->name }}</option>
+                                    <option wire:key="opt-origin-{{ $loc->id }}" value="{{ $loc->id }}">
+                                        {{ $loc->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -233,7 +234,8 @@
                                 class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-medium text-zinc-900 dark:text-white">
                                 <option value="">Pilih Tujuan</option>
                                 @foreach ($this->locations as $loc)
-                                    <option value="{{ $loc->id }}">{{ $loc->name }}</option>
+                                    <option wire:key="opt-dest-{{ $loc->id }}" value="{{ $loc->id }}">
+                                        {{ $loc->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -249,7 +251,8 @@
                                 class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-medium text-zinc-900 dark:text-white opacity-90">
                                 <option value="">Pilih Jadwal (Opsional)</option>
                                 @foreach ($this->activeSchedules as $s)
-                                    <option value="{{ $s->id }}">{{ $s->departure_time->format('d M H:i') }} -
+                                    <option wire:key="opt-sched-{{ $s->id }}" value="{{ $s->id }}">
+                                        {{ $s->departure_time->format('d M H:i') }} -
                                         {{ $s->bus->fleet_code }}</option>
                                 @endforeach
                             </select>
@@ -266,7 +269,8 @@
                                 class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-medium text-zinc-900 dark:text-white">
                                 <option value="">Bukan Bagasi (Kargo Mandiri)</option>
                                 @foreach ($this->recentBookings as $b)
-                                    <option value="{{ $b->id }}">{{ $b->booking_code }} -
+                                    <option wire:key="opt-book-{{ $b->id }}" value="{{ $b->id }}">
+                                        {{ $b->booking_code }} -
                                         {{ $b->customer_name }}</option>
                                 @endforeach
                             </select>

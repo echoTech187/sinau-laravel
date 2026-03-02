@@ -78,3 +78,4 @@ class Index extends Component
         return view('livewire.pages.locations.index');
     }
 }
+

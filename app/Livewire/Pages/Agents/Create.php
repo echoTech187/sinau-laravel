@@ -49,3 +49,4 @@ class Create extends Component
         return view('livewire.pages.agents.create');
     }
 }
+

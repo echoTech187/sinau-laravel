@@ -51,11 +51,19 @@ class Index extends Component
     #[Computed]
     public function stats()
     {
+        /** @var object|null $stats */
+        $stats = Booking::toBase()
+            ->selectRaw('COUNT(id) as total')
+            ->selectRaw('SUM(CASE WHEN payment_status = ? THEN 1 ELSE 0 END) as paid', [PaymentStatus::PAID->value])
+            ->selectRaw('SUM(CASE WHEN payment_status = ? THEN 1 ELSE 0 END) as unpaid', [PaymentStatus::UNPAID->value])
+            ->selectRaw('SUM(CASE WHEN payment_status = ? THEN total_amount ELSE 0 END) as total_revenue', [PaymentStatus::PAID->value])
+            ->first();
+
         return [
-            'total' => Booking::count('id'),
-            'paid' => Booking::where('payment_status', '=', PaymentStatus::PAID, 'and')->count(),
-            'unpaid' => Booking::where('payment_status', '=', PaymentStatus::UNPAID, 'and')->count(),
-            'total_revenue' => Booking::where('payment_status', '=', PaymentStatus::PAID, 'and')->sum('total_amount'),
+            'total' => $stats?->total ?? 0,
+            'paid' => $stats?->paid ?? 0,
+            'unpaid' => $stats?->unpaid ?? 0,
+            'total_revenue' => $stats?->total_revenue ?? 0,
         ];
     }
 
@@ -64,3 +72,4 @@ class Index extends Component
         return view('livewire.pages.bookings.index');
     }
 }
+

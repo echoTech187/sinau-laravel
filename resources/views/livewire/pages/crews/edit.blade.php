@@ -98,7 +98,8 @@
                                 class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-bold">
                                 <option value="">Pilih Posisi Penugasan</option>
                                 @foreach ($this->crewPositions as $cp)
-                                    <option value="{{ $cp->id }}">{{ $cp->name }}</option>
+                                    <option wire:key="cp-{{ $cp->id }}" value="{{ $cp->id }}">
+                                        {{ $cp->name }}</option>
                                 @endforeach
                             </select>
                         </div>

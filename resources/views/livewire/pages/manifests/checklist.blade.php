@@ -1,6 +1,3 @@
-﻿@php
-    /** @var \App\Livewire\Pages\Manifests\Checklist $this */
-@endphp
 <div class="relative min-h-full">
     <!-- Decorative Background Blobs -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -20,19 +17,25 @@
                     class="w-9 h-9 flex items-center justify-center bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-sm hover:border-indigo-500 hover:text-indigo-600 transition-all group shrink-0">
                     <x-heroicon-o-arrow-left class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
                 </a>
-                <div>
+                <div class="flex items-center gap-3">
                     <h1 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-2">
                         <div
                             class="p-2 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30">
-                            <x-heroicon-s-clipboard-document-check class="w-5 h-5 text-white" />
+                            <x-heroicon-s-clipboard-document-check class="w-8 h-8 text-white" />
                         </div>
-                        Inspeksi P2H: <span class="text-indigo-600">{{ $manifest->manifest_number }}</span>
+
                     </h1>
-                    <div class="flex items-center gap-2 mt-1 ml-9">
-                        <span
-                            class="text-[10px] font-black bg-indigo-600 text-white px-2 py-0.5 rounded-md uppercase tracking-[0.15em]">{{ $manifest->schedule->bus->fleet_code }}</span>
-                        <span
-                            class="text-xs text-zinc-400 font-bold uppercase">{{ $manifest->schedule->route->name }}</span>
+                    <div class="flex flex-col gap-1">
+                        <h5 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                            Inspeksi P2H: <span class="text-indigo-600">{{ $manifest->manifest_number }}</span>
+                        </h5>
+                        <div class="flex items-center gap-2">
+
+                            <span
+                                class="text-[10px] font-black bg-indigo-600 text-white px-2 py-0.5 rounded-md uppercase tracking-[0.15em]">{{ $manifest->schedule->bus->fleet_code }}</span>
+                            <span
+                                class="text-xs text-zinc-400 font-bold uppercase">{{ $manifest->schedule->route->name }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -66,10 +69,54 @@
                         ],
                     };
                 @endphp
-                <div
-                    class="px-4 py-2 rounded-xl text-[10px] font-black border flex items-center gap-2 {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
-                    <span class="w-2 h-2 rounded-full {{ $statusConfig['dot'] }} animate-pulse"></span>
-                    STATUS: {{ strtoupper($manifest->status->value) }}
+                <div class="flex items-center gap-2">
+                    <div
+                        class="px-4 py-2 rounded-xl text-[10px] font-black border flex items-center gap-2 {{ $statusConfig['bg'] }} {{ $statusConfig['text'] }} {{ $statusConfig['border'] }}">
+                        <span class="w-2 h-2 rounded-full {{ $statusConfig['dot'] }} animate-pulse"></span>
+                        STATUS: {{ strtoupper($manifest->status->value) }}
+                    </div>
+                    <div class="dropdown dropdown-end px-2">
+                        <label tabindex="0"
+                            class="btn btn-circle btn-ghost btn-xs text-zinc-400 hover:text-indigo-600">
+                            <x-heroicon-o-question-mark-circle class="w-5 h-5" />
+                        </label>
+                        <div tabindex="0"
+                            class="dropdown-content z-100 menu p-4 shadow-xl bg-white dark:bg-zinc-900 rounded-2xl w-80 border border-zinc-100 dark:border-zinc-800 mt-2">
+                            <h3
+                                class="text-[10px] font-black text-zinc-400 uppercase tracking-[0.15em] mb-4 border-b border-zinc-100 dark:border-zinc-800 pb-2">
+                                Status Manifest</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-3">
+                                    <span class="w-2 h-2 mt-1 rounded-full bg-amber-500 shrink-0"></span>
+                                    <div>
+                                        <p class="text-[11px] font-bold text-zinc-900 dark:text-white leading-tight">
+                                            DRAFT</p>
+                                        <p class="text-[10px] text-zinc-500 dark:text-zinc-400 leading-tight mt-0.5">
+                                            Manifest baru dibuat, pemeriksaan (Checklist) sedang atau belum dilakukan.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="w-2 h-2 mt-1 rounded-full bg-emerald-500 shrink-0"></span>
+                                    <div>
+                                        <p class="text-[11px] font-bold text-zinc-900 dark:text-white leading-tight">
+                                            APPROVED</p>
+                                        <p class="text-[10px] text-zinc-500 dark:text-zinc-400 leading-tight mt-0.5">
+                                            Semua item wajib lolos inspeksi. Armada diizinkan beroperasi.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <span class="w-2 h-2 mt-1 rounded-full bg-rose-500 shrink-0"></span>
+                                    <div>
+                                        <p class="text-[11px] font-bold text-zinc-900 dark:text-white leading-tight">
+                                            REJECTED</p>
+                                        <p class="text-[10px] text-zinc-500 dark:text-zinc-400 leading-tight mt-0.5">
+                                            Terdapat item KRITIS yang gagal. Armada dilarang beroperasi (Grounded).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -92,7 +139,8 @@
                                 $isRejected = $approval && $approval->status->value === 'rejected';
                                 $isActive = $selectedCategoryId == $category->id;
                             @endphp
-                            <button wire:click="selectCategory({{ $category->id }})"
+                            <button wire:key="category-{{ $category->id }}"
+                                wire:click="selectCategory({{ $category->id }})" type="button"
                                 class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl border transition-all duration-300 relative overflow-hidden group/item {{ $isActive ? 'bg-zinc-900 dark:bg-indigo-600 border-zinc-900 dark:border-indigo-600 text-white shadow-md' : 'bg-transparent border-transparent text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:border-zinc-100 dark:hover:border-zinc-700' }}">
                                 <div class="flex items-center gap-3">
                                     <div
@@ -134,6 +182,65 @@
                         </p>
                     </div>
                 </div>
+                <!-- Status Legend Card -->
+                <div
+                    class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 shadow-sm">
+                    <h3 class="text-[10px] font-black text-zinc-400 uppercase tracking-[0.15em] mb-4">Panduan Status
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="w-12 h-6 rounded flex items-center justify-center shrink-0 bg-emerald-100/50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-[9px] font-black text-emerald-600 dark:text-emerald-400">
+                                PASS
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-bold text-zinc-900 dark:text-white leading-tight">Lolos
+                                    Inspeksi</p>
+                                <p class="text-[10px] text-zinc-500 dark:text-zinc-400 leading-tight mt-0.5">Kondisi
+                                    sangat baik dan aman beroperasi.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="w-12 h-6 rounded flex items-center justify-center shrink-0 bg-amber-100/50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-[9px] font-black text-amber-600 dark:text-amber-400">
+                                NOTA
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-bold text-zinc-900 dark:text-white leading-tight">Lolos
+                                    Bersyarat</p>
+                                <p class="text-[10px] text-zinc-500 dark:text-zinc-400 leading-tight mt-0.5">Aman
+                                    beroperasi, tapi mendapat catatan untuk perbaikan selanjutnya.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="w-12 h-6 rounded flex items-center justify-center shrink-0 bg-rose-100/50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-[9px] font-black text-rose-600 dark:text-rose-400">
+                                FAIL
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-bold text-zinc-900 dark:text-white leading-tight">Tidak Lolos
+                                </p>
+                                <p class="text-[10px] text-zinc-500 dark:text-zinc-400 leading-tight mt-0.5">Rusak /
+                                    Tidak berfungsi. Wajib diperbaiki hari ini.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div
+                                class="w-12 h-6 rounded flex items-center justify-center shrink-0 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[9px] font-black text-zinc-500 dark:text-zinc-400">
+                                N/A
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-bold text-zinc-900 dark:text-white leading-tight">Tidak
+                                    Berlaku</p>
+                                <p class="text-[10px] text-zinc-500 dark:text-zinc-400 leading-tight mt-0.5">Item tidak
+                                    ada / tidak bisa dievaluasi pada armada ini.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Content: Inspection Items List -->
@@ -168,7 +275,7 @@
                     @if (count($this->currentItems) > 0)
                         @foreach ($this->currentItems as $index => $item)
                             @php $resultVal = $responses[$item->id]['result'] ?? ''; @endphp
-                            <div
+                            <div wire:key="item-{{ $item->id }}"
                                 class="p-4 bg-white/80 dark:bg-zinc-900/30 rounded-xl border transition-all duration-300 relative group/card {{ $resultVal === 'fail' ? 'border-rose-200 dark:border-rose-500/20 bg-rose-50/10' : ($resultVal === 'pass' ? 'border-emerald-200 dark:border-emerald-500/20' : 'border-zinc-100 dark:border-zinc-800') }}">
 
                                 @if ($item->is_critical)
@@ -214,7 +321,8 @@
                                                         : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-400 hover:border-zinc-400 hover:text-zinc-600',
                                                 };
                                             @endphp
-                                            <label class="cursor-pointer">
+                                            <label class="cursor-pointer"
+                                                wire:key="result-{{ $item->id }}-{{ $res->value }}">
                                                 <input type="radio"
                                                     wire:model.live="responses.{{ $item->id }}.result"
                                                     value="{{ $res->value }}" class="sr-only">

@@ -98,3 +98,4 @@ class Index extends Component
         return view('livewire.pages.crews.index');
     }
 }
+

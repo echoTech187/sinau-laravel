@@ -24,13 +24,13 @@ class Edit extends Component
         $this->form->setBus($bus);
     }
 
-    #[Computed]
+    #[Computed(persist: true)]
     public function busClasses()
     {
         return BusClass::all();
     }
 
-    #[Computed]
+    #[Computed(persist: true)]
     public function seatLayouts()
     {
         return SeatLayout::all();
@@ -62,3 +62,4 @@ class Edit extends Component
         return view('livewire.pages.buses.edit');
     }
 }
+

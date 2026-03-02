@@ -75,7 +75,8 @@
                                         class="select select-bordered w-full bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-bold">
                                         <option value="">Pilih Asal</option>
                                         @foreach ($this->locations as $loc)
-                                            <option value="{{ $loc->id }}">{{ $loc->name }}
+                                            <option wire:key="origin-{{ $loc->id }}" value="{{ $loc->id }}">
+                                                {{ $loc->name }}
                                                 ({{ $loc->city }})
                                             </option>
                                         @endforeach
@@ -110,7 +111,8 @@
                                         class="select select-bordered w-full bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-bold">
                                         <option value="">Pilih Tujuan</option>
                                         @foreach ($this->locations as $loc)
-                                            <option value="{{ $loc->id }}">{{ $loc->name }}
+                                            <option wire:key="dest-{{ $loc->id }}" value="{{ $loc->id }}">
+                                                {{ $loc->name }}
                                                 ({{ $loc->city }})
                                             </option>
                                         @endforeach
@@ -296,7 +298,8 @@
                                                 ? in_array($seatNum, $this->selected_seats)
                                                 : false;
                                     @endphp
-                                    <div @if ($seat['type'] === 'seat' && $seatNum) wire:click="toggleSeat('{{ $seatNum }}')" @endif
+                                    <div wire:key="layout-seat-{{ $seatNum ?? str()->random(8) }}"
+                                        @if ($seat['type'] === 'seat' && $seatNum) wire:click="toggleSeat('{{ $seatNum }}')" @endif
                                         class="size-11 sm:size-14 rounded-lg sm:rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all hover:scale-110 active:scale-90 border-2
                                             {{ $seat['type'] === 'seat'
                                                 ? ($isTaken
@@ -336,7 +339,7 @@
                                 <div class="flex flex-wrap gap-2">
                                     @if (count($this->selected_seats) > 0)
                                         @foreach ($this->selected_seats as $seat)
-                                            <span
+                                            <span wire:key="sel-badge-{{ $seat }}"
                                                 class="px-3 py-1.5 bg-indigo-600 text-white text-xs font-black rounded-xl shadow-md">{{ $seat }}</span>
                                         @endforeach
                                     @else
@@ -425,7 +428,7 @@
 
                         <div class="space-y-4">
                             @foreach ($selected_seats as $seat)
-                                <div
+                                <div wire:key="passenger-row-{{ $seat }}"
                                     class="flex flex-col sm:flex-row gap-4 p-4 sm:p-6 rounded-2xl sm:rounded-[28px] bg-zinc-50 dark:bg-zinc-950/30 border border-zinc-100 dark:border-zinc-900 group/item hover:border-indigo-500/30 transition-all shadow-sm">
                                     <div class="flex items-center gap-4">
                                         <div

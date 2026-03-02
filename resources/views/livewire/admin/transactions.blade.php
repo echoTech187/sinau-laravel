@@ -32,7 +32,8 @@
                                 /** @var \App\Models\Transaction[] $transactions */
                             @endphp
                             @foreach ($transactions as $t)
-                                <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-700/30 transition-colors">
+                                <tr wire:key="transaction-{{ $t->id }}"
+                                    class="hover:bg-zinc-50 dark:hover:bg-zinc-700/30 transition-colors">
                                     <td class="px-6 py-4 font-mono text-zinc-900 dark:text-white">
                                         {{ $t->invoice_number }}
                                     </td>

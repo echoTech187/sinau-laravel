@@ -84,6 +84,6 @@ class User extends Authenticatable
     {
         return $this->avatar
             ? asset('storage/' . $this->avatar)
-            : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+            : asset('assets/images/default-avatar.png');
     }
 }

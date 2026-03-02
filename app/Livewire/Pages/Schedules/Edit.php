@@ -106,3 +106,4 @@ class Edit extends Component
         return view('livewire.pages.schedules.edit');
     }
 }
+

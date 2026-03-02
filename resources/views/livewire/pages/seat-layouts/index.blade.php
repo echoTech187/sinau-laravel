@@ -1,4 +1,4 @@
-﻿@php
+@php
     /** @var \App\Livewire\Pages\SeatLayouts\Index $this */
 @endphp
 <div class="container relative min-h-full pb-20">
@@ -21,7 +21,9 @@
                 <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">Pengaturan denah kursi bus untuk berbagai jenis
                     karoseri dan kelas layanan.</p>
             </div>
-            <div class="flex items-center gap-3">
+            <!-- Action Buttons -->
+            <div
+                class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
                 <a wire:navigate href="{{ route('seat-layouts.create') }}"
                     class="btn btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/20 rounded-2xl transition-all hover:-translate-y-0.5 font-bold">
                     <x-heroicon-o-plus class="w-5 h-5" />
@@ -71,8 +73,8 @@
                             <!-- Mini Preview (Simulated) -->
                             <div
                                 class="mt-6 flex flex-wrap gap-1 justify-center p-3 bg-zinc-50 dark:bg-zinc-950/50 rounded-2xl border border-zinc-100 dark:border-zinc-800 overflow-hidden max-h-24">
-                                @foreach (array_slice($layout->layout_mapping, 0, 15) as $seat)
-                                    <div
+                                @foreach (array_slice($layout->layout_mapping, 0, 15) as $index => $seat)
+                                    <div wire:key="layout-seat-{{ $layout->id }}-{{ $index }}"
                                         class="size-3 rounded shadow-sm {{ $seat['type'] === 'seat' ? 'bg-indigo-500' : 'bg-zinc-200 dark:bg-zinc-800' }}">
                                     </div>
                                 @endforeach

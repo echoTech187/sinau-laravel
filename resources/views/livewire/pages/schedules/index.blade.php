@@ -1,4 +1,4 @@
-﻿@php
+@php
     /** @var \App\Livewire\Pages\Schedules\Index $this */
 @endphp
 <div class="relative min-h-full">
@@ -27,7 +27,9 @@
                         Kelola jam operasional armada, penugasan kru, dan pantau status perjalanan secara real-time.
                     </p>
                 </div>
-                <div class="flex items-center gap-3">
+                <!-- Action Buttons -->
+                <div
+                    class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
                     <a wire:navigate href="{{ route('schedules.create') }}"
                         class="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-xl transition-all hover:-translate-y-0.5 font-bold">
                         <x-heroicon-o-plus-circle class="w-4 h-4" />
@@ -116,12 +118,18 @@
                             <span class="text-xs font-bold text-zinc-400 uppercase">Status:</span>
                             <select wire:model.live="filter_status"
                                 class="select select-sm select-bordered bg-white dark:bg-zinc-900 rounded-xl border-zinc-200 dark:border-zinc-800 text-xs shadow-sm">
-                                <option value="">Semua Status</option>
-                                <option value="scheduled">Scheduled</option>
-                                <option value="boarding">Boarding</option>
-                                <option value="on_the_way">On The Way</option>
-                                <option value="arrived">Arrived</option>
-                                <option value="canceled">Canceled</option>
+                                <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">
+                                    Semua Status</option>
+                                <option value="scheduled"
+                                    class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Scheduled</option>
+                                <option value="boarding"
+                                    class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Boarding</option>
+                                <option value="on_the_way"
+                                    class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">On The Way</option>
+                                <option value="arrived" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">
+                                    Arrived</option>
+                                <option value="canceled"
+                                    class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Canceled</option>
                             </select>
                         </div>
                         <div class="flex items-center gap-2">
@@ -216,7 +224,8 @@
                                         <td class="py-4">
                                             <div class="flex -space-x-1.5 overflow-hidden">
                                                 @foreach ($schedule->crews as $crew)
-                                                    <div class="inline-flex items-center justify-center size-6 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-white dark:border-zinc-900 text-[9px] font-bold text-zinc-600 dark:text-zinc-400"
+                                                    <div wire:key="schedule-{{ $schedule->id }}-crew-{{ $crew->id }}"
+                                                        class="inline-flex items-center justify-center size-6 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-white dark:border-zinc-900 text-[9px] font-bold text-zinc-600 dark:text-zinc-400"
                                                         title="{{ $crew->crew->name }} ({{ $crew->position->name }})">
                                                         {{ collect(explode(' ', $crew->crew->name))->take(1)->map(fn($w) => substr($w, 0, 1))->implode('') }}
                                                     </div>

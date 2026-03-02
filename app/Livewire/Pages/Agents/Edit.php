@@ -55,3 +55,4 @@ class Edit extends Component
         return view('livewire.pages.agents.edit');
     }
 }
+
