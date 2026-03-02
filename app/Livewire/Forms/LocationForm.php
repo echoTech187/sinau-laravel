@@ -14,19 +14,19 @@ class LocationForm extends Form
     #[Rule('required|string|min:3|max:255')]
     public string $name = '';
 
-    #[Rule('required|string|max:100')]
+    #[Rule('required|string|min:3|max:100')]
     public string $city = '';
 
-    #[Rule('required|string|max:100')]
+    #[Rule('required|string|min:3|max:100')]
     public string $province = '';
 
-    #[Rule('required|string')]
+    #[Rule('required|string|min:5|max:1000')]
     public string $address = '';
 
-    #[Rule('nullable|numeric')]
+    #[Rule('nullable|numeric|between:-90,90')]
     public ?float $latitude = null;
 
-    #[Rule('nullable|numeric')]
+    #[Rule('nullable|numeric|between:-180,180')]
     public ?float $longitude = null;
 
     #[Rule('nullable|string|in:circular,polygon')]
@@ -41,6 +41,8 @@ class LocationForm extends Form
     #[Rule('boolean')]
     public bool $has_maintenance_facility = false;
 
+    #[Rule('nullable|array')]
+    #[Rule('exists:roles,id', as: 'role_ids.*')]
     public array $role_ids = [];
 
     public function setLocation(Location $location)

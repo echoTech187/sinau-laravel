@@ -24,7 +24,7 @@ class ShipmentForm extends Form
     #[Rule('required|string|min:10|max:20')]
     public string $receiver_phone = '';
 
-    #[Rule('required|string|min:5')]
+    #[Rule('required|string|min:5|max:1000')]
     public string $item_description = '';
 
     #[Rule('required|numeric|min:0.1')]

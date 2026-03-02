@@ -91,9 +91,14 @@ class Edit extends Component
 
     public function saveSchedule()
     {
-        $this->form->update();
-        session()->flash('success', 'Perubahan jadwal telah disimpan.');
-        return $this->redirect(route('schedules.index'), navigate: true);
+        try {
+            $this->form->update();
+            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Perubahan jadwal telah disimpan.');
+            return $this->redirect(route('schedules.index'), navigate: true);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+            return;
+        }
     }
 
     public function render()

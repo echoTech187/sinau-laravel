@@ -24,17 +24,23 @@ class Create extends Component
     #[Computed]
     public function locations()
     {
-        return Location::whereHas('roles', function($q) {
+        return Location::whereHas('roles', function ($q) {
             $q->where('name', '=', 'Agen');
         })->get();
     }
 
     public function saveAgent()
     {
-        $this->form->store();
-        
-        session()->flash('message', 'Data Agen/Mitra berhasil ditambahkan!');
-        return $this->redirectRoute('agents.index', navigate: true);
+        try {
+            $this->form->store();
+            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Data Agen/Mitra berhasil ditambahkan!');
+
+            return $this->redirectRoute('agents.index', navigate: true);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+
+            return;
+        }
     }
 
     #[Title('Tambah Agen Baru')]

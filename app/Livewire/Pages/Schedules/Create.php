@@ -89,9 +89,14 @@ class Create extends Component
 
     public function saveSchedule()
     {
-        $this->form->store();
-        session()->flash('success', 'Jadwal baru berhasil terbit.');
-        return $this->redirect(route('schedules.index'), navigate: true);
+        try {
+            $this->form->store();
+            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Jadwal baru berhasil terbit.');
+            return $this->redirect(route('schedules.index'), navigate: true);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+            return;
+        }
     }
 
     public function render()

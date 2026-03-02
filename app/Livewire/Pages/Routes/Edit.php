@@ -41,11 +41,14 @@ class Edit extends Component
 
     public function saveRoute()
     {
-        $this->form->update();
-
-        session()->flash('message', 'Data Rute berhasil diperbarui!');
-
-        return $this->redirectRoute('routes.index', navigate: true);
+        try {
+            $this->form->update();
+            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Data Rute berhasil diperbarui!');
+            return $this->redirectRoute('routes.index', navigate: true);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+            return;
+        }
     }
 
     #[Title('Ubah Data Rute')]

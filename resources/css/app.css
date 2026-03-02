@@ -61,10 +61,6 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
 
-\[:where(&)\]:size-4 {
-    @apply size-4;
-}
-
 
 
 /**
@@ -99,4 +95,20 @@ select:focus[data-flux-control] {
     display: flex;
     flex-direction: column;
     width: 100%;
+}
+
+.form-control label>span {
+    @apply text-zinc-900 dark:text-zinc-50;
+}
+
+.form-control>.input {
+    @apply w-full;
+}
+
+.form-control>.select {
+    @apply w-full;
+}
+
+.form-control>.textarea {
+    @apply w-full;
 }

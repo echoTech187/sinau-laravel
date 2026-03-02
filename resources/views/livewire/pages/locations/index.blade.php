@@ -1,5 +1,7 @@
-﻿@php /** @var \App\Livewire\Pages\Locations\Index $this */ @endphp
-<div class="container relative min-h-screen pb-10">
+﻿@php
+    /** @var \App\Livewire\Pages\Locations\Index $this */
+@endphp
+<div class="relative min-h-full">
     <!-- Decorative Background Blob -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-0 right-0 w-125 h-125 bg-indigo-500/5 rounded-full blur-[100px]"></div>

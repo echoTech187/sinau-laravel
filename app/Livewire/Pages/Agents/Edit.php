@@ -39,11 +39,14 @@ class Edit extends Component
 
     public function saveAgent()
     {
-        $this->form->update();
-
-        session()->flash('message', 'Data Agen/Mitra berhasil diperbarui!');
-
-        return $this->redirectRoute('agents.index', navigate: true);
+        try {
+            $this->form->update();
+            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Data Agen/Mitra berhasil diperbarui!');
+            return $this->redirectRoute('agents.index', navigate: true);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+            return;
+        }
     }
 
     #[Title('Ubah Data Agen')]

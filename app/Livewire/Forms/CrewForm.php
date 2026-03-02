@@ -2,22 +2,27 @@
 
 namespace App\Livewire\Forms;
 
-use Livewire\Attributes\Validate;
-use Livewire\Form;
-use App\Models\Crew;
 use App\Enums\CrewStatus;
+use App\Models\Crew;
 use Illuminate\Validation\Rule;
+use Livewire\Form;
 
 class CrewForm extends Form
 {
     public ?Crew $crew = null;
 
     public $crew_position_id = '';
+
     public $employee_number = '';
+
     public $name = '';
+
     public $phone_number = '';
+
     public $license_number = '';
+
     public $license_expired_at = '';
+
     public $status = 'active';
 
     public function setCrew(Crew $crew)
@@ -39,11 +44,12 @@ class CrewForm extends Form
             'employee_number' => [
                 'required',
                 'string',
+                'min:3',
                 'max:50',
-                Rule::unique('crews', 'employee_number')->ignore($this->crew?->id)
+                Rule::unique('crews', 'employee_number')->ignore($this->crew?->id),
             ],
-            'name' => 'required|string|max:255',
-            'phone_number' => 'required|string|max:20',
+            'name' => 'required|string|min:3|max:255',
+            'phone_number' => 'required|string|min:9|max:20',
             'license_number' => 'nullable|string|max:100',
             'license_expired_at' => 'nullable|date',
             'status' => ['required', Rule::enum(CrewStatus::class)],

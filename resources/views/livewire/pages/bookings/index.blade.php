@@ -1,5 +1,7 @@
-﻿@php /** @var \App\Livewire\Pages\Bookings\Index $this */ @endphp
-<div class="container relative min-h-screen pb-20">
+﻿@php
+    /** @var \App\Livewire\Pages\Bookings\Index $this */
+@endphp
+<div class="container relative min-h-full pb-20">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-0 right-0 w-125 h-125 bg-purple-500/5 rounded-full blur-[100px]"></div>
     </div>

@@ -108,7 +108,7 @@ new class extends Component {
 };
 ?>
 
-<div class="container relative min-h-screen pb-10">
+<div class="relative min-h-full">
     <x-slot:title>{{ __('Kelola User') }}</x-slot:title>
 
     <!-- Decorative Background Blobs -->

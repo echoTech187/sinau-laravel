@@ -36,7 +36,10 @@ class ScheduleForm extends Form
     #[Validate('required|numeric|min:0')]
     public $base_price = 0;
 
+    #[Validate('nullable|integer|min:0')]
     public $start_odometer = '';
+
+    #[Validate('nullable|integer|min:0|gte:start_odometer')]
     public $end_odometer = '';
 
     #[Validate('required')]
@@ -89,6 +92,8 @@ class ScheduleForm extends Form
             'departure_time' => 'required',
             'arrival_estimate' => 'required',
             'base_price' => 'required|numeric|min:0',
+            'start_odometer' => 'nullable|integer|min:0',
+            'end_odometer' => 'nullable|integer|min:0|gte:start_odometer',
             'trip_type' => ['required', Rule::enum(TripType::class)],
             'status' => ['required', Rule::enum(ScheduleStatus::class)],
             'crews.*.crew_id' => 'required|exists:crews,id',

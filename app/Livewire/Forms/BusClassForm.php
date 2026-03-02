@@ -16,9 +16,11 @@ class BusClassForm extends Form
     #[Rule('required|integer|min:0')]
     public int $free_baggage_kg = 20;
 
-    #[Rule('nullable|string')]
+    #[Rule('nullable|string|max:1000')]
     public string $description = '';
 
+    #[Rule('nullable|array')]
+    #[Rule('exists:facilities,id', as: 'facility_ids.*')]
     public array $facility_ids = [];
 
     public function setBusClass(BusClass $busClass)

@@ -1,5 +1,7 @@
-﻿@php /** @var \App\Livewire\Pages\Locations\Create $this */ @endphp
-<div class="container relative min-h-screen pb-10">
+@php
+    /** @var \App\Livewire\Pages\Locations\Create $this */
+@endphp
+<div class="relative min-h-full">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-0 right-0 w-150 h-150 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px]">
         </div>
@@ -15,7 +17,7 @@
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
                             class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/30">
-                            <x-heroicon-o-map-pin class="w-6 h-6 text-white" />
+                            <x-heroicon-o-map-pin class="w-5 h-5 text-white" />
                         </div>
                         Tambah Lokasi Operasional
                     </h1>
@@ -225,7 +227,7 @@
 
                 <div class="pt-4 flex flex-col gap-3">
                     <button type="submit"
-                        class="btn btn-block bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-2xl h-14 font-black tracking-tight text-lg transition-all transform active:scale-[0.98] group overflow-hidden relative">
+                        class="btn btn-block bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-2xl h-14 font-black tracking-tight text-sm transition-all transform active:scale-[0.98] group overflow-hidden relative">
                         <div
                             class="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer">
                         </div>
@@ -237,7 +239,7 @@
                             class="loading loading-spinner loading-md relative z-10"></span>
                     </button>
                     <a wire:navigate href="{{ route('locations.index') }}"
-                        class="btn btn-block btn-ghost bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 border-0 shadow-sm rounded-2xl h-14 font-black tracking-tight text-lg transition-all">
+                        class="btn btn-block btn-ghost bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 border-0 shadow-sm rounded-2xl h-14 font-black tracking-tight text-sm transition-all">
                         Batal
                     </a>
                 </div>

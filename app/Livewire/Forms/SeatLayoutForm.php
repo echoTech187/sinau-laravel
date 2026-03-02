@@ -19,6 +19,7 @@ class SeatLayoutForm extends Form
     #[Rule('required|integer|min:1|max:10')]
     public int $grid_columns = 5;
 
+    #[Rule('nullable|array')]
     public array $layout_mapping = [];
 
     public function setSeatLayout(SeatLayout $seatLayout)

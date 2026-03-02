@@ -31,23 +31,20 @@ class Create extends Component
 
     public function saveCrew()
     {
-        $validator = \Illuminate\Support\Facades\Validator::make(
-            $this->form->all(),
-            $this->form->rules()
-        );
+        // $this->form->validate();
 
-        if ($validator->fails()) {
-            $this->setErrorBag($validator->getMessageBag());
-            $this->dispatch('notify', 'Mohon periksa kembali isian form Anda.', 'error');
+        try {
+
+            $this->form->store();
+
+            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Data kru berhasil disimpan');
+
+            return $this->redirectRoute('crews.index', navigate: true);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
 
             return;
         }
-
-        $this->form->store();
-
-        $this->dispatch('notify', 'Data Kru berhasil ditambahkan!', 'success');
-
-        return $this->redirectRoute('crews.index', navigate: true);
     }
 
     #[Title('Tambah Data Kru')]

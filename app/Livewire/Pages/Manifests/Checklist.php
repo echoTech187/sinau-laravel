@@ -137,7 +137,7 @@ class Checklist extends Component
         // Update overall manifest status
         $this->updateManifestStatus();
 
-        $this->dispatch('notify', 'Data inspeksi divisi berhasil disimpan.', 'success');
+        $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Data inspeksi divisi berhasil disimpan.');
     }
 
     protected function updateManifestStatus()

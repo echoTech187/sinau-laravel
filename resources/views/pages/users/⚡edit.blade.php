@@ -82,7 +82,7 @@ new class extends Component {
 
 ?>
 
-<div class="container relative min-h-screen">
+<div class="container relative min-h-full">
     <x-slot:title>{{ $user->exists ? 'Edit Pengguna' : 'Tambah Pengguna Baru' }}</x-slot:title>
     <!-- Decorative Background Blob behind layout -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">

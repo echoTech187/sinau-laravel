@@ -12,7 +12,7 @@
         },
         remove(id) { this.toasts = this.toasts.filter(t => t.id !== id); }
     }" x-on:notify.window="add($event)"
-        class="fixed top-5 right-5 z-[9999] flex flex-col gap-3 w-80 pointer-events-none" aria-live="polite">
+        class="fixed top-5 right-5 z-9999 flex flex-col gap-3 w-80 pointer-events-none" aria-live="polite">
         <template x-for="toast in toasts" :key="toast.id">
             <div x-show="true" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 translate-y-4 scale-95"

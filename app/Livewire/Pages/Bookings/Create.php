@@ -140,7 +140,7 @@ class Create extends Component
     public function goToStep4()
     {
         if (empty($this->selected_seats)) {
-            $this->dispatch('notify', 'Silakan pilih setidaknya satu kursi.', 'error');
+            $this->dispatch('notify', type: 'error', title: 'Perhatian', message: 'Silakan pilih setidaknya satu kursi.');
 
             return;
         }
@@ -181,8 +181,10 @@ class Create extends Component
 
                 $this->redirect(route('bookings.show', $booking->id), navigate: true);
             });
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
         } catch (\Exception $e) {
-            $this->dispatch('notify', 'Terjadi kesalahan: '.$e->getMessage(), 'error');
+            $this->dispatch('notify', type: 'error', title: 'Gagal', message: 'Terjadi kesalahan: '.$e->getMessage());
         }
     }
 

@@ -52,7 +52,7 @@ class RouteForm extends Form
                 'max:50',
                 Rule::unique('routes', 'route_code')->ignore($this->routeModel?->id)
             ],
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|min:3|max:255',
             'origin_location_id' => 'required|exists:locations,id|different:destination_location_id',
             'destination_location_id' => 'required|exists:locations,id',
             'distance_km' => 'nullable|integer|min:1',

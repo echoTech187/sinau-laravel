@@ -278,7 +278,7 @@ new class extends Component {
 };
 ?>
 
-<div class="container relative min-h-screen">
+<div class=" relative min-h-full">
     <style>
         /* Folder Tab Styles */
         .folder-tab {
@@ -610,7 +610,7 @@ new class extends Component {
                                                     <div
                                                         class="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
                                                         <span
-                                                            class="block mb-2 font-bold text-[10px] uppercase tracking-wider text-zinc-400 flex items-center gap-1">
+                                                            class=" mb-2 font-bold text-[10px] uppercase tracking-wider text-zinc-400 flex items-center gap-1">
                                                             <x-heroicon-o-map-pin
                                                                 class="w-3.5 h-3.5 text-indigo-500" />
                                                             Batas Regional Cabang
@@ -721,7 +721,7 @@ new class extends Component {
                                             @foreach ($permissions as $permission)
                                                 <label
                                                     class="flex items-start gap-3 p-3 rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 bg-zinc-50/50 dark:bg-zinc-800/30 hover:bg-white dark:hover:bg-zinc-800 transition-all cursor-pointer hover:shadow-sm">
-                                                    <div class="flex-shrink-0 mt-0.5">
+                                                    <div class="shrink-0 mt-0.5">
                                                         <input type="checkbox" wire:model="userPermissions"
                                                             value="{{ $permission->id }}"
                                                             class="checkbox checkbox-sm checkbox-primary rounded-md" />

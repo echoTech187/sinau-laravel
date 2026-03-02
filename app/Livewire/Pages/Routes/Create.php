@@ -32,11 +32,14 @@ class Create extends Component
 
     public function saveRoute()
     {
-        $this->form->store();
-
-        session()->flash('message', 'Data Rute berhasil ditambahkan!');
-
-        return $this->redirectRoute('routes.index', navigate: true);
+        try {
+            $this->form->store();
+            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Data Rute berhasil ditambahkan!');
+            return $this->redirectRoute('routes.index', navigate: true);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+            return;
+        }
     }
 
     #[Title('Tambah Rute Perjalanan')]

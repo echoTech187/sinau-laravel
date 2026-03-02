@@ -1,5 +1,7 @@
-﻿@php /** @var \App\Livewire\Pages\Bookings\Show $this */ @endphp
-<div class="container relative min-h-screen pb-20">
+﻿@php
+    /** @var \App\Livewire\Pages\Bookings\Show $this */
+@endphp
+<div class="container relative min-h-full pb-20">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-0 right-0 w-150 h-150 bg-emerald-500/5 rounded-full blur-[120px]"></div>
     </div>

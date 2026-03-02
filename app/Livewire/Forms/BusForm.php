@@ -45,7 +45,7 @@ class BusForm extends Form
             'fleet_code' => ['required', 'string', 'max:255', Rule::unique('buses', 'fleet_code')->ignore($this->bus)],
             'plate_number' => ['required', 'string', 'max:255', Rule::unique('buses', 'plate_number')->ignore($this->bus)],
             'rfid_tag_id' => ['nullable', 'string', 'max:255', Rule::unique('buses', 'rfid_tag_id')->ignore($this->bus)],
-            'name' => 'nullable|string|max:255',
+            'name' => 'nullable|string|min:3|max:255',
             'chassis_brand' => 'required|string|max:255',
             'chassis_type' => 'required|string|max:255',
             'body_maker' => 'required|string|max:255',

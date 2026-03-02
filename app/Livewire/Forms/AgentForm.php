@@ -44,13 +44,14 @@ class AgentForm extends Form
             'agent_code' => [
                 'required',
                 'string',
+                'min:3',
                 'max:50',
                 Rule::unique('agents', 'agent_code')->ignore($this->agent?->id)
             ],
             'location_id' => 'nullable|exists:locations,id',
             'parent_branch_id' => 'nullable|exists:agents,id',
-            'name' => 'required|string|max:255',
-            'phone_number' => 'required|string|max:20',
+            'name' => 'required|string|min:3|max:255',
+            'phone_number' => 'required|string|min:9|max:20',
             'type' => ['required', Rule::enum(AgentType::class)],
             'commission_type' => ['required', Rule::enum(CommissionType::class)],
             'commission_value' => 'required|numeric|min:0',

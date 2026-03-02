@@ -41,10 +41,14 @@ class Create extends Component
 
     public function save()
     {
-        $shipment = $this->form->store();
-        
-        $this->dispatch('notify', 'Kargo berhasil didaftarkan.', 'success');
-        $this->redirect(route('shipments.index'), navigate: true);
+        try {
+            $shipment = $this->form->store();
+            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Kargo berhasil didaftarkan.');
+            $this->redirect(route('shipments.index'), navigate: true);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+            return;
+        }
     }
 
     public function render()

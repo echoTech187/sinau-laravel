@@ -18,11 +18,14 @@ class Edit extends Component
 
     public function save()
     {
-        $this->form->update();
-        
-        $this->dispatch('notify', 'Lokasi berhasil diperbarui.', 'success');
-        
-        return $this->redirect(route('locations.index'), navigate: true);
+        try {
+            $this->form->update();
+            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Lokasi berhasil diperbarui.');
+            return $this->redirect(route('locations.index'), navigate: true);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+            return;
+        }
     }
 
     public function render()

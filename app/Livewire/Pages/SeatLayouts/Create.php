@@ -65,11 +65,14 @@ class Create extends Component
 
     public function save()
     {
-        $this->form->store();
-        
-        $this->dispatch('notify', 'Layout kursi baru berhasil disimpan.', 'success');
-        
-        return $this->redirect(route('seat-layouts.index'), navigate: true);
+        try {
+            $this->form->store();
+            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Layout kursi baru berhasil disimpan.');
+            return $this->redirect(route('seat-layouts.index'), navigate: true);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+            return;
+        }
     }
 
     public function render()

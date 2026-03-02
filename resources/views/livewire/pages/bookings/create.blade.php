@@ -1,5 +1,7 @@
-﻿@php /** @var \App\Livewire\Pages\Bookings\Create $this */ @endphp
-<div class="container relative min-h-screen pb-20">
+@php
+    /** @var \App\Livewire\Pages\Bookings\Create $this */
+@endphp
+<div class="container relative min-h-full pb-20">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-0 right-0 w-150 h-150 bg-indigo-500/5 rounded-full blur-[120px]"></div>
         <div class="absolute bottom-0 left-0 w-100 h-100 bg-rose-500/5 rounded-full blur-[100px]"></div>
@@ -15,7 +17,7 @@
                 </div>
                 <div>
                     <h1
-                        class="text-lg sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-tight">
+                        class="text-sm sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-white uppercase leading-tight">
                         Reservasi Tiket</h1>
                     <p class="text-[11px] sm:text-sm font-medium text-zinc-500 dark:text-zinc-400 mt-0.5 max-w-xl">
                         Reservasi perjalanan Anda dengan cepat, mudah, dan transparan.</p>
@@ -213,7 +215,7 @@
                                                 class="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Mulai
                                                 Dari</span>
                                             <div
-                                                class="text-xl sm:text-2xl font-black text-indigo-600 dark:text-indigo-400 leading-none mt-0.5">
+                                                class="text-base sm:text-2xl font-black text-indigo-600 dark:text-indigo-400 leading-none mt-0.5">
                                                 Rp {{ number_format($s->base_price, 0, ',', '.') }}
                                             </div>
                                         </div>
@@ -233,7 +235,7 @@
                                 class="p-6 rounded-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 mb-6 group-hover:scale-110 transition-transform">
                                 <x-heroicon-o-calendar class="w-12 h-12 opacity-20" />
                             </div>
-                            <h3 class="text-xl font-black text-zinc-800 dark:text-white uppercase tracking-tight">
+                            <h3 class="text-base font-black text-zinc-800 dark:text-white uppercase tracking-tight">
                                 Tidak
                                 Ada Jadwal</h3>
                             <p class="text-zinc-500 dark:text-zinc-400 text-sm mt-1 max-w-xs leading-relaxed italic">
@@ -253,7 +255,7 @@
                         <div class="flex flex-wrap items-start justify-between gap-4 mb-6">
                             <div>
                                 <h2
-                                    class="text-lg sm:text-2xl font-black text-zinc-900 dark:text-white uppercase tracking-tight">
+                                    class="text-sm sm:text-2xl font-black text-zinc-900 dark:text-white uppercase tracking-tight">
                                     Pilih No. Kursi</h2>
                                 <p class="text-xs font-medium text-zinc-400 lowercase mt-1 italic leading-relaxed">Klik
                                     pada kursi yang tersedia untuk memilih.</p>
@@ -308,7 +310,7 @@
                                             <span
                                                 class="text-[8px] font-black uppercase tracking-tighter opacity-40 leading-none">Kursi</span>
                                             <span
-                                                class="text-base sm:text-xl font-black mt-0.5 leading-none">{{ $seatNum }}</span>
+                                                class="text-base sm:text-base font-black mt-0.5 leading-none">{{ $seatNum }}</span>
                                         @endif
                                     </div>
                                 @endforeach
@@ -329,7 +331,7 @@
                                     <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Kursi
                                         Terpilih</span>
                                     <span
-                                        class="text-lg font-black text-zinc-900 dark:text-white">{{ count($this->selected_seats) }}</span>
+                                        class="text-sm font-black text-zinc-900 dark:text-white">{{ count($this->selected_seats) }}</span>
                                 </div>
                                 <div class="flex flex-wrap gap-2">
                                     @if (count($this->selected_seats) > 0)
@@ -349,7 +351,7 @@
                                         <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Total
                                             Estimasi</span>
                                         <span
-                                            class="text-xl font-black text-indigo-600 dark:text-indigo-400 tracking-tight">
+                                            class="text-base font-black text-indigo-600 dark:text-indigo-400 tracking-tight">
                                             Rp
                                             {{ number_format(collect($this->passengers)->sum('price'), 0, ',', '.') }}
                                         </span>
@@ -427,7 +429,7 @@
                                     class="flex flex-col sm:flex-row gap-4 p-4 sm:p-6 rounded-2xl sm:rounded-[28px] bg-zinc-50 dark:bg-zinc-950/30 border border-zinc-100 dark:border-zinc-900 group/item hover:border-indigo-500/30 transition-all shadow-sm">
                                     <div class="flex items-center gap-4">
                                         <div
-                                            class="size-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-lg font-black shadow-lg shadow-indigo-600/30 transform group-hover/item:rotate-12 transition-all shrink-0">
+                                            class="size-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm font-black shadow-lg shadow-indigo-600/30 transform group-hover/item:rotate-12 transition-all shrink-0">
                                             {{ $seat }}
                                         </div>
                                         <div class="flex flex-col">

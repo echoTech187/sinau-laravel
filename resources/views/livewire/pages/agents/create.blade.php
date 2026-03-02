@@ -1,5 +1,7 @@
-﻿@php /** @var \App\Livewire\Pages\Agents\Create $this */ @endphp
-<div class="container relative min-h-screen pb-10">
+@php
+    /** @var \App\Livewire\Pages\Agents\Create $this */
+@endphp
+<div class="relative min-h-full">
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-0 right-0 w-150 h-150 bg-sky-500/10 dark:bg-sky-500/5 rounded-full blur-[100px]">
         </div>
@@ -16,7 +18,7 @@
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
                             class="p-2.5 rounded-2xl bg-linear-to-br from-sky-500 to-indigo-600 shadow-lg shadow-sky-500/30">
-                            <x-heroicon-o-plus-circle class="w-6 h-6 text-white" />
+                            <x-heroicon-o-plus-circle class="w-5 h-5 text-white" />
                         </div>
                         Tambah Agen / Mitra Baru
                     </h1>
@@ -155,75 +157,89 @@
                             @enderror
                         </div>
 
-                        <div
-                            class="form-control w-full border border-sky-100 dark:border-sky-900 rounded-xl p-3 bg-sky-50/50 dark:bg-sky-900/10">
-                            <label class="label pb-0"><span
-                                    class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Tipe
-                                    Skema
-                                    Komisi*</span></label>
-                            <div class="flex gap-4">
-                                <label class="cursor-pointer flex items-center gap-2">
+                        <div class="form-control w-full">
+                            <label class="label pb-0">
+                                <span
+                                    class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">
+                                    Tipe Skema Komisi*
+                                </span>
+                            </label>
+                            <div class="flex items-center gap-6 mt-3 px-2">
+                                <label class="cursor-pointer flex items-center gap-3">
                                     <input type="radio" wire:model="form.commission_type" value="percentage"
                                         class="radio radio-primary radio-sm" />
-                                    <span class="label-text font-medium">Persentase (%)</span>
+                                    <span class="label-text font-bold text-zinc-700 dark:text-zinc-300">Persentase
+                                        (%)</span>
                                 </label>
-                                <label class="cursor-pointer flex items-center gap-2">
+                                <label class="cursor-pointer flex items-center gap-3">
                                     <input type="radio" wire:model="form.commission_type" value="flat"
                                         class="radio radio-primary radio-sm" />
-                                    <span class="label-text font-medium">Flat (Rp)</span>
+                                    <span class="label-text font-bold text-zinc-700 dark:text-zinc-300">Flat (Rp)</span>
                                 </label>
                             </div>
                             @error('form.commission_type')
-                                <span class="text-[10px] text-red-500 mt-1">{{ $message }}</span>
+                                <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
                             @enderror
                         </div>
 
-                        <div
-                            class="form-control w-full border border-sky-100 dark:border-sky-900 rounded-xl p-3 bg-sky-50/50 dark:bg-sky-900/10">
-                            <label class="label pb-0"><span
-                                    class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Nilai
-                                    Komisi
-                                    Dasar*</span></label>
-                            <div class="input-group flex items-center">
+                        <div class="form-control w-full">
+                            <label class="label pb-0">
                                 <span
-                                    class="text-sm px-3 text-zinc-500 bg-white dark:bg-zinc-800 rounded-l-lg border border-r-0 border-zinc-200 dark:border-zinc-700 py-3">{{ $form->commission_type === 'percentage' ? '%' : 'Rp' }}</span>
+                                    class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">
+                                    Nilai Komisi Dasar*
+                                </span>
+                            </label>
+                            <div class="flex items-stretch mt-1">
+                                <span
+                                    class="flex items-center px-4 text-sm font-bold text-zinc-500 bg-zinc-50 dark:bg-zinc-800/50 border border-r-0 border-zinc-200 dark:border-zinc-800 rounded-l-xl">
+                                    {{ $form->commission_type === 'percentage' ? '%' : 'Rp' }}
+                                </span>
                                 <input type="number" step="0.01" wire:model="form.commission_value"
-                                    class="input input-sm border-l-0 rounded-l-none w-full border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 focus:outline-none" />
+                                    class="input input-bordered w-full rounded-l-none bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-r-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-bold" />
                             </div>
                             @error('form.commission_value')
-                                <span class="text-[10px] text-red-500 mt-1">{{ $message }}</span>
+                                <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
                 </div>
 
-                <div class="form-control w-full max-w-xs mt-4">
-                    <label class="label pb-0">
-                        <span
-                            class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">
-                            Status Operasional*
-                        </span>
-                    </label>
-                    <select wire:model="form.status"
-                        class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-bold">
-                        <option value="active">Active (Dapat Menjual)</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="banned">Banned (Masalah Akun)</option>
-                    </select>
-                    @error('form.status')
-                        <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
-                    @enderror
+                <div>
+                    <h4
+                        class="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-4 flex items-center gap-2 pb-2 border-b border-zinc-100 dark:border-zinc-800">
+                        <x-heroicon-o-shield-check class="w-4 h-4" />
+                        Status Operasional
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="form-control w-full">
+                            <label class="label pb-0">
+                                <span
+                                    class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">
+                                    Status Operasional*
+                                </span>
+                            </label>
+                            <select wire:model="form.status"
+                                class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-bold">
+                                <option value="active">Active (Dapat Menjual)</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="banned">Banned (Masalah Akun)</option>
+                            </select>
+                            @error('form.status')
+                                <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
 
                 <div class="pt-8 border-t border-zinc-100 dark:border-zinc-800 flex justify-end gap-3 mt-8">
                     <button type="submit"
-                        class="btn bg-indigo-600 hover:bg-indigo-700 text-white border-0 px-10 h-14 rounded-2xl shadow-xl shadow-indigo-600/30 font-black tracking-tight text-lg transition-all group overflow-hidden relative">
+                        class="btn bg-indigo-600 hover:bg-indigo-700 text-white border-0 px-6 h-11 rounded-2xl shadow-xl shadow-indigo-600/30 font-black tracking-tight text-sm transition-all group overflow-hidden relative">
                         <div
                             class="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer">
                         </div>
                         <span wire:loading.remove wire:target="saveAgent"
                             class="flex items-center gap-3 relative z-10">
-                            <x-heroicon-o-check-circle class="w-6 h-6" />
+                            <x-heroicon-o-check-circle class="w-5 h-5" />
                             SIMPAN DATA AGEN
                         </span>
                         <span wire:loading wire:target="saveAgent"
