@@ -15,7 +15,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // UserSeeder::class,
             RbacSeeder::class,
+            MasterDataSeeder::class,
+            BusClassSeeder::class,
+            SeatLayoutSeeder::class,
             PoBusSeeder::class,
+            AgentLocationSeeder::class,
+            CrewSeeder::class,
+            BusSeeder::class,
         ]);
     }
 }

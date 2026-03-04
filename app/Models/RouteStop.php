@@ -12,7 +12,7 @@ class RouteStop extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['route_id', 'location_id', 'stop_order', 'type', 'is_checkpoint'];
+    protected $fillable = ['route_id', 'agent_id', 'stop_order', 'type', 'is_checkpoint'];
 
     protected $casts = [
         'type' => StopType::class,
@@ -24,9 +24,9 @@ class RouteStop extends Model
         return $this->belongsTo(Route::class);
     }
 
-    public function location(): BelongsTo
+    public function agent(): BelongsTo
     {
-        return $this->belongsTo(Location::class);
+        return $this->belongsTo(Agent::class);
     }
 
     public function scheduleStops(): HasMany

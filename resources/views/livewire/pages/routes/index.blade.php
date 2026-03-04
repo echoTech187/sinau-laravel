@@ -13,36 +13,22 @@
 
     <div class="relative z-10 space-y-8">
         <div class="animate-fade-in-up">
-            <header
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 dark:border-zinc-700/50 pb-4">
-                <div>
-                    <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
-                        <div
-                            class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30">
-                            <x-heroicon-o-map class="w-6 h-6 text-white" />
-                        </div>
-                        Master Rute & Persinggahan
-                    </h1>
-                    <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
-                        Manajemen jalur perjalanan operasional bus, terminal asal/tujuan, dan rute persinggahan
-                        (checkpoint).
-                    </p>
-                </div>
-                <!-- Action Buttons -->
-                <div
-                    class="flex flex-wrap sm:flex-nowrap justify-start sm:justify-end items-center gap-3 w-full sm:w-auto mt-4 sm:mt-0">
-                    <button
-                        class="btn btn-sm bg-white/50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl transition-all">
-                        <x-heroicon-o-arrow-path class="w-4 h-4" />
-                        Sinkronisasi Jarak
-                    </button>
-                    <a wire:navigate href="{{ route('routes.create') }}"
-                        class="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-xl transition-all hover:-translate-y-0.5 font-bold">
-                        <x-heroicon-o-plus class="w-4 h-4" />
-                        Tambah Rute Baru
-                    </a>
-                </div>
-            </header>
+            <x-page-header title="Master Rute & Persinggahan"
+                description="Manajemen jalur perjalanan operasional bus, terminal asal/tujuan, dan rute persinggahan (checkpoint)."
+                icon="heroicon-o-map" iconGradient="from-indigo-500 to-purple-600" iconShadow="shadow-indigo-500/30">
+                <button
+                    class="btn btn-sm sm:btn-md bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-2xl shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all font-bold group">
+                    <x-heroicon-o-arrow-path
+                        class="w-5 h-5 text-indigo-500 group-hover:rotate-180 transition-transform duration-500" />
+                    <span class="hidden xs:inline">Sinkronisasi Jarak</span>
+                    <span class="xs:hidden">Sync</span>
+                </button>
+                <a wire:navigate href="{{ route('routes.create') }}"
+                    class="btn btn-sm sm:btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-2xl transition-all hover:-translate-y-0.5 font-bold">
+                    <x-heroicon-o-plus class="w-5 h-5" />
+                    Tambah Rute
+                </a>
+            </x-page-header>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in-up"
@@ -73,12 +59,12 @@
 
         <div class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm animate-fade-in-up"
             style="animation-delay: 0.2s">
-            <div class="flex flex-col md:flex-row gap-4 items-center justify-between mb-6">
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-between xl:justify-end mb-6">
                 <!-- Data Filters -->
                 <div
-                    class="flex flex-wrap gap-2 p-1 bg-zinc-100/80 dark:bg-zinc-800/80 backdrop-blur rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 w-full md:w-auto overflow-x-auto">
+                    class="flex gap-2 p-1 bg-zinc-100/80 dark:bg-zinc-800/80 backdrop-blur rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 w-full md:w-auto overflow-x-auto">
                     <select wire:model.live="originFilter"
-                        class="select select-sm border-0 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium">
+                        class="select select-sm border-0 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium whitespace-nowrap">
                         <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua
                             Terminal Asal</option>
                         @foreach ($this->terminals as $loc)
@@ -87,7 +73,7 @@
                             </option>
                         @endforeach
                     </select>
-                    <div class="w-px h-6 bg-zinc-300 dark:bg-zinc-700 my-auto hidden sm:block"></div>
+                    <div class="w-px h-6 bg-zinc-300 dark:bg-zinc-700 my-auto"></div>
                     <select wire:model.live="destFilter"
                         class="select select-sm border-0 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium whitespace-nowrap">
                         <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua
@@ -101,7 +87,7 @@
                 </div>
 
                 <!-- Search -->
-                <div class="relative w-full xl:w-80 group shrink-0">
+                <div class="relative w-full md:w-80 group shrink-0">
                     <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                         <x-heroicon-o-magnifying-glass
                             class="w-4 h-4 text-zinc-400 group-focus-within:text-indigo-500 transition-colors" />
@@ -246,4 +232,3 @@
             wire:click="$set('confirmingRouteDeletion', false)"></div>
     </div>
 </div>
-

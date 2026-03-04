@@ -62,10 +62,6 @@ class PoBusSeeder extends Seeder
 
         DB::table('bus_inventories')->truncate();
         DB::table('buses')->truncate();
-        DB::table('bus_class_facility')->truncate();
-        DB::table('facilities')->truncate();
-        DB::table('seat_layouts')->truncate();
-        DB::table('bus_classes')->truncate();
 
         DB::table('inspection_items')->truncate();
         DB::table('inspection_categories')->truncate();
@@ -147,42 +143,20 @@ class PoBusSeeder extends Seeder
         // ---------------------------------------------------------
         // 2. MASTER DATA ARMADA & KELAS
         // ---------------------------------------------------------
-        $fAc = Facility::create(['name' => 'AC', 'icon' => 'heroicon-o-variable']);
-        $fToilet = Facility::create(['name' => 'Toilet', 'icon' => 'heroicon-o-sparkles']);
-        $fSnack = Facility::create(['name' => 'Snack & Air Mineral', 'icon' => 'heroicon-o-shopping-bag']);
-        $fMeal = Facility::create(['name' => 'Servis Makan 1x', 'icon' => 'heroicon-o-cake']);
-        $fReclining = Facility::create(['name' => 'Reclining Seat 2-2', 'icon' => 'heroicon-o-chevron-double-down']);
-        $fLegrest = Facility::create(['name' => 'Leg Rest', 'icon' => 'heroicon-o-minus']);
-        $fSleeper = Facility::create(['name' => 'Sleeper Seat', 'icon' => 'heroicon-o-moon']);
-
-        $classVip = BusClass::create(['name' => 'VIP Class', 'free_baggage_kg' => 15, 'description' => 'Kelas menengah yang nyaman dengan kursi 2-2.']);
-        $classVip->facilities()->attach([$fAc->id, $fToilet->id, $fSnack->id, $fReclining->id]);
-
-        $classExec = BusClass::create(['name' => 'Executive Plus', 'free_baggage_kg' => 20, 'description' => 'Kelas Premium dengan kursi 2-2 yang lega dan legrest.']);
-        $classExec->facilities()->attach([$fAc->id, $fToilet->id, $fSnack->id, $fMeal->id, $fReclining->id, $fLegrest->id]);
-
-        $classSleeper = BusClass::create(['name' => 'First Class Sleeper', 'free_baggage_kg' => 25, 'description' => 'Cabin private dengan kursi rebah 150 derajat.']);
-        $classSleeper->facilities()->attach([$fAc->id, $fToilet->id, $fSnack->id, $fMeal->id, $fSleeper->id]);
-
-        // Layout JSON Examples
-        $layoutVip = SeatLayout::create([
-            'name' => 'VIP 36 Seats (2-2 Toilet Belakang)',
-            'grid_rows' => 10,
-            'grid_columns' => 5,
-            'layout_mapping' => [
-                ['row' => 1, 'col' => 1, 'type' => 'seat', 'seat_number' => '1A'],
-                ['row' => 1, 'col' => 2, 'type' => 'seat', 'seat_number' => '1B'],
-                ['row' => 1, 'col' => 3, 'type' => 'aisle', 'label' => ''],
-                ['row' => 1, 'col' => 4, 'type' => 'seat', 'seat_number' => '1C'],
-                ['row' => 1, 'col' => 5, 'type' => 'seat', 'seat_number' => '1D'],
-                ['row' => 10, 'col' => 5, 'type' => 'toilet', 'label' => ''],
-                ['row' => 10, 'col' => 4, 'type' => 'door', 'label' => ''],
-            ],
-        ]);
+        // ---------------------------------------------------------
+        // 2. MASTER DATA ARMADA & KELAS (DARI SEEDER SEBELUMNYA)
+        // ---------------------------------------------------------
+        $classExec = BusClass::where('name', 'Executive Plus')->first();
+        $classVip = BusClass::where('name', 'VIP Class')->first();
+        
+        // Pilih layout yang sesuai (misal yang ada kata 'VIP' atau 'Executive')
+        $layoutVip = SeatLayout::where('name', 'like', '%Executive Plus%')->first() 
+                  ?? SeatLayout::where('name', 'like', '%VIP%')->first()
+                  ?? SeatLayout::first();
 
         $buses = [
             Bus::create([
-                'bus_class_id' => $classExec->id, 'seat_layout_id' => $layoutVip->id, 'base_pool_id' => $locations['Garasi Bitung']->id,
+                'bus_class_id' => $classExec->id ?? null, 'seat_layout_id' => $layoutVip->id ?? null, 'base_pool_id' => $locations['Garasi Bitung']->id,
                 'fleet_code' => 'EX-001', 'plate_number' => 'B 7123 KGA', 'rfid_tag_id' => '1A2B3C4D',
                 'name' => 'Sapu Jagat', 'chassis_brand' => 'Mercedes-Benz', 'chassis_type' => 'OH 1626 L',
                 'body_maker' => 'Adiputro', 'body_model' => 'Jetbus 5 MHD', 'manufacture_year' => 2023,

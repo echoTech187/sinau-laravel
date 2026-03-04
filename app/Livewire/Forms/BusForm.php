@@ -3,12 +3,17 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Bus;
+use App\Services\ImageService;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class BusForm extends Form
 {
+    use WithFileUploads;
+
     public ?Bus $bus = null;
 
     public $bus_class_id;
@@ -35,6 +40,9 @@ class BusForm extends Form
     public $current_odometer;
     public $average_daily_km;
     public $status = 'active';
+
+    public $photo;
+    public $photo_path;
 
     public function rules()
     {
@@ -63,6 +71,7 @@ class BusForm extends Form
             'current_odometer' => 'required|integer|min:0',
             'average_daily_km' => 'required|integer|min:0',
             'status' => 'required|string|in:active,maintenance,inactive',
+            'photo' => 'nullable|image|max:2048',
         ];
     }
 
@@ -96,12 +105,19 @@ class BusForm extends Form
         $this->current_odometer = $bus->current_odometer;
         $this->average_daily_km = $bus->average_daily_km;
         $this->status = $bus->status->value ?? $bus->status;
+        $this->photo_path = $bus->photo_path;
     }
 
     public function store()
     {
         $validated = $this->validate();
         
+        if ($this->photo) {
+            $validated['photo_path'] = $this->processPhoto($this->photo);
+        }
+        
+        unset($validated['photo']);
+
         Bus::create($validated);
         $this->reset();
     }
@@ -110,7 +126,32 @@ class BusForm extends Form
     {
         $validated = $this->validate();
         
+        if ($this->photo) {
+            // Delete old photo before replacing
+            if ($this->bus->photo_path) {
+                Storage::disk('public')->delete($this->bus->photo_path);
+            }
+            $validated['photo_path'] = $this->processPhoto($this->photo);
+        }
+        
+        unset($validated['photo']);
+
         $this->bus->update($validated);
         $this->reset();
+    }
+
+    /**
+     * Crop to 7:5 aspect ratio (1400x1000px) and compress to JPEG.
+     */
+    private function processPhoto($upload): string
+    {
+        return app(ImageService::class)->cropAndCompress(
+            upload: $upload,
+            directory: 'buses/photos',
+            disk: 'public',
+            width: 1400,
+            height: 1000,
+            quality: 82
+        );
     }
 }

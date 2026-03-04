@@ -32,11 +32,11 @@ class ScheduleCrew extends Model
 
     public function boardingLocation(): BelongsTo
     {
-        return $this->belongsTo(Location::class, 'boarding_location_id');
+        return $this->belongsTo(Agent::class, 'boarding_location_id');
     }
 
     public function dropoffLocation(): BelongsTo
     {
-        return $this->belongsTo(Location::class, 'dropoff_location_id');
+        return $this->belongsTo(Agent::class, 'dropoff_location_id');
     }
 }

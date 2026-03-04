@@ -31,10 +31,12 @@
                         <x-heroicon-o-arrow-left class="w-4 h-4" />
                         Kembali
                     </a>
-                    <button wire:click="save"
-                        class="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-xl transition-all hover:-translate-y-0.5 font-bold">
-                        <x-heroicon-o-document-plus class="w-4 h-4" />
-                        Terbitkan Resi
+                    <button type="submit" wire:loading.attr="disabled"
+                        class="btn bg-indigo-600 hover:bg-indigo-700 text-white border-0 px-8 rounded-2xl shadow-lg shadow-indigo-600/30 font-bold tracking-wide flex items-center justify-center gap-2 group transition-all">
+                        <x-heroicon-o-check-circle wire:loading.remove wire:target="save"
+                            class="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        <span wire:loading wire:target="save" class="loading loading-spinner loading-sm"></span>
+                        Buat Resi Pengiriman
                     </button>
                 </div>
             </header>

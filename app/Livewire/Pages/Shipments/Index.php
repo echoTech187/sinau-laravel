@@ -9,6 +9,9 @@ use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Url;
 
+use Livewire\Attributes\Title;
+
+#[Title('Daftar Pengiriman')]
 class Index extends Component
 {
     use WithPagination;
@@ -64,7 +67,7 @@ class Index extends Component
     {
         $shipment = Shipment::findOrFail($id);
         $shipment->delete();
-        $this->dispatch('notify', 'Shipment deleted successfully.', 'success');
+        $this->dispatch('notify', ['title' => 'Terhapus', 'message' => 'Shipment deleted successfully.', 'type' => 'success']);
     }
 
     public function render()

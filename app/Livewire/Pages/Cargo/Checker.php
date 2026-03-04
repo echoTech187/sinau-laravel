@@ -6,6 +6,9 @@ use App\Models\Shipment;
 use App\Enums\ShipmentStatus;
 use Livewire\Component;
 
+use Livewire\Attributes\Title;
+
+#[Title('Cek Kargo')]
 class Checker extends Component
 {
     public string $barcode = '';
@@ -23,7 +26,7 @@ class Checker extends Component
             ->first();
 
         if (!$this->selectedShipment) {
-            $this->dispatch('notify', 'Resi/Barcode tidak ditemukan! Kargo Ilegal?', 'error');
+            $this->dispatch('notify', ['title' => 'Gagal', 'message' => 'Resi/Barcode tidak ditemukan! Kargo Ilegal?', 'type' => 'error']);
         }
     }
 
@@ -35,7 +38,7 @@ class Checker extends Component
             'status' => ShipmentStatus::INSPECTED_BY_CHECKER
         ]);
 
-        $this->dispatch('notify', 'Kargo Berhasil Diverifikasi (SAFE).', 'success');
+        $this->dispatch('notify', ['title' => 'Berhasil', 'message' => 'Kargo Berhasil Diverifikasi (SAFE).', 'type' => 'success']);
         $this->reset(['barcode', 'selectedShipment']);
     }
 

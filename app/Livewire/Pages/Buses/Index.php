@@ -87,6 +87,8 @@ class Index extends Component
             Bus::findOrFail($this->busIdBeingDeleted)->delete();
             $this->confirmingBusDeletion = false;
             $this->busIdBeingDeleted = null;
+            unset($this->buses);
+            $this->dispatch('notify', ['title' => 'Berhasil', 'message' => 'Armada berhasil dihapus.', 'type' => 'success']);
         }
     }
 }

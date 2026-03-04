@@ -7,34 +7,21 @@
     </div>
 
     <div class="relative z-10 space-y-8">
-        <header
-            class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-6 animate-fade-in-up">
-            <div>
-                <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
-                    <div
-                        class="p-2.5 rounded-2xl bg-linear-to-br from-sky-500 to-indigo-600 shadow-lg shadow-sky-500/20 text-white">
-                        <x-heroicon-o-star class="w-6 h-6" />
-                    </div>
-                    Kelas & Fasilitas Armada
-                </h1>
-                <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">Pengaturan kelas layanan bus dan daftar
-                    fasilitas pendukung kenyamanan penumpang.</p>
-            </div>
-            <!-- Action Buttons -->
-            <div
-                class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
-                <button wire:click="$set('showingFacilityModal', true)"
-                    class="btn btn-md bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-2xl shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all font-bold">
-                    <x-heroicon-o-sparkles class="w-5 h-5 text-sky-500" />
-                    Manajemen Fasilitas
-                </button>
-                <a wire:navigate href="{{ route('bus-classes.create') }}"
-                    class="btn btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/20 rounded-2xl transition-all hover:-translate-y-0.5 font-bold">
-                    <x-heroicon-o-plus class="w-5 h-5" />
-                    Tambah Kelas
-                </a>
-            </div>
-        </header>
+        <x-page-header title="Kelas & Fasilitas Armada"
+            description="Pengaturan kelas layanan bus dan daftar fasilitas pendukung kenyamanan penumpang."
+            icon="heroicon-o-star" iconGradient="from-sky-500 to-indigo-600" iconShadow="shadow-sky-500/20">
+            <button wire:click="openCreateModal"
+                class="btn btn-sm sm:btn-md bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-2xl shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all font-bold">
+                <x-heroicon-o-sparkles class="w-5 h-5 text-sky-500" />
+                <span class="hidden xs:inline">Manajemen Fasilitas</span>
+                <span class="xs:hidden">Fasilitas</span>
+            </button>
+            <a wire:navigate href="{{ route('bus-classes.create') }}"
+                class="btn btn-sm sm:btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/20 rounded-2xl transition-all hover:-translate-y-0.5 font-bold">
+                <x-heroicon-o-plus class="w-5 h-5" />
+                Tambah Kelas
+            </a>
+        </x-page-header>
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <!-- Left: Bus Classes Table -->
@@ -143,13 +130,20 @@
                                 </div>
                                 <span
                                     class="text-[10px] font-bold text-zinc-600 dark:text-zinc-400 truncate">{{ $f->name }}</span>
-                                <button wire:click="deleteFacility({{ $f->id }})"
-                                    class="absolute -top-1 -right-1 size-5 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm scale-75">
-                                    <x-heroicon-o-x-mark class="w-3 h-3" />
-                                </button>
+                                <div
+                                    class="absolute -top-1 -right-1 flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button wire:click="editFacility({{ $f->id }})"
+                                        class="size-5 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-sm scale-75 hover:bg-sky-600">
+                                        <x-heroicon-o-pencil class="w-3 h-3" />
+                                    </button>
+                                    <button wire:click="deleteFacility({{ $f->id }})"
+                                        class="size-5 rounded-full bg-red-500 text-white flex items-center justify-center shadow-sm scale-75 hover:bg-red-600">
+                                        <x-heroicon-o-x-mark class="w-3 h-3" />
+                                    </button>
+                                </div>
                             </div>
                         @endforeach
-                        <button wire:click="$set('showingFacilityModal', true)"
+                        <button wire:click="openCreateModal"
                             class="flex flex-col items-center justify-center gap-1 p-2 rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700 hover:border-sky-500 hover:bg-sky-50 dark:hover:bg-sky-950/30 transition-all text-zinc-400 hover:text-sky-600">
                             <x-heroicon-o-plus-circle class="w-5 h-5" />
                             <span class="text-[9px] font-bold">Baru</span>
@@ -164,7 +158,9 @@
     <div class="modal {{ $showingFacilityModal ? 'modal-open' : '' }}" role="dialog">
         <div
             class="modal-box bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 max-w-sm">
-            <h3 class="font-black text-xl text-zinc-900 dark:text-white">Tambah Fasilitas</h3>
+            <h3 class="font-black text-xl text-zinc-900 dark:text-white">
+                {{ $editingFacilityId ? 'Edit Fasilitas' : 'Tambah Fasilitas' }}
+            </h3>
             <p class="text-sm text-zinc-500 mt-1">Gunakan icon Heroicons (format: heroicon-o-name)</p>
 
             <div class="mt-6 space-y-4">
@@ -185,14 +181,14 @@
             </div>
 
             <div class="modal-action mt-8">
-                <button wire:click="$set('showingFacilityModal', false)" class="btn btn-ghost">Batal</button>
-                <button wire:click="addFacility"
+                <button wire:click="resetModal" class="btn btn-ghost">Batal</button>
+                <button wire:click="saveFacility"
                     class="btn bg-sky-600 hover:bg-sky-700 text-white border-0 shadow-lg shadow-sky-600/20 rounded-2xl px-8 font-black uppercase tracking-widest text-[10px]">
-                    Simpan
+                    {{ $editingFacilityId ? 'Update' : 'Simpan' }}
                 </button>
             </div>
         </div>
-        <div class="modal-backdrop bg-zinc-900/60 backdrop-blur-sm" wire:click="$set('showingFacilityModal', false)">
+        <div class="modal-backdrop bg-zinc-900/60 backdrop-blur-sm" wire:click="resetModal">
         </div>
     </div>
 

@@ -49,119 +49,45 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="form-control w-full">
-                                <label class="label pb-0">
-                                    <span
-                                        class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Trayek
-                                        Rute Utama*</span>
-                                </label>
-                                <select wire:model.live="form.route_id"
-                                    class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.route_id')  @enderror">
+                                <x-form-select label="Trayek Rute Utama*" wire:model.live="form.route_id">
                                     <option value="">-- Pilih Rute --</option>
                                     @foreach ($this->routes as $route)
                                         <option wire:key="opt-route-{{ $route->id }}" value="{{ $route->id }}">
-                                            {{ $route->name }}
-                                            ({{ $route->route_code }})
+                                            {{ $route->name }} ({{ $route->route_code }})
                                         </option>
                                     @endforeach
-                                </select>
-                                @error('form.route_id')
-                                    <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
-                                @enderror
+                                </x-form-select>
+                                <p class="mt-2 text-[10px] text-amber-600 dark:text-amber-400 font-medium">*Mengubah
+                                    rute akan mereset estimasi stop.</p>
                             </div>
 
-                            <div class="form-control w-full">
-                                <label class="label pb-0">
-                                    <span
-                                        class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Armada
-                                        Bus*</span>
-                                </label>
-                                <select wire:model="form.bus_id"
-                                    class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.bus_id')  @enderror">
-                                    <option value="">-- Pilih Bus --</option>
-                                    @foreach ($this->buses as $bus)
-                                        <option wire:key="opt-bus-{{ $bus->id }}" value="{{ $bus->id }}">
-                                            {{ $bus->name }}
-                                            ({{ $bus->plate_number }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('form.bus_id')
-                                    <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
-                                @enderror
-                            </div>
+                            <x-form-select label="Armada Bus" wire:model="form.bus_id">
+                                <option value="">-- Pilih Bus --</option>
+                                @foreach ($this->buses as $bus)
+                                    <option wire:key="opt-bus-{{ $bus->id }}" value="{{ $bus->id }}">
+                                        {{ $bus->name }} ({{ $bus->plate_number }})
+                                    </option>
+                                @endforeach
+                            </x-form-select>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                            <div class="form-control w-full">
-                                <label class="label pb-0">
-                                    <span
-                                        class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Tanggal
-                                        Berangkat*</span>
-                                </label>
-                                <input type="date" wire:model="form.departure_date"
-                                    class="input input-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.departure_date')  @enderror" />
-                                @error('form.departure_date')
-                                    <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="form-control w-full">
-                                <label class="label pb-0">
-                                    <span
-                                        class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Jam
-                                        Berangkat*</span>
-                                </label>
-                                <input type="datetime-local" wire:model="form.departure_time"
-                                    class="input input-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.departure_time')  @enderror" />
-                                @error('form.departure_time')
-                                    <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="form-control w-full">
-                                <label class="label pb-0">
-                                    <span
-                                        class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Estimasi
-                                        Sampai*</span>
-                                </label>
-                                <input type="datetime-local" wire:model="form.arrival_estimate"
-                                    class="input input-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all @error('form.arrival_estimate')  @enderror" />
-                                @error('form.arrival_estimate')
-                                    <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
-                                @enderror
-                            </div>
+                            <x-form-input label="Tanggal Berangkat*" wire:model="form.departure_date" type="date" />
+                            <x-form-input label="Jam Berangkat*" wire:model.live="form.departure_time"
+                                type="datetime-local" />
+                            <x-form-input label="Estimasi Sampai*" wire:model="form.arrival_estimate"
+                                type="datetime-local" />
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                            <div class="form-control w-full">
-                                <label class="label pb-0">
-                                    <span
-                                        class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Harga
-                                        Dasar (Tiket)</span>
-                                </label>
-                                <div class="relative">
-                                    <span
-                                        class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 font-bold text-xs uppercase">Rp</span>
-                                    <input type="number" wire:model="form.base_price"
-                                        class="input input-bordered w-full pl-12 bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-zinc-800 @error('form.base_price')  @enderror"
-                                        placeholder="0" />
-                                </div>
-                                @error('form.base_price')
-                                    <span class="text-[10px] text-red-500 mt-1 font-bold">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="form-control w-full">
-                                <label class="label pb-0">
-                                    <span
-                                        class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Jenis
-                                        Perjalanan</span>
-                                </label>
-                                <select wire:model="form.trip_type"
-                                    class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-bold">
-                                    <option value="revenue">Operasional (Revenue)</option>
-                                    <option value="relocation">Relokasi (Kirim Bus)</option>
-                                </select>
-                            </div>
+                            <x-form-input label="Harga Dasar (Tiket)" wire:model="form.base_price" type="number"
+                                placeholder="0" step="1" class="font-bold text-zinc-800">
+                                <x-slot:prefix>Rp</x-slot:prefix>
+                            </x-form-input>
+                            <x-form-select label="Jenis Perjalanan" wire:model="form.trip_type" class="font-bold">
+                                <option value="revenue">Operasional (Revenue)</option>
+                                <option value="relocation">Relokasi (Kirim Bus)</option>
+                            </x-form-select>
                         </div>
                     </div>
 
@@ -192,7 +118,7 @@
                                                         class="label-text text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1.5">Pilih
                                                         Personel*</span></label>
                                                 <select wire:model="form.crews.{{ $index }}.crew_id"
-                                                    class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
+                                                    class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-semibold">
                                                     <option value="">-- Pilih Kru --</option>
                                                     @foreach ($this->crews as $c)
                                                         <option
@@ -213,7 +139,7 @@
                                                         Penugasan*</span></label>
                                                 <select
                                                     wire:model="form.crews.{{ $index }}.assigned_position_id"
-                                                    class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
+                                                    class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-semibold">
                                                     <option value="">-- Pilih Jabatan --</option>
                                                     @foreach ($this->positions as $pos)
                                                         <option
@@ -236,13 +162,12 @@
                                                         Naik (Boarding)*</span></label>
                                                 <select
                                                     wire:model="form.crews.{{ $index }}.boarding_location_id"
-                                                    class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
-                                                    <option value="">-- Lokasi --</option>
-                                                    @foreach ($this->locations as $loc)
+                                                    class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-semibold">
+                                                    <option value="">-- Pilih Agen --</option>
+                                                    @foreach ($this->agents as $agent)
                                                         <option
-                                                            wire:key="opt-boarding-{{ $index }}-{{ $loc->id }}"
-                                                            value="{{ $loc->id }}">{{ $loc->name }}
-                                                        </option>
+                                                            wire:key="opt-boarding-{{ $index }}-{{ $agent->id }}"
+                                                            value="{{ $agent->id }}">{{ $agent->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -252,13 +177,12 @@
                                                         Turun (Dropoff)*</span></label>
                                                 <select
                                                     wire:model="form.crews.{{ $index }}.dropoff_location_id"
-                                                    class="select select-sm select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all">
-                                                    <option value="">-- Lokasi --</option>
-                                                    @foreach ($this->locations as $loc)
+                                                    class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-semibold">
+                                                    <option value="">-- Pilih Agen --</option>
+                                                    @foreach ($this->agents as $agent)
                                                         <option
-                                                            wire:key="opt-dropoff-{{ $index }}-{{ $loc->id }}"
-                                                            value="{{ $loc->id }}">{{ $loc->name }}
-                                                        </option>
+                                                            wire:key="opt-dropoff-{{ $index }}-{{ $agent->id }}"
+                                                            value="{{ $agent->id }}">{{ $agent->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -295,7 +219,29 @@
                         </div>
 
                         <div class="space-y-6 relative ml-3 border-l-2 border-white/20 pb-4">
-                            @if (count($form->stops) > 0)
+                            @if (count($form->stops) > 0 || $routeOriginName)
+
+                                {{-- ORIGIN --}}
+                                @if ($routeOriginName)
+                                    <div class="relative pl-6">
+                                        <div
+                                            class="absolute -left-[11px] top-0 size-5 bg-emerald-400 rounded-full flex items-center justify-center border-4 border-indigo-600 dark:border-indigo-900">
+                                            <div class="size-1.5 bg-white rounded-full"></div>
+                                        </div>
+                                        <div
+                                            class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+                                            <p
+                                                class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">
+                                                🛫 KEBERANGKATAN</p>
+                                            <p class="text-xs font-bold text-white mb-2">{{ $routeOriginName }}</p>
+                                            <div class="text-sm font-bold text-emerald-200 tracking-widest">
+                                                {{ $form->departure_time ? \Carbon\Carbon::parse($form->departure_time)->format('H:i') : '--:--' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                {{-- STOPS --}}
                                 @foreach ($form->stops as $index => $stop)
                                     <div wire:key="stop-{{ $index }}" class="relative pl-6">
                                         <div
@@ -319,6 +265,27 @@
                                         </div>
                                     </div>
                                 @endforeach
+
+                                {{-- DESTINATION --}}
+                                @if ($routeDestinationName)
+                                    <div class="relative pl-6">
+                                        <div
+                                            class="absolute -left-[11px] top-0 size-5 bg-red-400 rounded-full flex items-center justify-center border-4 border-indigo-600 dark:border-indigo-900">
+                                            <div class="size-1.5 bg-white rounded-full"></div>
+                                        </div>
+                                        <div
+                                            class="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+                                            <p
+                                                class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">
+                                                🏁 TUJUAN AKHIR</p>
+                                            <p class="text-xs font-bold text-white mb-2">{{ $routeDestinationName }}
+                                            </p>
+                                            <div class="text-sm font-bold text-red-200 tracking-widest">
+                                                {{ $form->arrival_estimate ? \Carbon\Carbon::parse($form->arrival_estimate)->format('H:i') : '--:--' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             @else
                                 <div
                                     class="px-4 py-8 text-center bg-white/5 rounded-2xl border border-dashed border-white/10">
@@ -327,28 +294,49 @@
                                 </div>
                             @endif
                         </div>
-                    </div>
 
-                    <!-- Submission Summary -->
-                    <div class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm animate-fade-in-up"
-                        style="animation-delay: 0.3s">
-                        <h4
-                            class="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-6 pb-2 border-b border-zinc-100 dark:border-zinc-800">
-                            Konfirmasi Data</h4>
+                        {{-- Stats --}}
+                        @if (count($form->stops) > 0 || $routeOriginName)
+                            @php
+                                $stopCount = count($form->stops);
+                                $etaJam = $totalRouteKm ? floor($totalRouteKm / 60) : null;
+                                $etaMenit = $totalRouteKm ? round(fmod($totalRouteKm / 60, 1) * 60) : null;
+                                $etaLabel =
+                                    $etaJam !== null ? ($etaJam > 0 ? "{$etaJam}j " : '') . "{$etaMenit}m" : '—';
+                            @endphp
+                            <div class="mt-5 pt-4 border-t border-white/20 grid grid-cols-3 gap-2">
+                                <div class="bg-white/10 rounded-xl p-3 text-center">
+                                    <p class="text-lg font-black">{{ $stopCount }}</p>
+                                    <p class="text-[10px] text-indigo-200 uppercase tracking-wide">Titik Stop</p>
+                                </div>
+                                <div class="bg-white/10 rounded-xl p-3 text-center">
+                                    <p class="text-lg font-black">{{ $totalRouteKm ?: '—' }}</p>
+                                    <p class="text-[10px] text-indigo-200 uppercase tracking-wide">KM Total</p>
+                                </div>
+                                <div class="bg-white/10 rounded-xl p-3 text-center">
+                                    <p class="text-lg font-black">{{ $etaLabel }}</p>
+                                    <p class="text-[10px] text-indigo-200 uppercase tracking-wide">Est. Waktu</p>
+                                </div>
+                            </div>
+                            <p class="text-[9px] text-indigo-300/60 mt-2 text-center">*estimasi @ ~60 km/jam rata-rata
+                            </p>
+                        @endif
 
-                        <div class="space-y-4">
-                            <button type="submit"
-                                class="btn btn-block bg-indigo-600 hover:bg-indigo-700 text-white border-0 h-14 rounded-2xl shadow-lg shadow-indigo-600/30 font-black tracking-tight text-sm">
-                                <span wire:loading.remove wire:target="saveSchedule" class="flex items-center gap-3">
-                                    <x-heroicon-o-check-badge class="w-5 h-5" />
-                                    Terbitkan Jadwal
+                        <!-- Submit Button -->
+                        <div class="mt-5">
+                            <button type="submit" wire:loading.attr="disabled"
+                                class="btn w-full bg-white text-indigo-700 hover:bg-indigo-50 border-0 h-11 rounded-2xl font-black tracking-tight text-sm transition-all group overflow-hidden relative shadow-lg">
+                                <div
+                                    class="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer">
+                                </div>
+                                <span class="flex items-center justify-center gap-2 relative z-10">
+                                    <x-heroicon-o-check-circle wire:loading.remove wire:target="saveSchedule"
+                                        class="w-5 h-5" />
+                                    <span wire:loading wire:target="saveSchedule"
+                                        class="loading loading-spinner loading-sm"></span>
+                                    Terbitkan JADWAL
                                 </span>
-                                <span wire:loading wire:target="saveSchedule"
-                                    class="loading loading-spinner loading-md"></span>
                             </button>
-                            <p class="text-[10px] text-zinc-400 text-center px-4 leading-relaxed">Pastikan seluruh data
-                                penugasan kru dan estimasi waktu telah diverifikasi oleh kordinator lapangan sebelum
-                                diterbitkan ke sistem.</p>
                         </div>
                     </div>
                 </div>

@@ -28,6 +28,7 @@ class Checklist extends Component
     public function mount(OperationalManifest $manifest)
     {
         $this->manifest = $manifest;
+        $this->manifest->loadMissing(['approvals', 'schedule.bus', 'schedule.route']);
         $this->selectedCategoryId = InspectionCategory::first(['id'])?->id;
         $this->loadResponses();
     }
@@ -42,9 +43,7 @@ class Checklist extends Component
     {
         $this->responses = [];
         $existing = ManifestChecklist::where('manifest_id', '=', $this->manifest->id, 'and')
-            ->whereIn('inspection_item_id', function ($q) {
-                $q->select('id')->from('inspection_items')->where('category_id', '=', $this->selectedCategoryId, 'and');
-            })
+            ->whereIn('inspection_item_id', $this->currentItems->pluck('id'))
             ->get();
 
         foreach ($existing as $check) {
@@ -86,7 +85,7 @@ class Checklist extends Component
             $response = $this->responses[$item->id] ?? null;
 
             if (! $response || empty($response['result'])) {
-                $this->dispatch('notify', "Harap isi semua item: {$item->item_name}", 'error');
+                $this->dispatch('notify', ['title' => 'Error', 'message' => "Harap isi semua item: {$item->item_name}", 'type' => 'error']);
 
                 return;
             }
@@ -143,7 +142,7 @@ class Checklist extends Component
         // Update overall manifest status
         $this->updateManifestStatus();
 
-        $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Data inspeksi divisi berhasil disimpan.');
+        $this->dispatch('notify', ['type' => 'success', 'title' => 'Berhasil', 'message' => 'Data inspeksi divisi berhasil disimpan.']);
     }
 
     protected function updateManifestStatus()

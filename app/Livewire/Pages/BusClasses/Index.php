@@ -8,6 +8,9 @@ use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+use Livewire\Attributes\Title;
+
+#[Title('Daftar Kelas Bus')]
 class Index extends Component
 {
     use WithPagination;
@@ -25,6 +28,8 @@ class Index extends Component
 
     public string $newFacilityIcon = '';
 
+    public ?int $editingFacilityId = null;
+
     protected $queryString = [
         'search' => ['except' => ''],
     ];
@@ -34,7 +39,7 @@ class Index extends Component
         $this->resetPage();
     }
 
-    #[Computed(persist: true)]
+    #[Computed]
     public function busClasses()
     {
         return BusClass::query()
@@ -45,34 +50,78 @@ class Index extends Component
             ->paginate(10);
     }
 
-    #[Computed(persist: true)]
+    #[Computed]
     public function facilities()
     {
         return Facility::all();
     }
 
-    public function addFacility()
+    public function saveFacility()
     {
         $this->validate([
             'newFacilityName' => 'required|string|max:50',
             'newFacilityIcon' => 'nullable|string|max:50',
         ]);
 
-        Facility::create([
-            'name' => $this->newFacilityName,
-            'icon' => $this->newFacilityIcon ?: 'heroicon-o-sparkles',
-        ]);
+        if ($this->editingFacilityId) {
+            $facility = Facility::findOrFail($this->editingFacilityId);
+            $facility->update([
+                'name' => $this->newFacilityName,
+                'icon' => $this->newFacilityIcon ?: 'heroicon-o-sparkles',
+            ]);
+            $message = 'Fasilitas berhasil diperbarui.';
+        } else {
+            Facility::create([
+                'name' => $this->newFacilityName,
+                'icon' => $this->newFacilityIcon ?: 'heroicon-o-sparkles',
+            ]);
+            $message = 'Fasilitas baru berhasil ditambahkan.';
+        }
 
+        $this->resetModal();
+
+        unset($this->facilities);
+        $this->dispatch('notify', [
+            'title' => 'Berhasil',
+            'message' => $message,
+            'type' => 'success'
+        ]);
+    }
+
+    public function openCreateModal()
+    {
+        $this->editingFacilityId = null;
         $this->newFacilityName = '';
         $this->newFacilityIcon = '';
+        $this->showingFacilityModal = true;
+    }
+
+    public function editFacility($id)
+    {
+        $facility = Facility::findOrFail($id);
+        $this->editingFacilityId = $id;
+        $this->newFacilityName = $facility->name;
+        $this->newFacilityIcon = $facility->icon;
+        $this->showingFacilityModal = true;
+    }
+
+    public function resetModal()
+    {
+        $this->newFacilityName = '';
+        $this->newFacilityIcon = '';
+        $this->editingFacilityId = null;
         $this->showingFacilityModal = false;
-        $this->dispatch('notify', 'Fasilitas baru berhasil ditambahkan.', 'success');
     }
 
     public function deleteFacility($id)
     {
         Facility::find($id, 'id')->delete();
-        $this->dispatch('notify', 'Fasilitas berhasil dihapus.', 'info');
+        unset($this->facilities);
+        $this->dispatch('notify', [
+            'title' => 'Terhapus',
+            'message' => 'Fasilitas berhasil dihapus.',
+            'type' => 'info'
+        ]);
     }
 
     public function confirmDeleteBusClass($id)
@@ -87,7 +136,12 @@ class Index extends Component
             BusClass::find($this->busClassIdBeingDeleted, 'id')->delete();
             $this->confirmingBusClassDeletion = false;
             $this->busClassIdBeingDeleted = null;
-            $this->dispatch('notify', 'Kelas Bus berhasil dihapus.', 'success');
+            unset($this->busClasses);
+            $this->dispatch('notify', [
+                'title' => 'Berhasil',
+                'message' => 'Kelas Bus berhasil dihapus.',
+                'type' => 'success'
+            ]);
         }
     }
 

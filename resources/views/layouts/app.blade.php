@@ -6,11 +6,28 @@
         toasts: [],
         add(e) {
             const id = Date.now();
-            const t = { id, type: e.detail.type ?? 'success', message: e.detail.message ?? '', title: e.detail.title ?? '' };
+            const detail = Array.isArray(e.detail) ? e.detail[0] : e.detail;
+            const t = {
+                id,
+                type: detail.type ?? 'success',
+                message: detail.message ?? '',
+                title: detail.title ?? ''
+            };
             this.toasts.push(t);
-            setTimeout(() => this.remove(id), e.detail.timeout ?? 4000);
+            setTimeout(() => this.remove(id), detail.timeout ?? 4000);
         },
-        remove(id) { this.toasts = this.toasts.filter(t => t.id !== id); }
+        remove(id) { this.toasts = this.toasts.filter(t => t.id !== id); },
+        init() {
+            @if(session()->has('notify'))
+            this.add({
+                detail: {
+                    type: '{{ session('notify.type', 'success') }}',
+                    title: '{{ session('notify.title', '') }}',
+                    message: '{{ session('notify.message', '') }}'
+                }
+            });
+            @endif
+        }
     }" x-on:notify.window="add($event)"
         class="fixed top-5 right-5 z-9999 flex flex-col gap-3 w-80 pointer-events-none" aria-live="polite">
         <template x-for="toast in toasts" :key="toast.id">

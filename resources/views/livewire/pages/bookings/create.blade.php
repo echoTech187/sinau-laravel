@@ -286,34 +286,53 @@
                             <div class="inline-grid gap-2 sm:gap-3 p-4 sm:p-8 bg-white dark:bg-zinc-900 rounded-2xl sm:rounded-[40px] border border-zinc-200 dark:border-zinc-800 shadow-2xl"
                                 style="grid-template-columns: repeat({{ $this->selectedSchedule->bus->seatLayout->grid_columns }}, minmax(0, 1fr));">
 
-                                @foreach ($this->selectedSchedule->bus->seatLayout->layout_mapping as $seat)
+                                @foreach ($this->selectedSchedule->bus->seatLayout->all_seats as $seat)
                                     @php
                                         $seatNum = $seat['seat_number'] ?? ($seat['label'] ?? null);
+                                        $seatType = $seat['type'] ?? 'available';
                                         $isTaken =
-                                            $seat['type'] === 'seat' && $seatNum
+                                            $seatType === 'seat' && $seatNum
                                                 ? in_array($seatNum, $this->takenSeats)
                                                 : false;
                                         $isSelected =
-                                            $seat['type'] === 'seat' && $seatNum
+                                            $seatType === 'seat' && $seatNum
                                                 ? in_array($seatNum, $this->selected_seats)
                                                 : false;
+                                        if ($seatType === 'seat') {
+                                            if ($isTaken) {
+                                                $seatClass =
+                                                    'bg-zinc-100 border-zinc-200 dark:bg-zinc-800 dark:border-zinc-700 cursor-not-allowed text-zinc-400';
+                                            } elseif ($isSelected) {
+                                                $seatClass =
+                                                    'bg-indigo-600 border-indigo-500 text-white shadow-xl shadow-indigo-600/30';
+                                            } else {
+                                                $seatClass =
+                                                    'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-indigo-400 text-zinc-600 dark:text-zinc-400 shadow-sm cursor-pointer hover:scale-110 active:scale-90';
+                                            }
+                                        } elseif ($seatType === 'available') {
+                                            $seatClass = 'opacity-0 pointer-events-none';
+                                        } else {
+                                            $seatClass =
+                                                'bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-400 cursor-default opacity-60';
+                                        }
                                     @endphp
                                     <div wire:key="layout-seat-{{ $seatNum ?? str()->random(8) }}"
-                                        @if ($seat['type'] === 'seat' && $seatNum) wire:click="toggleSeat('{{ $seatNum }}')" @endif
-                                        class="size-11 sm:size-14 rounded-lg sm:rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all hover:scale-110 active:scale-90 border-2
-                                            {{ $seat['type'] === 'seat'
-                                                ? ($isTaken
-                                                    ? 'bg-zinc-100 border-zinc-200 dark:bg-zinc-800 dark:border-zinc-700 cursor-not-allowed text-zinc-400'
-                                                    : ($isSelected
-                                                        ? 'bg-indigo-600 border-indigo-500 text-white shadow-xl shadow-indigo-600/30'
-                                                        : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-indigo-400 text-zinc-600 dark:text-zinc-400 shadow-sm'))
-                                                : 'opacity-0 pointer-events-none' }}">
+                                        @if ($seatType === 'seat' && $seatNum) wire:click="toggleSeat('{{ $seatNum }}')" @endif
+                                        class="size-11 sm:size-14 rounded-lg sm:rounded-xl flex flex-col items-center justify-center transition-all border-2 {{ $seatClass }}">
 
-                                        @if ($seat['type'] === 'seat')
+                                        @if ($seatType === 'seat')
                                             <span
                                                 class="text-[8px] font-black uppercase tracking-tighter opacity-40 leading-none">Kursi</span>
                                             <span
                                                 class="text-base sm:text-base font-black mt-0.5 leading-none">{{ $seatNum }}</span>
+                                        @elseif($seatType === 'toilet')
+                                            <x-heroicon-o-sparkles class="w-5 h-5 opacity-40" />
+                                        @elseif($seatType === 'stairs')
+                                            <x-heroicon-o-bars-3-bottom-left class="w-5 h-5 opacity-40 rotate-90" />
+                                        @elseif($seatType === 'smoking')
+                                            <x-heroicon-o-no-symbol class="w-5 h-5 opacity-40" />
+                                        @elseif($seatType === 'pantry')
+                                            <x-heroicon-o-cake class="w-5 h-5 opacity-40" />
                                         @endif
                                     </div>
                                 @endforeach
@@ -470,18 +489,13 @@
                             <button type="button" wire:click="$set('step', 3)"
                                 class="btn btn-ghost rounded-2xl font-black uppercase tracking-[.3em] text-[10px] text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 shadow-sm border border-transparent hover:border-zinc-200 px-6">Koreksi
                                 Kursi</button>
-                            <button type="submit"
-                                class="btn flex-1 bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-2xl shadow-indigo-600/30 rounded-2xl sm:rounded-3xl h-14 sm:h-16 font-black uppercase tracking-widest text-xs sm:text-sm group overflow-hidden relative">
-                                <div
-                                    class="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer">
-                                </div>
-                                <span wire:loading.remove wire:target="saveBooking"
-                                    class="flex items-center gap-2 relative z-10">
-                                    <x-heroicon-o-check-circle class="w-5 h-5 sm:w-6 sm:h-6" />
-                                    KONFIRMASI & TERBITKAN TIKET
-                                </span>
+                            <button type="submit" wire:loading.attr="disabled"
+                                class="btn bg-indigo-600 hover:bg-indigo-700 text-white border-0 px-8 rounded-2xl shadow-lg shadow-indigo-600/30 font-bold tracking-wide flex items-center justify-center gap-2 group transition-all min-w-[200px]">
+                                <x-heroicon-o-check-circle wire:loading.remove wire:target="saveBooking"
+                                    class="w-5 h-5 group-hover:scale-110 transition-transform" />
                                 <span wire:loading wire:target="saveBooking"
-                                    class="loading loading-spinner loading-md relative z-10"></span>
+                                    class="loading loading-spinner loading-sm"></span>
+                                Buat Reservasi
                             </button>
                         </div>
                     </div>

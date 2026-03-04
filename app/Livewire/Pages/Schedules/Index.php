@@ -10,8 +10,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('layouts.app.sidebar')]
-#[Title('Daftar Jadwal Keberangkatan')]
+#[Layout('layouts.app')]
 class Index extends Component
 {
     use WithPagination;
@@ -92,9 +91,9 @@ class Index extends Component
         session()->flash('message', 'Jadwal berhasil dihapus secara logis.');
     }
 
+    #[Title('Daftar Jadwal Keberangkatan')]
     public function render()
     {
         return view('livewire.pages.schedules.index');
     }
 }
-

@@ -13,35 +13,22 @@
 
     <div class="relative z-10 space-y-8">
         <div class="animate-fade-in-up">
-            <header
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 dark:border-zinc-700/50 pb-4">
-                <div>
-                    <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
-                        <div
-                            class="p-2.5 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/30">
-                            <x-heroicon-o-users class="w-6 h-6 text-white" />
-                        </div>
-                        Master Data Kru
-                    </h1>
-                    <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
-                        Manajemen data kru operasional, pengemudi, awak kabin, dan status lisensi (SIM/SIPA).
-                    </p>
-                </div>
-                <!-- Action Buttons -->
-                <div
-                    class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
-                    <button
-                        class="btn btn-sm bg-white/50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl transition-all">
-                        <x-heroicon-o-arrow-path class="w-4 h-4" />
-                        Synchronize
-                    </button>
-                    <a wire:navigate href="{{ route('crews.create') }}"
-                        class="btn btn-sm bg-emerald-600 hover:bg-emerald-700 text-white border-0 shadow-lg shadow-emerald-600/30 rounded-xl transition-all hover:-translate-y-0.5 font-bold">
-                        <x-heroicon-o-plus class="w-4 h-4" />
-                        Tambah Kru Baru
-                    </a>
-                </div>
-            </header>
+            <x-page-header title="Master Data Kru"
+                description="Manajemen data kru operasional, pengemudi, awak kabin, dan status lisensi (SIM/SIPA)."
+                icon="heroicon-o-users" iconGradient="from-emerald-500 to-teal-600" iconShadow="shadow-emerald-500/30">
+                <button
+                    class="btn btn-sm sm:btn-md bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-2xl shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all font-bold group">
+                    <x-heroicon-o-arrow-path
+                        class="w-5 h-5 text-emerald-500 group-hover:rotate-180 transition-transform duration-500" />
+                    <span class="hidden xs:inline">Synchronize</span>
+                    <span class="xs:hidden">Sync</span>
+                </button>
+                <a wire:navigate href="{{ route('crews.create') }}"
+                    class="btn btn-sm sm:btn-md bg-emerald-600 hover:bg-emerald-700 text-white border-0 shadow-lg shadow-emerald-600/30 rounded-2xl transition-all hover:-translate-y-0.5 font-bold">
+                    <x-heroicon-o-plus class="w-5 h-5" />
+                    Tambah Kru
+                </a>
+            </x-page-header>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in-up"
@@ -158,8 +145,13 @@
                                     <td class="py-3 pl-4">
                                         <div class="flex items-center gap-3">
                                             <div
-                                                class="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center shrink-0">
-                                                <x-heroicon-o-user class="w-5 h-5 text-zinc-400" />
+                                                class="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center shrink-0 overflow-hidden">
+                                                @if ($crew->photo_path)
+                                                    <img src="{{ asset('storage/' . $crew->photo_path) }}"
+                                                        alt="{{ $crew->name }}" class="w-full h-full object-cover" />
+                                                @else
+                                                    <x-heroicon-o-user class="w-5 h-5 text-zinc-400" />
+                                                @endif
                                             </div>
                                             <div class="flex flex-col">
                                                 <span

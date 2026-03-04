@@ -7,30 +7,15 @@
     </div>
 
     <div class="relative z-10 space-y-8">
-        <header
-            class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-6 animate-fade-in-up">
-            <div>
-                <h1
-                    class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3 text-pretty">
-                    <div
-                        class="p-2.5 rounded-2xl bg-linear-to-br from-purple-500 to-indigo-600 shadow-lg shadow-purple-500/20 text-white">
-                        <x-heroicon-o-squares-2x2 class="w-6 h-6" />
-                    </div>
-                    Konfigurasi Layout Kursi
-                </h1>
-                <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">Pengaturan denah kursi bus untuk berbagai jenis
-                    karoseri dan kelas layanan.</p>
-            </div>
-            <!-- Action Buttons -->
-            <div
-                class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
-                <a wire:navigate href="{{ route('seat-layouts.create') }}"
-                    class="btn btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/20 rounded-2xl transition-all hover:-translate-y-0.5 font-bold">
-                    <x-heroicon-o-plus class="w-5 h-5" />
-                    Buat Layout Baru
-                </a>
-            </div>
-        </header>
+        <x-page-header title="Konfigurasi Layout Kursi"
+            description="Pengaturan denah kursi bus untuk berbagai jenis karoseri dan kelas layanan."
+            icon="heroicon-o-squares-2x2" iconGradient="from-purple-500 to-indigo-600" iconShadow="shadow-purple-500/20">
+            <a wire:navigate href="{{ route('seat-layouts.create') }}"
+                class="btn btn-sm sm:btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/20 rounded-2xl transition-all hover:-translate-y-0.5 font-bold">
+                <x-heroicon-o-plus class="w-5 h-5" />
+                Buat Layout Baru
+            </a>
+        </x-page-header>
 
         <div class="relative w-full md:w-96 animate-fade-in-up" style="animation-delay: 0.1s">
             <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-zinc-400">
@@ -59,7 +44,7 @@
                                         Kursi</span>
                                     <span
                                         class="text-xl font-black text-indigo-600 dark:text-indigo-400 mt-1 leading-none">
-                                        {{ collect($layout->layout_mapping)->where('type', 'seat')->count() }}
+                                        {{ collect($layout->all_seats)->where('type', 'seat')->count() }}
                                     </span>
                                 </div>
                             </div>
@@ -73,12 +58,12 @@
                             <!-- Mini Preview (Simulated) -->
                             <div
                                 class="mt-6 flex flex-wrap gap-1 justify-center p-3 bg-zinc-50 dark:bg-zinc-950/50 rounded-2xl border border-zinc-100 dark:border-zinc-800 overflow-hidden max-h-24">
-                                @foreach (array_slice($layout->layout_mapping, 0, 15) as $index => $seat)
+                                @foreach (array_slice($layout->all_seats, 0, 15) as $index => $seat)
                                     <div wire:key="layout-seat-{{ $layout->id }}-{{ $index }}"
-                                        class="size-3 rounded shadow-sm {{ $seat['type'] === 'seat' ? 'bg-indigo-500' : 'bg-zinc-200 dark:bg-zinc-800' }}">
+                                        class="size-3 rounded shadow-sm {{ ($seat['type'] ?? '') === 'seat' ? 'bg-indigo-500' : 'bg-zinc-200 dark:bg-zinc-800' }}">
                                     </div>
                                 @endforeach
-                                @if (count($layout->layout_mapping) > 15)
+                                @if (count($layout->all_seats) > 15)
                                     <div
                                         class="size-3 flex items-center justify-center text-[7px] font-black text-zinc-400">
                                         +</div>

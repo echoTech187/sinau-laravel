@@ -21,8 +21,8 @@ class ScheduleForm extends Form
     #[Validate('required|exists:routes,id')]
     public $route_id = '';
 
-    #[Validate('required|exists:buses,id')]
-    public $bus_id = '';
+    #[Validate('nullable|exists:buses,id')]
+    public $bus_id = null;
 
     #[Validate('required|date|after_or_equal:today')]
     public $departure_date = '';
@@ -37,10 +37,10 @@ class ScheduleForm extends Form
     public $base_price = 0;
 
     #[Validate('nullable|integer|min:0')]
-    public $start_odometer = '';
+    public $start_odometer = null;
 
     #[Validate('nullable|integer|min:0|gte:start_odometer')]
-    public $end_odometer = '';
+    public $end_odometer = null;
 
     #[Validate('required')]
     public $trip_type = 'revenue';
@@ -60,7 +60,7 @@ class ScheduleForm extends Form
         $this->departure_date = $schedule->departure_date->format('Y-m-d');
         $this->departure_time = $schedule->departure_time->format('Y-m-d\TH:i');
         $this->arrival_estimate = $schedule->arrival_estimate->format('Y-m-d\TH:i');
-        $this->base_price = $schedule->base_price;
+        $this->base_price = (int) $schedule->base_price;
         $this->start_odometer = $schedule->start_odometer;
         $this->end_odometer = $schedule->end_odometer;
         $this->trip_type = $schedule->trip_type->value;
@@ -76,7 +76,7 @@ class ScheduleForm extends Form
         $this->stops = $schedule->scheduleStops->map(fn($s) => [
             'id' => $s->id,
             'route_stop_id' => $s->route_stop_id,
-            'location_name' => $s->routeStop->location->name ?? 'Unknown',
+            'location_name' => $s->routeStop->agent->name ?? 'Unknown',
             'estimated_time' => $s->estimated_time,
             'status' => $s->status->value,
             'notes' => $s->notes,
@@ -87,7 +87,7 @@ class ScheduleForm extends Form
     {
         return [
             'route_id' => 'required|exists:routes,id',
-            'bus_id' => 'required|exists:buses,id',
+            'bus_id' => 'nullable|exists:buses,id',
             'departure_date' => 'required|date',
             'departure_time' => 'required',
             'arrival_estimate' => 'required',
@@ -98,8 +98,8 @@ class ScheduleForm extends Form
             'status' => ['required', Rule::enum(ScheduleStatus::class)],
             'crews.*.crew_id' => 'required|exists:crews,id',
             'crews.*.assigned_position_id' => 'required|exists:crew_positions,id',
-            'crews.*.boarding_location_id' => 'required|exists:locations,id',
-            'crews.*.dropoff_location_id' => 'required|exists:locations,id',
+            'crews.*.boarding_location_id' => 'required|exists:agents,id',
+            'crews.*.dropoff_location_id'   => 'required|exists:agents,id',
             'stops.*.route_stop_id' => 'required|exists:route_stops,id',
             'stops.*.estimated_time' => 'required',
         ];
@@ -110,7 +110,13 @@ class ScheduleForm extends Form
         $this->validate();
 
         return DB::transaction(function () {
-            $schedule = Schedule::create($this->except(['schedule', 'crews', 'stops']));
+            // Normalize empty optional integers to null
+            $data = $this->except(['schedule', 'crews', 'stops']);
+            $data['bus_id']         = $this->bus_id !== '' ? $this->bus_id : null;
+            $data['start_odometer'] = $this->start_odometer !== '' ? $this->start_odometer : null;
+            $data['end_odometer']   = $this->end_odometer   !== '' ? $this->end_odometer   : null;
+
+            $schedule = Schedule::create($data);
 
             foreach ($this->crews as $crewData) {
                 $schedule->crews()->create($crewData);
@@ -133,7 +139,13 @@ class ScheduleForm extends Form
         $this->validate();
 
         return DB::transaction(function () {
-            $this->schedule->update($this->except(['schedule', 'crews', 'stops']));
+            // Normalize empty optional integers to null
+            $data = $this->except(['schedule', 'crews', 'stops']);
+            $data['bus_id']         = $this->bus_id !== '' ? $this->bus_id : null;
+            $data['start_odometer'] = $this->start_odometer !== '' ? $this->start_odometer : null;
+            $data['end_odometer']   = $this->end_odometer   !== '' ? $this->end_odometer   : null;
+
+            $this->schedule->update($data);
 
             // Simple replace strategy for crews and stops
             $this->schedule->crews()->delete();

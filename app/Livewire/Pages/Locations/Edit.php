@@ -5,8 +5,10 @@ namespace App\Livewire\Pages\Locations;
 use App\Livewire\Forms\LocationForm;
 use App\Models\Location;
 use App\Models\LocationRole;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Edit Lokasi')]
 class Edit extends Component
 {
     public LocationForm $form;
@@ -20,10 +22,10 @@ class Edit extends Component
     {
         try {
             $this->form->update();
-            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Lokasi berhasil diperbarui.');
+            $this->dispatch('notify', ['type' => 'success', 'title' => 'Berhasil', 'message' => 'Lokasi berhasil diperbarui.']);
             return $this->redirect(route('locations.index'), navigate: true);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+            $this->dispatch('notify', ['type' => 'error', 'title' => 'Gagal', 'message' => $e->validator->errors()->first()]);
             return;
         }
     }

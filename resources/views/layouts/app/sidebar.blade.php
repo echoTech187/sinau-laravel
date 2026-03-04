@@ -14,11 +14,20 @@
     hideTooltip() {
         this.tooltipText = '';
     }
-}" x-init="$watch('sidebarCollapsed', val => { localStorage.setItem('sidebarCollapsed', val); if (!val) hideTooltip(); })"
+}" x-init="document.documentElement.classList.remove('sidebar-collapsed');
+$watch('sidebarCollapsed', val => { localStorage.setItem('sidebarCollapsed', val); if (!val) hideTooltip(); })"
     @scroll.window="hideTooltip()">
 
 <head>
     @include('partials.head')
+    {{-- Pre-Alpine sidebar state: read localStorage before Alpine boots to avoid layout flash --}}
+    <script>
+        (function() {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                document.documentElement.classList.add('sidebar-collapsed');
+            }
+        })();
+    </script>
 </head>
 
 <body class="min-h-screen bg-zinc-100 dark:bg-zinc-950 font-sans antialiased text-zinc-900 dark:text-zinc-100">
@@ -51,7 +60,7 @@
             'w-20': sidebarCollapsed,
             'w-72': !sidebarCollapsed
         }"
-        class="fixed inset-y-0 left-0 bg-white dark:bg-zinc-950 border-e border-zinc-200 dark:border-zinc-800 transition-all duration-300 ease-in-out flex flex-col h-screen z-50">
+        class="sidebar-aside w-72 fixed inset-y-0 left-0 bg-white dark:bg-zinc-950 border-e border-zinc-200 dark:border-zinc-800 transition-all duration-300 ease-in-out flex flex-col h-screen z-50">
 
         <!-- Sidebar Header -->
         <div class="flex items-center h-20 shrink-0 border-b border-zinc-100 dark:border-zinc-800/50 overflow-hidden"
@@ -239,7 +248,7 @@
 
     <!-- Content Area -->
     <div :class="sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-72'"
-        class="transition-all duration-300 flex flex-col min-h-screen">
+        class="content-area lg:pl-72 transition-all duration-300 flex flex-col min-h-screen">
         <!-- Dashboard Header / Topbar -->
         <header
             class="h-20 shrink-0 flex items-center justify-between px-4 lg:px-8 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl sticky top-0 z-30 border-b border-zinc-200 dark:border-zinc-800">

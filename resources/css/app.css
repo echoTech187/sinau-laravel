@@ -112,3 +112,16 @@ select:focus[data-flux-control] {
 .form-control>.textarea {
     @apply w-full;
 }
+
+/* ==========================================================
+   Sidebar: Pre-Alpine layout fix for fresh page loads (new tab)
+   These rules apply ONLY before Alpine.js boots.
+   The x-init in sidebar.blade.php removes 'sidebar-collapsed' from <html>
+   once Alpine initializes, so these rules stop applying and Alpine takes over.
+   ========================================================== */
+
+@media (min-width: 1024px) {
+    html.sidebar-collapsed .content-area {
+        padding-left: 5rem;
+    }
+}

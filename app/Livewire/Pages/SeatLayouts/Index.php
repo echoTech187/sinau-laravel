@@ -7,6 +7,9 @@ use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+use Livewire\Attributes\Title;
+
+#[Title('Daftar Layout Kursi')]
 class Index extends Component
 {
     use WithPagination;
@@ -48,7 +51,8 @@ class Index extends Component
             SeatLayout::find($this->layoutIdBeingDeleted, 'id')->delete();
             $this->confirmingLayoutDeletion = false;
             $this->layoutIdBeingDeleted = null;
-            $this->dispatch('notify', 'Layout kursi berhasil dihapus.', 'success');
+            unset($this->seatLayouts);
+            $this->dispatch('notify', ['title' => 'Berhasil', 'message' => 'Layout kursi berhasil dihapus.', 'type' => 'success']);
         }
     }
 

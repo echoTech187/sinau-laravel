@@ -20,7 +20,7 @@ class Bus extends Model
         'chassis_number', 'total_seats', 'max_baggage_weight_kg', 
         'max_baggage_volume_m3', 'stnk_expired_at', 'kir_expired_at', 
         'kps_expired_at', 'insurance_expired_at', 'current_odometer', 
-        'average_daily_km', 'status'
+        'average_daily_km', 'status', 'photo_path'
     ];
 
     protected $casts = [
@@ -31,6 +31,15 @@ class Bus extends Model
         'insurance_expired_at' => 'date',
         'max_baggage_volume_m3' => 'decimal:2',
     ];
+
+    protected function photoUrl(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn () => $this->photo_path 
+                ? asset('storage/' . $this->photo_path) 
+                : asset('images/placeholder-bus.png'),
+        );
+    }
 
     public function busClass(): BelongsTo
     {

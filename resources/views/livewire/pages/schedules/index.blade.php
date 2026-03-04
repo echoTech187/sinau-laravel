@@ -13,30 +13,16 @@
 
     <div class="relative z-10 space-y-8">
         <div class="animate-fade-in-up">
-            <header
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 dark:border-zinc-700/50 pb-4">
-                <div>
-                    <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
-                        <div
-                            class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30">
-                            <x-heroicon-o-calendar-days class="w-6 h-6 text-white" />
-                        </div>
-                        Penjadwalan Keberangkatan
-                    </h1>
-                    <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
-                        Kelola jam operasional armada, penugasan kru, dan pantau status perjalanan secara real-time.
-                    </p>
-                </div>
-                <!-- Action Buttons -->
-                <div
-                    class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
-                    <a wire:navigate href="{{ route('schedules.create') }}"
-                        class="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-xl transition-all hover:-translate-y-0.5 font-bold">
-                        <x-heroicon-o-plus-circle class="w-4 h-4" />
-                        Terbitkan Jadwal
-                    </a>
-                </div>
-            </header>
+            <x-page-header title="Penjadwalan Keberangkatan"
+                description="Kelola jam operasional armada, penugasan kru, dan pantau status perjalanan secara real-time."
+                icon="heroicon-o-calendar-days" iconGradient="from-indigo-500 to-purple-600"
+                iconShadow="shadow-indigo-500/30">
+                <a wire:navigate href="{{ route('schedules.create') }}"
+                    class="btn btn-sm sm:btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-2xl transition-all hover:-translate-y-0.5 font-bold">
+                    <x-heroicon-o-plus-circle class="w-5 h-5" />
+                    Terbitkan Jadwal
+                </a>
+            </x-page-header>
         </div>
 
         <!-- Stats Overview -->
@@ -204,20 +190,37 @@
 
                                         <!-- Bus -->
                                         <td class="py-4 whitespace-nowrap">
-                                            <div class="flex items-center gap-2">
-                                                <div
-                                                    class="p-1.5 rounded-lg bg-sky-50 dark:bg-sky-900/20 text-sky-600">
-                                                    <x-heroicon-o-truck class="w-4 h-4" />
+                                            @if ($schedule->bus)
+                                                <div class="flex items-center gap-2">
+                                                    <div
+                                                        class="p-1.5 rounded-lg bg-sky-50 dark:bg-sky-900/20 text-sky-600">
+                                                        <x-heroicon-o-truck class="w-4 h-4" />
+                                                    </div>
+                                                    <div>
+                                                        <p
+                                                            class="text-[11px] font-bold text-zinc-800 dark:text-zinc-300 leading-tight">
+                                                            {{ $schedule->bus->name }}</p>
+                                                        <p class="text-[9px] text-zinc-500">
+                                                            {{ $schedule->bus->plate_number }}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <p
-                                                        class="text-[11px] font-bold text-zinc-800 dark:text-zinc-300 leading-tight">
-                                                        {{ $schedule->bus->name }}</p>
-                                                    <p class="text-[9px] text-zinc-500">
-                                                        {{ $schedule->bus->plate_number }}
-                                                    </p>
+                                            @else
+                                                <div class="flex items-center gap-2">
+                                                    <div
+                                                        class="p-1.5 rounded-lg bg-zinc-50 dark:bg-zinc-800/50 text-zinc-400">
+                                                        <x-heroicon-o-truck class="w-4 h-4" />
+                                                    </div>
+                                                    <div>
+                                                        <p
+                                                            class="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 leading-tight italic">
+                                                            Belum Ditentukan</p>
+                                                        <p class="text-[9px] text-zinc-400">
+                                                            Pilih Armada
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endif
                                         </td>
 
                                         <!-- Crews -->
@@ -226,8 +229,8 @@
                                                 @foreach ($schedule->crews as $crew)
                                                     <div wire:key="schedule-{{ $schedule->id }}-crew-{{ $crew->id }}"
                                                         class="inline-flex items-center justify-center size-6 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-white dark:border-zinc-900 text-[9px] font-bold text-zinc-600 dark:text-zinc-400"
-                                                        title="{{ $crew->crew->name }} ({{ $crew->position->name }})">
-                                                        {{ collect(explode(' ', $crew->crew->name))->take(1)->map(fn($w) => substr($w, 0, 1))->implode('') }}
+                                                        title="{{ optional($crew->crew)->name }} ({{ optional($crew->position)->name }})">
+                                                        {{ collect(explode(' ', optional($crew->crew)->name ?? ''))->take(1)->map(fn($w) => substr($w, 0, 1))->implode('') }}
                                                     </div>
                                                 @endforeach
                                             </div>

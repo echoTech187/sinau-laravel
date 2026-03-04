@@ -15,8 +15,8 @@ class AgentForm extends Form
     public ?Agent $agent = null;
 
     public $agent_code = '';
-    public $location_id = '';
-    public $parent_branch_id = '';
+    public ?int $location_id = null;
+    public ?int $parent_branch_id = null;
     public $name = '';
     public $phone_number = '';
     public $type = 'partner_general';
@@ -63,13 +63,21 @@ class AgentForm extends Form
     {
         $this->validate();
 
-        Agent::create($this->all());
+        $data = $this->all();
+        $data['location_id'] = $data['location_id'] ?: null;
+        $data['parent_branch_id'] = $data['parent_branch_id'] ?: null;
+
+        Agent::create($data);
     }
 
     public function update()
     {
         $this->validate();
 
-        $this->agent->update($this->all());
+        $data = $this->all();
+        $data['location_id'] = $data['location_id'] ?: null;
+        $data['parent_branch_id'] = $data['parent_branch_id'] ?: null;
+
+        $this->agent->update($data);
     }
 }

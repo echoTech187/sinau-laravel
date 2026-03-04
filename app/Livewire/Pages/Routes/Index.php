@@ -89,8 +89,9 @@ class Index extends Component
 
         $this->confirmingRouteDeletion = false;
         $this->routeIdBeingDeleted = null;
+        unset($this->routes);
         
-        session()->flash('message', 'Data Rute beserta Titik Pemberhentiannya berhasil dihapus!');
+        $this->dispatch('notify', ['title' => 'Berhasil', 'message' => 'Data Rute beserta Titik Pemberhentiannya berhasil dihapus!', 'type' => 'success']);
     }
 
     #[Title('Master Data Rute')]

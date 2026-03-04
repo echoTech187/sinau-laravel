@@ -13,30 +13,16 @@
     <div class="relative z-10 space-y-8">
         <!-- Header -->
         <div class="animate-fade-in-up">
-            <header
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 dark:border-zinc-700/50 pb-4">
-                <div>
-                    <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
-                        <div
-                            class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/30">
-                            <x-heroicon-o-archive-box class="w-6 h-6 text-white" />
-                        </div>
-                        Manajemen Kargo (SJO)
-                    </h1>
-                    <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
-                        Portal pengelolaan logistik, paket, dan bagasi armada secara terpusat.
-                    </p>
-                </div>
-                <!-- Action Buttons -->
-                <div
-                    class="flex flex-wrap sm:flex-nowrap justify-start sm:justify-end items-center gap-3 w-full sm:w-auto mt-4 sm:mt-0">
-                    <a wire:navigate href="{{ route('shipments.create') }}"
-                        class="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-xl transition-all hover:-translate-y-0.5 font-bold">
-                        <x-heroicon-o-plus class="w-4 h-4" />
-                        Input Kargo Baru
-                    </a>
-                </div>
-            </header>
+            <x-page-header title="Manajemen Kargo (SJO)"
+                description="Portal pengelolaan logistik, paket, dan bagasi armada secara terpusat."
+                icon="heroicon-o-archive-box" iconGradient="from-indigo-500 to-blue-600"
+                iconShadow="shadow-indigo-500/30">
+                <a wire:navigate href="{{ route('shipments.create') }}"
+                    class="btn btn-sm sm:btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-2xl transition-all hover:-translate-y-0.5 font-bold">
+                    <x-heroicon-o-plus class="w-5 h-5" />
+                    Input Kargo
+                </a>
+            </x-page-header>
         </div>
 
         <!-- Stats Cards -->

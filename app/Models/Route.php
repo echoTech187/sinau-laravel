@@ -11,16 +11,16 @@ class Route extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['route_code', 'name', 'origin_location_id', 'destination_location_id', 'distance_km'];
+    protected $fillable = ['route_code', 'name', 'origin_agent_id', 'destination_agent_id', 'distance_km'];
 
     public function origin(): BelongsTo
     {
-        return $this->belongsTo(Location::class, 'origin_location_id');
+        return $this->belongsTo(Agent::class, 'origin_agent_id');
     }
 
     public function destination(): BelongsTo
     {
-        return $this->belongsTo(Location::class, 'destination_location_id');
+        return $this->belongsTo(Agent::class, 'destination_agent_id');
     }
 
     public function stops(): HasMany

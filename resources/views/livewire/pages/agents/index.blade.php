@@ -16,34 +16,23 @@
 
     <div class="relative z-10 space-y-8">
         <div class="animate-fade-in-up">
-            <header
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 dark:border-zinc-700/50 pb-4">
-                <div>
-                    <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
-                        <div
-                            class="p-2.5 rounded-2xl bg-linear-to-br from-sky-500 to-indigo-600 shadow-lg shadow-sky-500/30">
-                            <x-heroicon-o-building-storefront class="w-6 h-6 text-white" />
-                        </div>
-                        Master Data Agen & Cabang
-                    </h1>
-                    <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
-                        Manajemen data keagenan, kantor cabang mandiri, komisi dan saldo agen.
-                    </p>
-                </div>
-                <!-- Action Buttons -->
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
-                    <button
-                        class="btn btn-sm bg-white/50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl transition-all font-bold">
-                        <x-heroicon-o-arrow-path class="w-4 h-4" />
-                        Synchronize
-                    </button>
-                    <a wire:navigate href="{{ route('agents.create') }}"
-                        class="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-xl transition-all hover:-translate-y-0.5 font-bold">
-                        <x-heroicon-o-plus class="w-4 h-4" />
-                        Tambah Agen Baru
-                    </a>
-                </div>
-            </header>
+            <x-page-header title="Master Data Agen & Cabang"
+                description="Manajemen data keagenan, kantor cabang mandiri, komisi dan saldo agen."
+                icon="heroicon-o-building-storefront" iconGradient="from-sky-500 to-indigo-600"
+                iconShadow="shadow-sky-500/30">
+                <button wire:click="sync" wire:loading.attr="disabled"
+                    class="btn btn-sm sm:btn-md bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-2xl shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all font-bold group">
+                    <x-heroicon-o-arrow-path wire:loading.class="animate-spin"
+                        class="w-5 h-5 text-indigo-500 group-hover:rotate-180 transition-transform duration-500" />
+                    <span class="hidden xs:inline">Synchronize</span>
+                    <span class="xs:hidden">Sync</span>
+                </button>
+                <a wire:navigate href="{{ route('agents.create') }}"
+                    class="btn btn-sm sm:btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-2xl transition-all hover:-translate-y-0.5 font-bold">
+                    <x-heroicon-o-plus class="w-5 h-5" />
+                    Tambah Agen
+                </a>
+            </x-page-header>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in-up"
@@ -102,26 +91,37 @@
                     class="flex gap-2 p-1 bg-zinc-100/80 dark:bg-zinc-800/80 backdrop-blur rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 w-full md:w-auto overflow-x-auto">
                     <select wire:model.live="typeFilter"
                         class="select select-sm border-0 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium whitespace-nowrap">
-                        <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua Tipe</option>
-                        <option value="branch_office" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Kantor Cabang</option>
-                        <option value="partner_exclusive" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Mitra Eksklusif</option>
-                        <option value="partner_general" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Mitra Reguler</option>
+                        <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua
+                            Tipe</option>
+                        <option value="branch_office" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">
+                            Kantor Cabang</option>
+                        <option value="partner_exclusive"
+                            class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Mitra Eksklusif</option>
+                        <option value="partner_general" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">
+                            Mitra Reguler</option>
                     </select>
                     <div class="w-px h-6 bg-zinc-300 dark:bg-zinc-700 my-auto"></div>
                     <select wire:model.live="locationFilter"
                         class="select select-sm border-0 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium whitespace-nowrap max-w-50">
-                        <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua Lokasi</option>
+                        <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua
+                            Lokasi</option>
                         @foreach ($this->locations as $loc)
-                            <option value="{{ $loc->id }}" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">{{ $loc->name }}</option>
+                            <option value="{{ $loc->id }}"
+                                class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">{{ $loc->name }}
+                            </option>
                         @endforeach
                     </select>
                     <div class="w-px h-6 bg-zinc-300 dark:bg-zinc-700 my-auto"></div>
                     <select wire:model.live="statusFilter"
                         class="select select-sm border-0 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium whitespace-nowrap">
-                        <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua Status</option>
-                        <option value="active" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Active</option>
-                        <option value="inactive" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Inactive</option>
-                        <option value="banned" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Banned</option>
+                        <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua
+                            Status</option>
+                        <option value="active" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Active
+                        </option>
+                        <option value="inactive" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">
+                            Inactive</option>
+                        <option value="banned" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Banned
+                        </option>
                     </select>
                 </div>
 
@@ -146,6 +146,7 @@
                             <th class="py-4 rounded-tl-xl pl-4">Entitas Agen & Kode</th>
                             <th class="py-4">Tipe Agen</th>
                             <th class="py-4">Titik Lokasi</th>
+                            <th class="py-4">Jam Operasional</th>
                             <th class="py-4 text-right">Skema Komisi</th>
                             <th class="py-4">Status</th>
                             <th class="py-4 rounded-tr-xl text-right pr-4">Aksi</th>
@@ -171,7 +172,7 @@
                                                     class="font-bold text-zinc-900 dark:text-white">{{ $agent->name }}</span>
                                                 <div class="flex flex-col gap-0.5 mt-0.5">
                                                     <span
-                                                        class="text-[10px] font-mono font-bold text-sky-600 dark:text-sky-400">
+                                                        class="text-[10px] font-mono font-bold text-sky-600 dark:text-sky-400 uppercase">
                                                         {{ $agent->agent_code }}
                                                     </span>
                                                     <span class="text-[10px] text-zinc-500 flex items-center gap-1">
@@ -206,9 +207,36 @@
                                     </td>
 
                                     <td class="py-3">
-                                        <div class="flex items-center gap-1.5 text-xs text-zinc-700 dark:text-zinc-300">
+                                        <div
+                                            class="flex items-center gap-1.5 text-xs text-zinc-700 dark:text-zinc-300">
                                             <x-heroicon-s-map-pin class="w-4 h-4 text-emerald-500" />
                                             {{ optional($agent->location)->name ?? 'Tanpa Titik Lokasi' }}
+                                        </div>
+                                    </td>
+
+                                    {{-- Jam Operasional mini-pills --}}
+                                    <td class="py-3">
+                                        @php
+                                            $ohByDay = $agent->operationalHours->keyBy('day');
+                                            $dayAbbr = ['S', 'S', 'R', 'K', 'J', 'S', 'M'];
+                                        @endphp
+                                        <div class="flex items-center gap-1">
+                                            @foreach ($dayAbbr as $d => $abbr)
+                                                @php $oh = $ohByDay->get($d); @endphp
+                                                @if (!$oh || (!$oh->is_24_hours && !$oh->open_time))
+                                                    <span
+                                                        title="{{ ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'][$d] }}: Tutup"
+                                                        class="w-5 h-5 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-[8px] font-black text-zinc-400">{{ $abbr }}</span>
+                                                @elseif ($oh->is_24_hours)
+                                                    <span
+                                                        title="{{ ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'][$d] }}: 24 Jam"
+                                                        class="w-5 h-5 rounded-full bg-amber-400 flex items-center justify-center text-[8px] font-black text-white">{{ $abbr }}</span>
+                                                @else
+                                                    <span
+                                                        title="{{ ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'][$d] }}: {{ substr($oh->open_time, 0, 5) }}-{{ substr($oh->close_time, 0, 5) }}"
+                                                        class="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center text-[8px] font-black text-white">{{ $abbr }}</span>
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </td>
 
@@ -263,7 +291,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="6" class="py-12 text-center text-zinc-500 dark:text-zinc-400">
+                                <td colspan="7" class="py-12 text-center text-zinc-500 dark:text-zinc-400">
                                     <x-heroicon-o-building-storefront class="w-12 h-12 mx-auto mb-3 opacity-20" />
                                     <p class="font-medium text-lg">Tidak ada data agen ditemukan</p>
                                     <p class="text-xs mt-1">Ganti filter pencarian atau tambahkan agen baru.</p>
@@ -307,7 +335,3 @@
             wire:click="$set('confirmingAgentDeletion', false)"></div>
     </div>
 </div>
-
-
-
-

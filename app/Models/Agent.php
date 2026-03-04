@@ -57,4 +57,9 @@ class Agent extends Model
     {
         return $this->hasMany(AgentStaff::class);
     }
+
+    public function operationalHours(): HasMany
+    {
+        return $this->hasMany(AgentOperationalHour::class);
+    }
 }

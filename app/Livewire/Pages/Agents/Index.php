@@ -69,7 +69,7 @@ class Index extends Component
     #[Computed]
     public function agents()
     {
-        return Agent::with(['location', 'parentBranch', 'balance'])
+        return Agent::with(['location', 'parentBranch', 'balance', 'operationalHours'])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%'.$this->search.'%')
@@ -104,7 +104,23 @@ class Index extends Component
         $this->confirmingAgentDeletion = false;
         $this->agentIdBeingDeleted = null;
 
-        session()->flash('message', 'Data Agen berhasil dihapus!');
+        $this->dispatch('notify', ['title' => 'Berhasil', 'message' => 'Data Agen berhasil dihapus!', 'type' => 'success']);
+    }
+    
+    public function sync()
+    {
+        // Simulate sync delay
+        usleep(800000); 
+        
+        $this->resetPage();
+        unset($this->agents);
+        unset($this->stats);
+        
+        $this->dispatch('notify', [
+            'title' => 'Sinkronisasi Berhasil',
+            'message' => 'Data agen telah diperbarui dari server.',
+            'type' => 'success'
+        ]);
     }
 
     #[Title('Master Data Agen & Cabang')]

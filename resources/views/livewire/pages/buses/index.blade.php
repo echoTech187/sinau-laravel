@@ -14,8 +14,8 @@
     <div class="relative z-10 space-y-8">
         <div class="animate-fade-in-up">
             <header
-                class="flex flex-col justify-end xl:flex-row xl:items-center xl:justify-between gap-4 border-b border-zinc-200 dark:border-zinc-700/50 pb-4">
-                <div>
+                class="flex flex-wrap items-center justify-between gap-6 border-b border-zinc-200 dark:border-zinc-700/50 pb-6">
+                <div class="flex-1 min-w-[280px]">
                     <h1 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white flex items-center gap-3">
                         <div
                             class="p-2.5 rounded-2xl bg-linear-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/30">
@@ -23,23 +23,24 @@
                         </div>
                         Master Armada Bus
                     </h1>
-                    <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
+                    <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
                         Manajemen data fisik bus, nomor lambung, spesifikasi sasis, dan status kelayakan jalan
                         (KIR/STNK).
                     </p>
                 </div>
                 <!-- Action Buttons -->
-                <div
-                    class="flex  justify-end sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
+                <div class="flex flex-wrap items-center justify-end gap-3 w-full sm:w-auto">
                     <button
-                        class="btn btn-sm bg-white/50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl transition-all">
-                        <x-heroicon-o-arrow-path class="w-4 h-4" />
-                        Synchronize
+                        class="btn btn-sm sm:btn-md bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-2xl shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all font-bold group">
+                        <x-heroicon-o-arrow-path
+                            class="w-5 h-5 text-indigo-500 group-hover:rotate-180 transition-transform duration-500" />
+                        <span class="hidden xs:inline">Synchronize</span>
+                        <span class="xs:hidden">Sync</span>
                     </button>
                     <a wire:navigate href="{{ route('buses.create') }}"
-                        class="btn btn-sm bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-xl transition-all hover:-translate-y-0.5 font-bold">
-                        <x-heroicon-o-plus class="w-4 h-4" />
-                        Tambah Bus Baru
+                        class="btn btn-sm sm:btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-2xl transition-all hover:-translate-y-0.5 font-bold">
+                        <x-heroicon-o-plus class="w-5 h-5" />
+                        Tambah Bus
                     </a>
                 </div>
             </header>
@@ -161,7 +162,7 @@
                                                 class="font-bold text-zinc-900 dark:text-white">{{ $bus->fleet_code }}</span>
                                             <div class="flex items-center gap-1.5 mt-0.5">
                                                 <span
-                                                    class="inline-block px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-[10px] font-mono font-bold text-zinc-600 dark:text-zinc-400 tracking-widest">
+                                                    class="inline-block text-nowrap px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-[10px] font-mono font-bold text-zinc-600 dark:text-zinc-400 tracking-widest">
                                                     {{ $bus->plate_number }}
                                                 </span>
                                             </div>
@@ -172,8 +173,13 @@
                                     <td class="py-3">
                                         <div class="flex items-center gap-3">
                                             <div
-                                                class="size-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-200 dark:border-zinc-700">
-                                                <x-heroicon-o-truck class="w-4 h-4 text-zinc-500" />
+                                                class="size-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-200 dark:border-zinc-700 overflow-hidden shadow-sm">
+                                                @if ($bus->photo_path)
+                                                    <img src="{{ $bus->photo_url }}" alt="{{ $bus->name }}"
+                                                        class="w-full h-full object-cover">
+                                                @else
+                                                    <x-heroicon-o-truck class="w-6 h-6 text-zinc-400 opacity-50" />
+                                                @endif
                                             </div>
                                             <div>
                                                 <p class="font-bold text-zinc-900 dark:text-white text-xs">

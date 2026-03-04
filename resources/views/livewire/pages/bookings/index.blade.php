@@ -7,28 +7,16 @@
     </div>
 
     <div class="relative z-10 space-y-8">
-        <header
-            class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-zinc-200 dark:border-zinc-800 pb-8 animate-fade-in-up">
-            <div>
-                <h1
-                    class="text-3xl font-black tracking-tight text-zinc-900 dark:text-white uppercase flex items-center gap-4">
-                    <div
-                        class="p-3.5 rounded-3xl bg-linear-to-br from-indigo-500 to-purple-600 shadow-xl shadow-indigo-500/20 text-white">
-                        <x-heroicon-o-clipboard-document-list class="w-8 h-8" />
-                    </div>
-                    Riwayat Booking
-                </h1>
-                <p class="mt-2 text-sm font-medium text-zinc-500 dark:text-zinc-400 italic leading-relaxed">Kelola dan
-                    pantau seluruh reservasi tiket penunpang secara real-time.</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <a wire:navigate href="{{ route('bookings.create') }}"
-                    class="btn btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-2xl px-8 font-black uppercase tracking-widest text-[10px]">
-                    <x-heroicon-o-plus class="w-4 h-4 mr-2" />
-                    Reservasi Baru
-                </a>
-            </div>
-        </header>
+        <x-page-header title="Riwayat Booking"
+            description="Kelola dan pantau seluruh reservasi tiket penumpang secara real-time."
+            icon="heroicon-o-clipboard-document-list" iconGradient="from-indigo-500 to-purple-600"
+            iconShadow="shadow-indigo-500/20">
+            <a wire:navigate href="{{ route('bookings.create') }}"
+                class="btn btn-sm sm:btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-600/30 rounded-2xl px-6 font-bold truncate">
+                <x-heroicon-o-plus class="w-5 h-5" />
+                Reservasi Baru
+            </a>
+        </x-page-header>
 
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in-up"

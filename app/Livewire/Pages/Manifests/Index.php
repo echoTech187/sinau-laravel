@@ -54,7 +54,7 @@ class Index extends Component
 
         // Check if already exists
         if (OperationalManifest::where('schedule_id', '=', $scheduleId, 'and')->exists()) {
-            $this->dispatch('notify', 'SJO untuk jadwal ini sudah ada.', 'warning');
+            $this->dispatch('notify', ['title' => 'Peringatan', 'message' => 'SJO untuk jadwal ini sudah ada.', 'type' => 'warning']);
 
             return;
         }
@@ -66,7 +66,7 @@ class Index extends Component
             'status' => OperationalManifestStatus::DRAFT,
         ]);
 
-        $this->dispatch('notify', 'Draft SJO berhasil dibuat.', 'success');
+        $this->dispatch('notify', ['title' => 'Berhasil', 'message' => 'Draft SJO berhasil dibuat.', 'type' => 'success']);
     }
 
     #[Computed]
@@ -84,7 +84,7 @@ class Index extends Component
     public function deleteManifest($id)
     {
         OperationalManifest::findOrFail($id)->delete();
-        $this->dispatch('notify', 'SJO berhasil dihapus.', 'success');
+        $this->dispatch('notify', ['title' => 'Berhasil', 'message' => 'SJO berhasil dihapus.', 'type' => 'success']);
     }
 
     #[Title('Monitoring SJO & P2H')]

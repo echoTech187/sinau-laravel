@@ -10,10 +10,12 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 #[Layout('layouts::app')]
 class Create extends Component
 {
+    use WithFileUploads;
     public BusForm $form;
 
     #[Computed(persist: true)]
@@ -32,7 +34,7 @@ class Create extends Component
     public function basePools()
     {
         return Location::whereHas('roles', function($q) {
-            $q->where('name', 'Pool');
+            $q->whereIn('name', ['Pool / Garasi', 'Kantor Cabang']);
         })->get();
     }
 
@@ -40,10 +42,10 @@ class Create extends Component
     {
         try {
             $this->form->store();
-            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Armada berhasil ditambahkan!');
+            $this->dispatch('notify', ['type' => 'success', 'title' => 'Berhasil', 'message' => 'Armada berhasil ditambahkan!']);
             return $this->redirectRoute('buses.index', navigate: true);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+            $this->dispatch('notify', ['type' => 'error', 'title' => 'Gagal', 'message' => $e->validator->errors()->first()]);
             return;
         }
     }

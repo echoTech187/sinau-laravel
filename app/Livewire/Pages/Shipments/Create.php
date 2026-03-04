@@ -2,12 +2,12 @@
 
 namespace App\Livewire\Pages\Shipments;
 
+use App\Livewire\Forms\ShipmentForm;
+use App\Models\Booking;
 use App\Models\Location;
 use App\Models\Schedule;
-use App\Models\Booking;
-use App\Livewire\Forms\ShipmentForm;
-use Livewire\Component;
 use Livewire\Attributes\Computed;
+use Livewire\Component;
 
 class Create extends Component
 {
@@ -43,10 +43,11 @@ class Create extends Component
     {
         try {
             $shipment = $this->form->store();
-            $this->dispatch('notify', type: 'success', title: 'Berhasil', message: 'Kargo berhasil didaftarkan.');
+            $this->dispatch('notify', ['type' => 'success', 'title' => 'Berhasil', 'message' => 'Kargo berhasil didaftarkan.']);
             $this->redirect(route('shipments.index'), navigate: true);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+            $this->dispatch('notify', ['type' => 'error', 'title' => 'Gagal', 'message' => $e->validator->errors()->first()]);
+
             return;
         }
     }
@@ -56,4 +57,3 @@ class Create extends Component
         return view('livewire.pages.shipments.create');
     }
 }
-

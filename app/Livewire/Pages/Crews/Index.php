@@ -88,8 +88,9 @@ class Index extends Component
 
         $this->confirmingCrewDeletion = false;
         $this->crewIdBeingDeleted = null;
+        unset($this->crews);
         
-        session()->flash('message', 'Data Kru berhasil dihapus!');
+        $this->dispatch('notify', ['title' => 'Berhasil', 'message' => 'Data Kru berhasil dihapus!', 'type' => 'success']);
     }
 
     #[Title('Master Data Kru')]

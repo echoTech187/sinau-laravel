@@ -28,5 +28,7 @@ test_*.*
 *_desc.*
 /*.php
 /*.html
-roles_desc.json
-
+*desc.json
+*.xlsx
+*.log
+/public/seat-layout-images

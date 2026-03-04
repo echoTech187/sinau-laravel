@@ -41,8 +41,8 @@ class LocationForm extends Form
     #[Rule('boolean')]
     public bool $has_maintenance_facility = false;
 
-    #[Rule('nullable|array')]
-    #[Rule('exists:roles,id', as: 'role_ids.*')]
+    #[Rule(['nullable', 'array'])]
+    #[Rule(['exists:roles,id'], as: 'role_ids.*')]
     public array $role_ids = [];
 
     public function setLocation(Location $location)

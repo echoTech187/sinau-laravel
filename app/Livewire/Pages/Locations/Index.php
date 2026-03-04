@@ -6,70 +6,86 @@ use App\Models\Location;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 
+#[Title('Daftar Lokasi')]
 class Index extends Component
 {
     use WithPagination;
 
-    public string $search = '';
-
-    public string $typeFilter = '';
+    public string $search          = '';
+    public string $provinceFilter  = '';
+    public string $maintenance     = '';
 
     public bool $confirmingLocationDeletion = false;
-
-    public ?int $locationIdBeingDeleted = null;
+    public ?int $locationIdBeingDeleted     = null;
 
     protected $queryString = [
-        'search' => ['except' => ''],
-        'typeFilter' => ['except' => ''],
+        'search'         => ['except' => ''],
+        'provinceFilter' => ['except' => ''],
+        'maintenance'    => ['except' => ''],
     ];
 
-    public function updatingSearch()
+    public function updatingSearch(): void        { $this->resetPage(); }
+    public function updatingProvinceFilter(): void { $this->resetPage(); }
+    public function updatingMaintenance(): void    { $this->resetPage(); }
+
+    #[Computed]
+    public function provinces(): array
     {
-        $this->resetPage();
+        return Location::query()
+            ->whereNotNull('province')
+            ->where('province', '!=', '')
+            ->distinct()
+            ->orderBy('province')
+            ->pluck('province')
+            ->toArray();
     }
 
     #[Computed]
     public function locations()
     {
         return Location::query()
-            ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%'.$this->search.'%')
-                    ->orWhere('city', 'like', '%'.$this->search.'%')
-                    ->orWhere('province', 'like', '%'.$this->search.'%');
-            }, [])
-            ->when($this->typeFilter, function ($query) {
-                // Assuming we filter by location roles if needed,
-                // but for now let's just use a simple name/city search
-            }, [])
+            ->when($this->search, fn($q) =>
+                $q->where('name', 'like', '%'.$this->search.'%')
+                  ->orWhere('city', 'like', '%'.$this->search.'%')
+                  ->orWhere('province', 'like', '%'.$this->search.'%')
+            )
+            ->when($this->provinceFilter, fn($q) =>
+                $q->where('province', $this->provinceFilter)
+            )
+            ->when($this->maintenance !== '', fn($q) =>
+                $q->where('has_maintenance_facility', (bool) $this->maintenance)
+            )
             ->with('roles')
             ->latest()
-            ->paginate(10);
+            ->paginate(12);
     }
 
     #[Computed]
-    public function stats()
+    public function stats(): array
     {
         return [
-            'total' => Location::count('id'),
-            'with_maintenance' => Location::where('has_maintenance_facility', '=', true, 'and')->count('id'),
-            'cities' => Location::distinct('city')->count('city'),
+            'total'            => Location::count(),
+            'with_maintenance' => Location::where('has_maintenance_facility', true)->count(),
+            'cities'           => Location::distinct('city')->count('city'),
         ];
     }
 
-    public function confirmDeleteLocation($id)
+    public function confirmDeleteLocation(int $id): void
     {
         $this->confirmingLocationDeletion = true;
-        $this->locationIdBeingDeleted = $id;
+        $this->locationIdBeingDeleted     = $id;
     }
 
-    public function deleteLocation()
+    public function deleteLocation(): void
     {
         if ($this->locationIdBeingDeleted) {
-            Location::find($this->locationIdBeingDeleted, 'id')->delete();
+            Location::findOrFail($this->locationIdBeingDeleted)->delete();
             $this->confirmingLocationDeletion = false;
-            $this->locationIdBeingDeleted = null;
-            $this->dispatch('notify', 'Lokasi berhasil dihapus.', 'success');
+            $this->locationIdBeingDeleted     = null;
+            unset($this->locations);
+            $this->dispatch('notify', ['title' => 'Berhasil', 'message' => 'Lokasi berhasil dihapus.', 'type' => 'success']);
         }
     }
 

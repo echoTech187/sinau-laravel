@@ -10,8 +10,10 @@ use App\Models\Schedule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Buat Pesanan')]
 class Create extends Component
 {
     // Step tracking
@@ -140,7 +142,7 @@ class Create extends Component
     public function goToStep4()
     {
         if (empty($this->selected_seats)) {
-            $this->dispatch('notify', type: 'error', title: 'Perhatian', message: 'Silakan pilih setidaknya satu kursi.');
+            $this->dispatch('notify', ['type' => 'error', 'title' => 'Perhatian', 'message' => 'Silakan pilih setidaknya satu kursi.']);
 
             return;
         }
@@ -182,9 +184,9 @@ class Create extends Component
                 $this->redirect(route('bookings.show', $booking->id), navigate: true);
             });
         } catch (\Illuminate\Validation\ValidationException $e) {
-            $this->dispatch('notify', type: 'error', title: 'Gagal', message: $e->validator->errors()->first());
+            $this->dispatch('notify', ['type' => 'error', 'title' => 'Gagal', 'message' => $e->validator->errors()->first()]);
         } catch (\Exception $e) {
-            $this->dispatch('notify', type: 'error', title: 'Gagal', message: 'Terjadi kesalahan: '.$e->getMessage());
+            $this->dispatch('notify', ['type' => 'error', 'title' => 'Gagal', 'message' => 'Terjadi kesalahan: '.$e->getMessage()]);
         }
     }
 
