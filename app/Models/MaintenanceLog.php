@@ -14,13 +14,14 @@ class MaintenanceLog extends Model
 
     protected $fillable = [
         'bus_id', 'maintenance_rule_id', 'location_id', 'reported_by_id',
-        'issue_description', 'type', 'status', 'odometer_at_service',
+        'issue_description', 'total_cost', 'vendor_name', 'type', 'status', 'odometer_at_service',
         'next_estimated_date', 'resolved_at'
     ];
 
     protected $casts = [
         'type' => MaintenanceType::class,
         'status' => MaintenanceStatus::class,
+        'total_cost' => 'decimal:2',
         'next_estimated_date' => 'date',
         'resolved_at' => 'datetime',
     ];

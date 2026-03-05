@@ -90,10 +90,9 @@ class Create extends Component
 
     public function saveCrew()
     {
-        // $this->form->validate();
+        $this->authorize('create', Crew::class);
 
         try {
-
             $this->form->store();
 
             $this->dispatch('notify', ['type' => 'success', 'title' => 'Berhasil', 'message' => 'Data Kru berhasil ditambahkan!']);

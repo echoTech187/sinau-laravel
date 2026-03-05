@@ -157,6 +157,8 @@ class RbacSeeder extends Seeder
         $pAgentView = $p($modArmada->id, 'Lihat Agen', 'agents.view', 'Armada');
         $pBusClassView = $p($modArmada->id, 'Lihat Kelas Bus', 'bus_classes.view', 'Armada');
         $pSeatLayoutView = $p($modArmada->id, 'Lihat Layout Kursi', 'seat_layouts.view', 'Armada');
+        $pMaintenanceView = $p($modArmada->id, 'Lihat Maintenance', 'maintenance.view', 'Armada');
+        $pMaintenanceManage = $p($modArmada->id, 'Kelola Maintenance', 'maintenance.manage', 'Armada');
 
         $pScheduleView = $p($modRoute->id, 'Lihat Jadwal', 'schedules.view', 'Operasional');
         $pScheduleManage = $p($modRoute->id, 'Kelola Jadwal', 'schedules.manage', 'Operasional');
@@ -226,6 +228,9 @@ class RbacSeeder extends Seeder
         Menus::create(['module_id' => $modArmada->id, 'parent_id' => $menuArmada->id, 'permission_id' => $pAgentView->id, 'name' => 'Agen & Cabang', 'icon' => 'heroicon-o-building-storefront', 'route' => 'agents.index', 'order' => 3, 'is_active' => true]);
         Menus::create(['module_id' => $modArmada->id, 'parent_id' => $menuArmada->id, 'permission_id' => $pBusClassView->id, 'name' => 'Kelas & Fasilitas', 'icon' => 'heroicon-o-star', 'route' => 'bus-classes.index', 'order' => 4, 'is_active' => true]);
         Menus::create(['module_id' => $modArmada->id, 'parent_id' => $menuArmada->id, 'permission_id' => $pSeatLayoutView->id, 'name' => 'Konfigurasi Kursi', 'icon' => 'heroicon-o-squares-2x2', 'route' => 'seat-layouts.index', 'order' => 5, 'is_active' => true]);
+        Menus::create(['module_id' => $modArmada->id, 'parent_id' => $menuArmada->id, 'permission_id' => $pMaintenanceView->id, 'name' => 'Dashboard Maintenance', 'icon' => 'heroicon-o-wrench', 'route' => 'maintenance.dashboard', 'order' => 6, 'is_active' => true]);
+        Menus::create(['module_id' => $modArmada->id, 'parent_id' => $menuArmada->id, 'permission_id' => $pMaintenanceManage->id, 'name' => 'Log Perawatan', 'icon' => 'heroicon-o-clipboard-document-check', 'route' => 'maintenance.logs', 'order' => 7, 'is_active' => true]);
+        Menus::create(['module_id' => $modArmada->id, 'parent_id' => $menuArmada->id, 'permission_id' => $pMaintenanceManage->id, 'name' => 'Pengaturan Servis', 'icon' => 'heroicon-o-adjustments-vertical', 'route' => 'maintenance.rules', 'order' => 8, 'is_active' => true]);
 
         $menuOperasional = Menus::create(['module_id' => $modRoute->id, 'parent_id' => null, 'permission_id' => $pScheduleView->id, 'name' => 'Operasional', 'icon' => 'heroicon-o-map', 'route' => null, 'order' => 10, 'is_active' => true]);
         Menus::create(['module_id' => $modRoute->id, 'parent_id' => $menuOperasional->id, 'permission_id' => $pBookingCreate->id, 'name' => 'Reservasi Tiket', 'icon' => 'heroicon-o-ticket', 'route' => 'bookings.create', 'order' => 1, 'is_active' => true]);

@@ -48,6 +48,8 @@ class Edit extends Component
 
     public function saveBus()
     {
+        $this->authorize('update', $this->bus);
+
         try {
             $this->form->update();
             $this->dispatch('notify', ['type' => 'success', 'title' => 'Berhasil', 'message' => 'Armada berhasil diperbarui!']);

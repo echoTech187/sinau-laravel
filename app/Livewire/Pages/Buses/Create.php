@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Pages\Buses;
 
-use App\Livewire\Forms\BusForm;
 use App\Models\BusClass;
+use App\Models\Bus;
 use App\Models\Location;
 use App\Models\SeatLayout;
 use Livewire\Attributes\Computed;
@@ -40,6 +40,8 @@ class Create extends Component
 
     public function saveBus()
     {
+        $this->authorize('create', Bus::class);
+        
         try {
             $this->form->store();
             $this->dispatch('notify', ['type' => 'success', 'title' => 'Berhasil', 'message' => 'Armada berhasil ditambahkan!']);

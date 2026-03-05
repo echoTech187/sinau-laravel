@@ -47,5 +47,9 @@ Route::middleware(['auth'])->group(function() {
 
     Route::get('/cargo/checker', \App\Livewire\Pages\Cargo\Checker::class)->name('cargo.checker');
 
+    // Domain 8: Maintenance
+    Route::get('/maintenance', \App\Livewire\Pages\Maintenance\Dashboard::class)->name('maintenance.dashboard');
+    Route::get('/maintenance/logs', \App\Livewire\Pages\Maintenance\Logs::class)->name('maintenance.logs');
+    Route::get('/maintenance/rules', \App\Livewire\Pages\Maintenance\Rules\Index::class)->name('maintenance.rules');
 
 });

@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        \App\Models\Schedule::observe(\App\Observers\ScheduleObserver::class);
+        
         $this->configureDefaults();
 
         // Super Admin Bypass

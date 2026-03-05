@@ -52,7 +52,7 @@
             <div
                 class="bg-white/40 dark:bg-zinc-900/40 backdrop-blur-md border border-white/40 dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex items-center gap-4">
                 <div class="p-3 bg-amber-50 dark:bg-amber-500/10 rounded-xl text-amber-500">
-                    <x-heroicon-o-wrench-screwdriver class="w-6 h-6" />
+                    <x-heroicon-o-wrench class="w-6 h-6" />
                 </div>
                 <div>
                     <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Fasilitas Bengkel</p>

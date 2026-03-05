@@ -90,6 +90,8 @@ class Edit extends Component
 
     public function saveCrew()
     {
+        $this->authorize('update', $this->crew);
+
         try {
             $this->form->update();
 

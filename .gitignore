@@ -32,3 +32,4 @@ test_*.*
 *.xlsx
 *.log
 /public/seat-layout-images
+/public/references

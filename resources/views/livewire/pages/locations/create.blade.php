@@ -117,7 +117,7 @@
                     class="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 md:p-8 shadow-sm space-y-4">
                     <h4
                         class="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-6 flex items-center gap-2 pb-2 border-b border-zinc-100 dark:border-zinc-800">
-                        <x-heroicon-o-wrench-screwdriver class="w-4 h-4" />
+                        <x-heroicon-o-wrench class="w-4 h-4" />
                         Fasilitas Lainnya
                     </h4>
                     <label

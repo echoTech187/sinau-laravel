@@ -9,6 +9,7 @@ use App\Models\Crew;
 use App\Models\CrewPosition;
 use App\Models\Location;
 use App\Models\Route as BusRoute;
+use App\Models\Schedule;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -39,26 +40,13 @@ class Create extends Component
                 $this->totalRouteKm        = (float) ($route->distance_km ?? 0);
                 $this->routeOriginName      = $route->origin?->name ?? '';
                 $this->routeDestinationName = $route->destination?->name ?? '';
-                $prevLat = $route->origin?->location?->latitude;
-                $prevLon = $route->origin?->location?->longitude;
-                $cumKm   = 0;
 
-                $this->form->stops = $route->stops->map(function ($s) use (&$prevLat, &$prevLon, &$cumKm) {
-                    $lat = $s->agent?->location?->latitude;
-                    $lon = $s->agent?->location?->longitude;
-
-                    if ($prevLat && $prevLon && $lat && $lon) {
-                        $cumKm += $this->haversineKm($prevLat, $prevLon, $lat, $lon) * 1.35;
-                    }
-
-                    $prevLat = $lat;
-                    $prevLon = $lon;
-
+                $this->form->stops = $route->stops->map(function ($s) {
                     return [
                         'route_stop_id' => $s->id,
                         'location_name' => $s->agent?->name ?? 'Unknown',
                         'estimated_time' => '',
-                        'km_from_start'  => round($cumKm, 2),
+                        'km_from_start'  => (float) ($s->distance_from_origin_km ?? 0),
                         'status'         => 'pending',
                     ];
                 })->toArray();
@@ -102,14 +90,7 @@ class Create extends Component
         }
     }
 
-    private function haversineKm(float $lat1, float $lon1, float $lat2, float $lon2): float
-    {
-        $R    = 6371;
-        $dLat = deg2rad($lat2 - $lat1);
-        $dLon = deg2rad($lon2 - $lon1);
-        $a    = sin($dLat / 2) ** 2 + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon / 2) ** 2;
-        return $R * 2 * atan2(sqrt($a), sqrt(1 - $a));
-    }
+
 
     public function addCrew()
     {
@@ -159,6 +140,8 @@ class Create extends Component
 
     public function saveSchedule()
     {
+        $this->authorize('create', Schedule::class);
+
         try {
             $this->form->store();
             $this->dispatch('notify', ['type' => 'success', 'title' => 'Berhasil', 'message' => 'Jadwal operasional baru berhasil disimpan.']);

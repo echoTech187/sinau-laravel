@@ -3,10 +3,10 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Bus;
-use App\Services\ImageService;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
+use App\Jobs\ProcessImageJob;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 
@@ -75,6 +75,11 @@ class BusForm extends Form
         ];
     }
 
+    public function __construct($component, $propertyName)
+    {
+        parent::__construct($component, $propertyName);
+    }
+
     public function setBus(Bus $bus)
     {
         $this->bus = $bus;
@@ -110,48 +115,47 @@ class BusForm extends Form
 
     public function store()
     {
-        $validated = $this->validate();
+        $validated = $this->except('photo');
         
-        if ($this->photo) {
-            $validated['photo_path'] = $this->processPhoto($this->photo);
+        $nullableKeys = ['rfid_tag_id', 'name', 'max_baggage_volume_m3'];
+        foreach ($nullableKeys as $key) {
+            if (isset($validated[$key]) && $validated[$key] === '') {
+                $validated[$key] = null;
+            }
         }
-        
-        unset($validated['photo']);
 
-        Bus::create($validated);
+        $bus = Bus::create($validated);
+
+        if ($this->photo) {
+            $rawPath = $this->photo->store('temp_uploads', 'local');
+            $absolutePath = storage_path('app/private/' . $rawPath);
+            
+            ProcessImageJob::dispatch(Bus::class, $bus->id, $absolutePath, 'buses/photos', 'public');
+        }
+
         $this->reset();
     }
 
     public function update()
     {
-        $validated = $this->validate();
+        $validated = $this->except('photo');
         
-        if ($this->photo) {
-            // Delete old photo before replacing
-            if ($this->bus->photo_path) {
-                Storage::disk('public')->delete($this->bus->photo_path);
+        $nullableKeys = ['rfid_tag_id', 'name', 'max_baggage_volume_m3'];
+        foreach ($nullableKeys as $key) {
+            if (isset($validated[$key]) && $validated[$key] === '') {
+                $validated[$key] = null;
             }
-            $validated['photo_path'] = $this->processPhoto($this->photo);
         }
-        
-        unset($validated['photo']);
 
         $this->bus->update($validated);
-        $this->reset();
-    }
 
-    /**
-     * Crop to 7:5 aspect ratio (1400x1000px) and compress to JPEG.
-     */
-    private function processPhoto($upload): string
-    {
-        return app(ImageService::class)->cropAndCompress(
-            upload: $upload,
-            directory: 'buses/photos',
-            disk: 'public',
-            width: 1400,
-            height: 1000,
-            quality: 82
-        );
+        if ($this->photo && $this->bus) {
+            $rawPath = $this->photo->store('temp_uploads', 'local');
+            $absolutePath = storage_path('app/private/' . $rawPath);
+            
+            ProcessImageJob::dispatch(Bus::class, $this->bus->id, $absolutePath, 'buses/photos', 'public');
+        }
+
+        $this->reset();
     }
 }

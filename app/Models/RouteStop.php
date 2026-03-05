@@ -12,7 +12,7 @@ class RouteStop extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['route_id', 'agent_id', 'stop_order', 'type', 'is_checkpoint'];
+    protected $fillable = ['route_id', 'agent_id', 'stop_order', 'type', 'is_checkpoint', 'distance_from_origin_km'];
 
     protected $casts = [
         'type' => StopType::class,

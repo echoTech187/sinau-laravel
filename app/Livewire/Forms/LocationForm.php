@@ -5,6 +5,7 @@ namespace App\Livewire\Forms;
 use App\Models\Location;
 use Livewire\Attributes\Rule;
 use Livewire\Form;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule as ValidationRule;
 
 class LocationForm extends Form
@@ -65,8 +66,10 @@ class LocationForm extends Form
     {
         $validated = $this->validate();
         
-        $location = Location::create($validated);
-        $location->roles()->sync($this->role_ids);
+        DB::transaction(function () use ($validated) {
+            $location = Location::create($validated);
+            $location->roles()->sync($this->role_ids);
+        });
 
         $this->reset();
     }
@@ -75,7 +78,9 @@ class LocationForm extends Form
     {
         $validated = $this->validate();
         
-        $this->location->update($validated);
-        $this->location->roles()->sync($this->role_ids);
+        DB::transaction(function () use ($validated) {
+            $this->location->update($validated);
+            $this->location->roles()->sync($this->role_ids);
+        });
     }
 }

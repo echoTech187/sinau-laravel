@@ -4,13 +4,16 @@ namespace App\Livewire\Forms;
 
 use App\Enums\CrewStatus;
 use App\Models\Crew;
-use App\Services\ImageService;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Validate;
 use Livewire\Form;
+use App\Jobs\ProcessImageJob;
+use Livewire\WithFileUploads;
 
 class CrewForm extends Form
 {
+    use WithFileUploads;
+
     public ?Crew $crew = null;
 
     // Identity
@@ -134,49 +137,45 @@ class CrewForm extends Form
     {
         $this->validate();
 
-        $data = $this->all();
+        $data = $this->except('photo', 'crew');
         
-        if ($this->photo) {
-            $data['photo_path'] = $this->processPhoto($this->photo);
+        $nullableKeys = ['pool_id', 'agent_id', 'bus_id', 'route_id', 'contact_phone_1', 'contact_phone_2', 'license_number', 'license_expired_at', 'spouse_name', 'education', 'region'];
+        foreach ($nullableKeys as $key) {
+            if (isset($data[$key]) && $data[$key] === '') {
+                $data[$key] = null;
+            }
         }
-        
-        // Exclude the livewire temporary file object
-        unset($data['photo']);
 
-        Crew::create($data);
+        $crew = Crew::create($data);
+
+        if ($this->photo) {
+            $rawPath = $this->photo->store('temp_uploads', 'local');
+            $absolutePath = storage_path('app/private/' . $rawPath);
+            
+            ProcessImageJob::dispatch(Crew::class, $crew->id, $absolutePath, 'crews/photos', 'public');
+        }
     }
 
     public function update()
     {
         $this->validate();
 
-        $data = $this->all();
+        $data = $this->except('photo', 'crew');
         
-        if ($this->photo) {
-            // Delete old photo before replacing
-            if ($this->crew?->photo_path) {
-                Storage::disk('public')->delete($this->crew->photo_path);
+        $nullableKeys = ['pool_id', 'agent_id', 'bus_id', 'route_id', 'contact_phone_1', 'contact_phone_2', 'license_number', 'license_expired_at', 'spouse_name', 'education', 'region'];
+        foreach ($nullableKeys as $key) {
+            if (isset($data[$key]) && $data[$key] === '') {
+                $data[$key] = null;
             }
-            $data['photo_path'] = $this->processPhoto($this->photo);
         }
-        
-        unset($data['photo']);
 
         $this->crew->update($data);
-    }
 
-    /**
-     * Crop to 1:1 aspect ratio (600×600px) and compress to JPEG.
-     */
-    private function processPhoto($upload): string
-    {
-        return app(ImageService::class)->cropAndCompress(
-            upload: $upload,
-            directory: 'crews/photos',
-            disk: 'public',
-            width: 600,
-            height: 600,
-            quality: 85
-        );
+        if ($this->photo && $this->crew) {
+            $rawPath = $this->photo->store('temp_uploads', 'local');
+            $absolutePath = storage_path('app/private/' . $rawPath);
+            
+            ProcessImageJob::dispatch(Crew::class, $this->crew->id, $absolutePath, 'crews/photos', 'public');
+        }
     }
 }

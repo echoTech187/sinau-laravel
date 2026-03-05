@@ -14,7 +14,7 @@ class ImageService
      * Process an uploaded image: crop to a given aspect ratio, 
      * compress, and save to storage.
      *
-     * @param UploadedFile|\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $upload
+     * @param string  $sourcePath Absolute path to the source image
      * @param string  $directory  e.g. 'buses/photos'
      * @param string  $disk       e.g. 'public'
      * @param int     $width      Target width in pixels (height derived from ratio)
@@ -23,7 +23,7 @@ class ImageService
      * @return string             Stored file path relative to disk root
      */
     public function cropAndCompress(
-        $upload,
+        string $sourcePath,
         string $directory,
         string $disk = 'public',
         int $width = 1400,
@@ -32,8 +32,8 @@ class ImageService
     ): string {
         $manager = new ImageManager(new Driver());
 
-        // Read the temporary file
-        $image = $manager->read($upload->getRealPath());
+        // Read the local file path
+        $image = $manager->read($sourcePath);
 
         // Cover-crop: fills the target dimensions by smart center-crop
         $image->cover($width, $height);
