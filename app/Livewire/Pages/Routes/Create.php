@@ -18,13 +18,15 @@ class Create extends Component
     #[Computed(persist: true)]
     public function agents()
     {
-        return Agent::with('location')->orderBy('name')->get();
+        return Agent::with('location')->get()->sortBy(function($agent) {
+            return ($agent->location->province ?? '') . $agent->name;
+        });
     }
 
     #[Computed(persist: true)]
     public function locations()
     {
-        return Location::orderBy('name')->get();
+        return Location::orderBy('province', 'asc')->orderBy('name', 'asc')->get();
     }
 
     // Re-estimate whenever origin/destination or any stop agent changes

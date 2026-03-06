@@ -150,14 +150,16 @@
                                     </td>
                                     <td class="py-3">
                                         <div class="flex flex-wrap gap-1">
-                                            @forelse ($location->roles as $role)
-                                                <span wire:key="loc-role-{{ $location->id }}-{{ $role->id }}"
-                                                    class="px-2 py-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[9px] font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-tighter">
-                                                    {{ $role->name }}
-                                                </span>
-                                            @empty
+                                            @if ($location->roles->count() > 0)
+                                                @foreach ($location->roles as $role)
+                                                    <span wire:key="loc-role-{{ $location->id }}-{{ $role->id }}"
+                                                        class="px-2 py-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[9px] font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-tighter">
+                                                        {{ $role->name }}
+                                                    </span>
+                                                @endforeach
+                                            @else
                                                 <span class="text-[10px] text-zinc-400">Umum</span>
-                                            @endforelse
+                                            @endif
                                         </div>
                                     </td>
                                     <td class="py-3 text-center">

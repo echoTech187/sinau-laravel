@@ -11,4 +11,3 @@ Route::middleware(['auth'])->group(function () {
     Route::livewire('admin/logs', 'pages::rbac.logs')->name('rbac.logs');
     Route::livewire('admin/approvals', 'pages::rbac.approvals')->name('rbac.approvals');
 });
-

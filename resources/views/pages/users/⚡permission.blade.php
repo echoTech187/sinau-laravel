@@ -202,7 +202,7 @@ new class extends Component {
 
         // Audit trail
         $updatedRole = Roles::find($this->editingRoleId);
-        AuditLogger::record('user_role_scope_updated', $this->userId, [
+        AuditLogger::record(AuditLogger::USER_ROLE_SCOPE_UPDATED, $this->userId, [
             'user_name' => $this->user->name,
             'role' => $updatedRole?->role,
             'role_id' => $this->editingRoleId,

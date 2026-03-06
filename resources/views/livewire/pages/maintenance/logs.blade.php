@@ -157,12 +157,32 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <x-select label="Paket Servis (Opsional)" wire:model.live="packageId" :options="$packagesList"
+                    option-label="name" placeholder="-- Bebas / Pilih Paket --" />
                 <x-select label="Jenis Perawatan" wire:model="type" :options="[
                     ['id' => 'preventive', 'name' => 'Preventive (Berkala/Rutin)'],
                     ['id' => 'corrective', 'name' => 'Corrective (Perbaikan/Laka)'],
                 ]" />
-                <x-select label="Aturan Terkait" wire:model="ruleId" :options="$rulesList" option-label="task_name"
-                    placeholder="Pilih Aturan Servis" />
+            </div>
+
+            <div class="space-y-1">
+                <label class="block text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                    Tugas / Aturan Servis <span class="text-red-500">*</span>
+                </label>
+                <div
+                    class="max-h-56 overflow-y-auto border border-zinc-200 dark:border-zinc-800 rounded-xl p-3 bg-zinc-50 dark:bg-zinc-900/50 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
+                    @foreach ($rulesList as $rule)
+                        <label class="inline-flex items-center cursor-pointer group">
+                            <input type="checkbox" wire:model="ruleIds" value="{{ $rule->id }}"
+                                class="form-checkbox h-4 w-4 text-indigo-600 rounded border-zinc-300 dark:border-zinc-700 focus:ring-indigo-600 dark:bg-zinc-800">
+                            <span
+                                class="ml-2 text-sm text-zinc-700 dark:text-zinc-300 group-hover:text-indigo-600 transition-colors">{{ $rule->task_name }}</span>
+                        </label>
+                    @endforeach
+                </div>
+                @error('ruleIds')
+                    <span class="text-[10px] text-red-500 font-bold uppercase">{{ $message }}</span>
+                @enderror
             </div>
 
             <x-select label="Bengkel / Lokasi Perbaikan" wire:model="locationId" :options="$locationsList" option-label="name"
@@ -185,7 +205,8 @@
                 class="bg-indigo-50/30 dark:bg-indigo-500/5 p-4 rounded-2xl border border-indigo-100 dark:border-indigo-900/30">
                 <x-input label="Bengkel Rekanan (Luar)" wire:model="vendor"
                     placeholder="Nama vendor jika diperbaiki di bengkel luar" />
-                <p class="text-[10px] text-zinc-500 mt-2 italic">Kosongkan jika diperbaiki di bengkel internal/pool.</p>
+                <p class="text-[10px] text-zinc-500 mt-2 italic">Kosongkan jika diperbaiki di bengkel internal/pool.
+                </p>
             </div>
         </div>
 

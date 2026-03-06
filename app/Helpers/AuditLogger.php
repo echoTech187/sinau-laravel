@@ -11,8 +11,23 @@ class AuditLogger
     // ──────────────────────────────────────────────
     // Event name constants
     // ──────────────────────────────────────────────
-    const ROLE_ASSIGNED           = 'role_assigned';
-    const ROLE_REVOKED            = 'role_revoked';
+    const ROLE_CREATED           = 'role_created';
+    const ROLE_UPDATED           = 'role_updated';
+    const ROLE_DELETED           = 'role_deleted';
+    const MODULE_CREATED         = 'module_created';
+    const MODULE_UPDATED         = 'module_updated';
+    const MODULE_DELETED         = 'module_deleted';
+    const PERMISSION_CREATED     = 'permission_created';
+    const PERMISSION_UPDATED     = 'permission_updated';
+    const PERMISSION_DELETED     = 'permission_deleted';
+    const MENU_CREATED           = 'menu_created';
+    const MENU_UPDATED           = 'menu_updated';
+    const MENU_DELETED           = 'menu_deleted';
+    const USER_ROLE_ASSIGNED     = 'role_assigned';
+    const USER_ROLE_REVOKED      = 'role_revoked';
+    const USER_ROLE_SCOPE_UPDATED = 'user_role_scope_updated';
+    const ROLE_ASSIGNED          = 'role_assigned'; // Legacy / Alternate
+    const ROLE_REVOKED           = 'role_revoked';  // Legacy / Alternate
     const PERMISSION_TOGGLED      = 'permission_toggled';
     const MODULE_PERMISSIONS_SET  = 'module_permissions_set';
     const FIELD_SECURITY_ADDED    = 'field_security_added';
@@ -21,8 +36,6 @@ class AuditLogger
     const DIRECT_PERMISSION_GRANT = 'direct_permission_grant';
     const DIRECT_PERMISSION_DENY  = 'direct_permission_deny';
     const DIRECT_PERMISSION_RESET = 'direct_permission_reset';
-    const USER_ROLE_ASSIGNED      = 'user_role_assigned';
-    const USER_ROLE_REVOKED       = 'user_role_revoked';
     const ACCESS_REQUEST_CREATED  = 'access_request_created';
     const ACCESS_REQUEST_APPROVED = 'access_request_approved';
     const ACCESS_REQUEST_REJECTED = 'access_request_rejected';
@@ -56,8 +69,21 @@ class AuditLogger
     public static function label(string $event): string
     {
         return match ($event) {
-            self::ROLE_ASSIGNED           => 'Peran Ditambahkan',
-            self::ROLE_REVOKED            => 'Peran Dicabut',
+            self::ROLE_CREATED           => 'Peran Baru Dibuat',
+            self::ROLE_UPDATED           => 'Peran Diperbarui',
+            self::ROLE_DELETED           => 'Peran Dihapus',
+            self::MODULE_CREATED         => 'Modul Baru Dibuat',
+            self::MODULE_UPDATED         => 'Modul Diperbarui',
+            self::MODULE_DELETED         => 'Modul Dihapus',
+            self::PERMISSION_CREATED     => 'Izin Baru Dibuat',
+            self::PERMISSION_UPDATED     => 'Izin Diperbarui',
+            self::PERMISSION_DELETED     => 'Izin Dihapus',
+            self::MENU_CREATED           => 'Menu Baru Dibuat',
+            self::MENU_UPDATED           => 'Menu Diperbarui',
+            self::MENU_DELETED           => 'Menu Dihapus',
+            self::USER_ROLE_ASSIGNED, self::ROLE_ASSIGNED     => 'Peran User Ditambahkan',
+            self::USER_ROLE_REVOKED, self::ROLE_REVOKED       => 'Peran User Dicabut',
+            self::USER_ROLE_SCOPE_UPDATED                     => 'Scope Peran User Diperbarui',
             self::PERMISSION_TOGGLED      => 'Izin Diubah',
             self::MODULE_PERMISSIONS_SET  => 'Izin Modul Diubah',
             self::FIELD_SECURITY_ADDED    => 'Field Security Ditambahkan',
@@ -66,8 +92,6 @@ class AuditLogger
             self::DIRECT_PERMISSION_GRANT => 'Izin Langsung Diberikan',
             self::DIRECT_PERMISSION_DENY  => 'Izin Langsung Diblokir',
             self::DIRECT_PERMISSION_RESET => 'Izin Langsung Direset',
-            self::USER_ROLE_ASSIGNED      => 'Peran User Ditambahkan',
-            self::USER_ROLE_REVOKED       => 'Peran User Dicabut',
             self::ACCESS_REQUEST_CREATED  => 'Permintaan Akses Diajukan',
             self::ACCESS_REQUEST_APPROVED => 'Permintaan Akses Disetujui',
             self::ACCESS_REQUEST_REJECTED => 'Permintaan Akses Ditolak',
@@ -81,10 +105,10 @@ class AuditLogger
     public static function badgeColor(string $event): string
     {
         return match (true) {
-            str_contains($event, 'assigned') || str_contains($event, 'grant'),
+            str_contains($event, 'created') || str_contains($event, 'assigned') || str_contains($event, 'grant'),
             str_contains($event, 'added')  => 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
 
-            str_contains($event, 'revoked') || str_contains($event, 'deny'),
+            str_contains($event, 'deleted') || str_contains($event, 'revoked') || str_contains($event, 'deny'),
             str_contains($event, 'removed') => 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
 
             str_contains($event, 'toggled') || str_contains($event, 'updated'),

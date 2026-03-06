@@ -14,6 +14,10 @@ new class extends Component {
     public string $searchUser = '';
     public bool $showAddModal = false;
 
+    // Deletion confirmation
+    public ?int $confirmingUserId = null;
+    public ?string $confirmingUserName = null;
+
     public function mount(Roles $roles)
     {
         $this->roles = $roles;
@@ -41,12 +45,28 @@ new class extends Component {
 
         // Audit trail
         $oldRole = $oldRoleId ? \App\Models\Roles::find($oldRoleId) : null;
-        AuditLogger::record(AuditLogger::ROLE_ASSIGNED, $userId, [
+        AuditLogger::record(AuditLogger::USER_ROLE_ASSIGNED, $userId, [
             'user_name' => $user?->name,
             'role' => $this->roles->role,
             'role_id' => $this->roles->id,
             'old_role' => $oldRole?->role,
         ]);
+    }
+
+    public function promptRemove(int $id, string $name)
+    {
+        $this->confirmingUserId = $id;
+        $this->confirmingUserName = $name;
+    }
+
+    public function confirmRemove()
+    {
+        if (!$this->confirmingUserId) {
+            return;
+        }
+        $this->removeUser($this->confirmingUserId);
+        $this->confirmingUserId = null;
+        $this->confirmingUserName = null;
     }
 
     public function removeUser(int $userId): void
@@ -57,7 +77,7 @@ new class extends Component {
         $this->dispatch('notify', type: 'success', message: 'Pengguna berhasil dicopot!');
 
         // Audit trail
-        AuditLogger::record(AuditLogger::ROLE_REVOKED, $userId, [
+        AuditLogger::record(AuditLogger::USER_ROLE_REVOKED, $userId, [
             'user_name' => $user?->name,
             'role' => $this->roles->role,
             'role_id' => $this->roles->id,
@@ -173,8 +193,7 @@ new class extends Component {
                                     <td>
                                         <button
                                             class="btn btn-xs btn-ghost text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
-                                            wire:click="removeUser({{ $user->id }})"
-                                            wire:confirm="Yakin ingin mencopot {{ $user->name }}?">
+                                            wire:click="promptRemove({{ $user->id }}, '{{ $user->name }}')">
                                             <x-heroicon-o-user-minus class="size-3.5" />
                                             <span class="hidden sm:inline">Copot</span>
                                         </button>
@@ -301,6 +320,12 @@ new class extends Component {
             </div>
             <div class="modal-backdrop bg-black/40 dark:bg-black/60" wire:click="$set('showAddModal', false)"></div>
         </dialog>
+    @endif
+
+    @if ($confirmingUserId)
+        <x-rbac.confirm-modal title="Copot Anggota"
+            message="Yakin ingin mencopot '{{ $confirmingUserName }}' dari peran {{ $this->roles->role }}?"
+            confirmAction="confirmRemove" cancelAction="$set('confirmingUserId', null)" />
     @endif
 </div>
 

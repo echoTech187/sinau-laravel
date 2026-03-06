@@ -75,7 +75,7 @@ new class extends Component {
                 $exists = DB::table('role_user')->where('user_id', $targetUser->id)->where('role_id', $roleId)->exists();
 
                 if (!$exists) {
-                    $targetUser->additionalRoles()->attach($roleId, ['data_scope' => $dataScope]);
+                    $targetUser->roles()->attach($roleId, ['data_scope' => $dataScope]);
                 }
 
                 AuditLogger::record(AuditLogger::USER_ROLE_ASSIGNED, $targetUser->id, [
@@ -85,7 +85,7 @@ new class extends Component {
                 ]);
             } elseif ($request->type === 'role_revoke') {
                 $roleId = $changes['role_id'];
-                $targetUser->additionalRoles()->detach($roleId);
+                $targetUser->roles()->detach($roleId);
 
                 AuditLogger::record(AuditLogger::USER_ROLE_REVOKED, $targetUser->id, [
                     'role_id' => $roleId,
@@ -96,7 +96,7 @@ new class extends Component {
                 foreach ($permissions as $slug) {
                     $p = Permissions::where('slug', $slug)->first();
                     if ($p) {
-                        $targetUser->permissions()->syncWithoutDetaching([$p->id => ['forbidden' => false]]);
+                        $targetUser->permissions()->syncWithoutDetaching([$p->id => ['is_forbidden' => false]]);
                     }
                 }
 
@@ -109,7 +109,7 @@ new class extends Component {
                 foreach ($permissions as $slug) {
                     $p = Permissions::where('slug', $slug)->first();
                     if ($p) {
-                        $targetUser->permissions()->syncWithoutDetaching([$p->id => ['forbidden' => true]]);
+                        $targetUser->permissions()->syncWithoutDetaching([$p->id => ['is_forbidden' => true]]);
                     }
                 }
 

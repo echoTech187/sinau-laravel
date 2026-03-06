@@ -28,7 +28,8 @@ class Logs extends Component
     
     // Form fields
     public $selectedBusId = '';
-    public $ruleId = '';
+    public $packageId = '';
+    public $ruleIds = [];
     public $locationId = '';
     public $type = 'corrective';
     public $status = 'pending';
@@ -39,7 +40,9 @@ class Logs extends Component
 
     protected $rules = [
         'selectedBusId' => 'required|exists:buses,id',
-        'ruleId' => 'nullable|exists:maintenance_rules,id',
+        'packageId' => 'nullable|exists:service_packages,id',
+        'ruleIds' => 'required|array|min:1',
+        'ruleIds.*' => 'exists:maintenance_rules,id',
         'locationId' => 'required|exists:agents,id',
         'type' => 'required',
         'status' => 'required',
@@ -62,25 +65,56 @@ class Logs extends Component
         }
     }
 
+    public function updatedPackageId($value)
+    {
+        if ($value) {
+            $package = \App\Models\ServicePackage::with('maintenanceRules')->find($value);
+            if ($package) {
+                $this->ruleIds = $package->maintenanceRules->pluck('id')->toArray();
+                // Optionally auto-set the type to preventive if it's a scheduled package
+                $this->type = 'preventive';
+            }
+        } else {
+            $this->ruleIds = [];
+        }
+    }
+
+    public function updatedSelectedBusId($value)
+    {
+        if ($value) {
+            $bus = Bus::find((int) $value);
+            if ($bus) {
+                $this->odoAtService = $bus->current_odometer;
+            }
+        }
+    }
+
     public function saveLog()
     {
         $this->validate();
 
-        MaintenanceLog::create([
-            'bus_id' => $this->selectedBusId,
-            'maintenance_rule_id' => $this->ruleId ?: null,
-            'location_id' => $this->locationId,
-            'reported_by_id' => Auth::id(),
-            'type' => $this->type,
-            'status' => $this->status,
-            'issue_description' => $this->issue,
-            'total_cost' => $this->cost,
-            'vendor_name' => $this->vendor,
-            'odometer_at_service' => $this->odoAtService,
-            'resolved_at' => $this->status === 'resolved' ? now() : null,
-        ]);
+        $costPerRule = 0;
+        if ($this->cost > 0 && count($this->ruleIds) > 0) {
+            $costPerRule = $this->cost / count($this->ruleIds); // Split cost evenly
+        }
 
-        $this->reset(['showCreateModal', 'selectedBusId', 'ruleId', 'locationId', 'issue', 'cost', 'vendor', 'odoAtService']);
+        foreach ($this->ruleIds as $ruleId) {
+            MaintenanceLog::create([
+                'bus_id' => $this->selectedBusId,
+                'maintenance_rule_id' => $ruleId,
+                'location_id' => $this->locationId,
+                'reported_by_id' => Auth::id(),
+                'type' => $this->type,
+                'status' => $this->status,
+                'issue_description' => $this->issue,
+                'total_cost' => $costPerRule,
+                'vendor_name' => $this->vendor,
+                'odometer_at_service' => $this->odoAtService,
+                'resolved_at' => $this->status === 'resolved' ? now() : null,
+            ]);
+        }
+
+        $this->reset(['showCreateModal', 'selectedBusId', 'packageId', 'ruleIds', 'locationId', 'issue', 'cost', 'vendor', 'odoAtService']);
         $this->dispatch('notify', ['type' => 'success', 'title' => 'Berhasil', 'message' => 'Catatan perawatan berhasil disimpan.']);
     }
 
@@ -92,11 +126,14 @@ class Logs extends Component
             $query->where('bus_id', '=', $this->bus_id);
         }
 
+        $packagesList = \App\Models\ServicePackage::orderBy('name')->get();
+
         return view('livewire.pages.maintenance.logs', [
             'logs' => $query->paginate(10),
             'buses' => Bus::all(),
-            'rulesList' => MaintenanceRule::all(),
+            'rulesList' => MaintenanceRule::orderBy('task_name')->get(),
             'locationsList' => Agent::all(),
+            'packagesList' => $packagesList,
         ]);
     }
 }

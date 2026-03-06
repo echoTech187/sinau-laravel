@@ -1,26 +1,31 @@
 <?php
+use App\Helpers\AuditLogger;
+use App\Models\RbacLog;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\RbacLog;
-use App\Models\User;
-use App\Helpers\AuditLogger;
-use Livewire\Attributes\Title;
 
-new class extends Component {
+new class extends Component
+{
     use WithPagination;
 
     public string $search = '';
+
     public string $filterEvent = '';
+
     public string $filterDate = '';
+
+    public bool $confirmingClearLogs = false;
 
     public function updatedSearch(): void
     {
         $this->resetPage();
     }
+
     public function updatedFilterEvent(): void
     {
         $this->resetPage();
     }
+
     public function updatedFilterDate(): void
     {
         $this->resetPage();
@@ -29,17 +34,23 @@ new class extends Component {
     public function getLogs()
     {
         return RbacLog::with(['actor', 'targetUser'])
-            ->when($this->filterEvent, fn($q) => $q->where('event', $this->filterEvent))
-            ->when($this->filterDate, fn($q) => $q->whereDate('created_at', $this->filterDate))
+            ->when($this->filterEvent, fn ($q) => $q->where('event', $this->filterEvent))
+            ->when($this->filterDate, fn ($q) => $q->whereDate('created_at', $this->filterDate))
             ->when($this->search, function ($q) {
                 $q->where(function ($sub) {
                     $sub->where('event', 'like', "%{$this->search}%")
-                        ->orWhereHas('actor', fn($a) => $a->where('name', 'like', "%{$this->search}%"))
-                        ->orWhereHas('targetUser', fn($t) => $t->where('name', 'like', "%{$this->search}%"));
+                        ->orWhereHas('actor', fn ($a) => $a->where('name', 'like', "%{$this->search}%"))
+                        ->orWhereHas('targetUser', fn ($t) => $t->where('name', 'like', "%{$this->search}%"));
                 });
             })
             ->latest()
             ->paginate(20);
+    }
+
+    public function confirmClearAllLogs(): void
+    {
+        $this->clearAllLogs();
+        $this->confirmingClearLogs = false;
     }
 
     public function clearAllLogs(): void
@@ -85,14 +96,13 @@ new class extends Component {
                         Jejak audit setiap perubahan hak akses dalam sistem.
                     </p>
                 </div>
-                @if (auth()->user()?->role?->slug === 'super-admin')
-                    <button wire:click="clearAllLogs"
-                        wire:confirm="Hapus SEMUA log aktivitas? Tindakan ini tidak dapat dibatalkan!"
+                @can('remove.all.rbac.logs')
+                    <button wire:click="$set('confirmingClearLogs', true)"
                         class="btn btn-sm bg-red-600 hover:bg-red-700 text-white border-0 shadow-lg shadow-red-600/20 rounded-xl font-bold gap-2 shrink-0">
                         <x-heroicon-o-trash class="w-4 h-4" />
                         Hapus Semua Log
                     </button>
-                @endif
+                @endcan
             </header>
         </div>
 
@@ -249,4 +259,10 @@ new class extends Component {
             @endif
         </div>
     </div>
+
+    @if ($confirmingClearLogs)
+        <x-rbac.confirm-modal title="Kosongkan Log"
+            message="Hapus SEMUA log aktivitas? Tindakan ini tidak dapat dibatalkan!"
+            confirmAction="confirmClearAllLogs" cancelAction="$set('confirmingClearLogs', false)" />
+    @endif
 </div>

@@ -15,6 +15,10 @@ new class extends Component {
     public bool $is_hidden = true;
     public ?int $editingId = null;
 
+    // Deletion confirmation
+    public ?int $confirmingId = null;
+    public ?string $confirmingField = null;
+
     // Available models & their securable fields
     public array $availableModels = [
         'App\Models\Transaction' => [
@@ -113,7 +117,7 @@ new class extends Component {
         $this->dispatch('saved');
 
         // Audit trail
-        $event = $isEdit ? AuditLogger::FIELD_SECURITY_UPDATED : AuditLogger::FIELD_SECURITY_ADDED;
+        $event = $this->editingId ? AuditLogger::FIELD_SECURITY_UPDATED : AuditLogger::FIELD_SECURITY_ADDED;
         AuditLogger::record($event, null, [
             'role' => $this->roles->role,
             'role_id' => $this->roles->id,
@@ -130,6 +134,22 @@ new class extends Component {
         $this->model = $fp->model;
         $this->field = $fp->field;
         $this->is_hidden = $fp->is_hidden;
+    }
+
+    public function promptDelete(int $id, string $field): void
+    {
+        $this->confirmingId = $id;
+        $this->confirmingField = $field;
+    }
+
+    public function confirmDelete(): void
+    {
+        if (!$this->confirmingId) {
+            return;
+        }
+        $this->delete($this->confirmingId);
+        $this->confirmingId = null;
+        $this->confirmingField = null;
     }
 
     public function delete(int $id): void
@@ -413,8 +433,8 @@ new class extends Component {
                                                 title="Edit">
                                                 <x-heroicon-o-pencil class="size-3.5" />
                                             </button>
-                                            <button wire:click="delete({{ $fp->id }})"
-                                                wire:confirm="Hapus aturan sensor field '{{ $fp->field }}'?"
+                                            <button
+                                                wire:click="promptDelete({{ $fp->id }}, '{{ $fp->field }}')"
                                                 class="btn btn-ghost btn-xs text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
                                                 title="Hapus">
                                                 <x-heroicon-o-trash class="size-3.5" />
@@ -444,6 +464,12 @@ new class extends Component {
             Kelola Anggota
         </a>
     </div>
+
+    @if ($confirmingId)
+        <x-rbac.confirm-modal title="Hapus Aturan Sensor"
+            message="Yakin ingin menghapus aturan sensor field '{{ $confirmingField }}'?"
+            confirmAction="confirmDelete" cancelAction="$set('confirmingId', null)" />
+    @endif
 </div>
 
 <style>

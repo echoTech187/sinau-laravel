@@ -218,9 +218,14 @@
                             <select wire:model="form.origin_location_id"
                                 class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-medium text-zinc-900 dark:text-white">
                                 <option value="">Pilih Asal</option>
-                                @foreach ($this->locations as $loc)
-                                    <option wire:key="opt-origin-{{ $loc->id }}" value="{{ $loc->id }}">
-                                        {{ $loc->name }}</option>
+                                @foreach ($this->locations->groupBy('province') as $province => $provLocs)
+                                    <optgroup label="{{ $province }}">
+                                        @foreach ($provLocs as $loc)
+                                            <option wire:key="opt-origin-{{ $loc->id }}"
+                                                value="{{ $loc->id }}">
+                                                {{ $loc->name }}</option>
+                                        @endforeach
+                                    </optgroup>
                                 @endforeach
                             </select>
                         </div>
@@ -235,9 +240,14 @@
                             <select wire:model="form.destination_location_id"
                                 class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-medium text-zinc-900 dark:text-white">
                                 <option value="">Pilih Tujuan</option>
-                                @foreach ($this->locations as $loc)
-                                    <option wire:key="opt-dest-{{ $loc->id }}" value="{{ $loc->id }}">
-                                        {{ $loc->name }}</option>
+                                @foreach ($this->locations->groupBy('province') as $province => $provLocs)
+                                    <optgroup label="{{ $province }}">
+                                        @foreach ($provLocs as $loc)
+                                            <option wire:key="opt-dest-{{ $loc->id }}"
+                                                value="{{ $loc->id }}">
+                                                {{ $loc->name }}</option>
+                                        @endforeach
+                                    </optgroup>
                                 @endforeach
                             </select>
                         </div>

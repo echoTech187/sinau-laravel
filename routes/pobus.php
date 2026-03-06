@@ -2,14 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('/buses', \App\Livewire\Pages\Buses\Index::class)->name('buses.index');
     Route::get('/buses/create', \App\Livewire\Pages\Buses\Create::class)->name('buses.create');
     Route::get('/buses/{bus}/edit', \App\Livewire\Pages\Buses\Edit::class)->name('buses.edit');
     Route::get('/schedules', \App\Livewire\Pages\Schedules\Index::class)->name('schedules.index');
     Route::get('/schedules/create', \App\Livewire\Pages\Schedules\Create::class)->name('schedules.create');
     Route::get('/schedules/{schedule}/edit', \App\Livewire\Pages\Schedules\Edit::class)->name('schedules.edit');
-    
+
     Route::get('/crews', \App\Livewire\Pages\Crews\Index::class)->name('crews.index');
     Route::get('/crews/create', \App\Livewire\Pages\Crews\Create::class)->name('crews.create');
     Route::get('/crews/{crew}/edit', \App\Livewire\Pages\Crews\Edit::class)->name('crews.edit');
@@ -51,5 +51,6 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/maintenance', \App\Livewire\Pages\Maintenance\Dashboard::class)->name('maintenance.dashboard');
     Route::get('/maintenance/logs', \App\Livewire\Pages\Maintenance\Logs::class)->name('maintenance.logs');
     Route::get('/maintenance/rules', \App\Livewire\Pages\Maintenance\Rules\Index::class)->name('maintenance.rules');
+    Route::get('/maintenance/packages', \App\Livewire\Pages\Maintenance\Packages\Index::class)->name('maintenance.packages');
 
 });

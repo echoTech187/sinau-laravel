@@ -33,3 +33,6 @@ test_*.*
 *.log
 /public/seat-layout-images
 /public/references
+/tmp_pdf
+/rosalia_scraper
+/agen.json

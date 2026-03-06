@@ -101,15 +101,17 @@
                             Mitra Reguler</option>
                     </select>
                     <div class="w-px h-6 bg-zinc-300 dark:bg-zinc-700 my-auto"></div>
-                    <select wire:model.live="locationFilter"
+                    <select wire:model.live="provinceFilter"
                         class="select select-sm border-0 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-0 text-zinc-600 dark:text-zinc-300 font-medium whitespace-nowrap max-w-50">
                         <option value="" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">Semua
-                            Lokasi</option>
-                        @foreach ($this->locations as $loc)
-                            <option value="{{ $loc->id }}"
-                                class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">{{ $loc->name }}
+                            Provinsi</option>
+                        @foreach ($this->provinces as $province)
+                            <option value="{{ $province }}"
+                                class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">{{ $province }}
                             </option>
                         @endforeach
+                        <option value="LAINNYA" class="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white">LAINNYA
+                        </option>
                     </select>
                     <div class="w-px h-6 bg-zinc-300 dark:bg-zinc-700 my-auto"></div>
                     <select wire:model.live="statusFilter"

@@ -66,6 +66,23 @@ new class extends Component {
     public int $menuOrder = 0;
 
     public bool $menuIsActive = true;
+    public ?int $editingModuleId = null;
+    public ?int $editingMenuId = null;
+    public ?int $editingPermissionId = null;
+
+    // Create Permission Modal
+    public bool $showCreatePermissionModal = false;
+    #[Validate('required|string|max:255')]
+    public string $permissionName = '';
+    #[Validate('required|string|max:255')]
+    public string $permissionSlug = '';
+    public string $permissionGroupName = '';
+    public int $permissionModuleId = 0;
+
+    // Deletion confirmation
+    public ?string $confirmingDeletionType = null;
+    public ?int $confirmingDeletionId = null;
+    public ?string $confirmingDeletionName = null;
 
     public function mount()
     {
@@ -141,7 +158,7 @@ new class extends Component {
             'description' => $this->roleDescription,
             'is_active' => $this->roleIsActive,
         ]);
-        AuditLogger::record('role_created', null, [
+        AuditLogger::record(AuditLogger::ROLE_CREATED, null, [
             'role' => $role->role,
             'role_id' => $role->id,
             'description' => $role->description,
@@ -153,22 +170,44 @@ new class extends Component {
     public function createModule()
     {
         $this->validateOnly('moduleName');
-        Modules::create([
+        $data = [
             'name' => $this->moduleName,
             'slug' => $this->moduleSlug ?: \Illuminate\Support\Str::slug($this->moduleName),
             'icon' => $this->moduleIcon,
             'order' => $this->moduleOrder,
             'is_active' => $this->moduleIsActive,
             'description' => $this->moduleDescription,
-        ]);
-        $this->reset(['moduleName', 'moduleSlug', 'moduleIcon', 'moduleOrder', 'moduleIsActive', 'moduleDescription', 'showCreateModuleModal']);
-        $this->dispatch('notify', type: 'success', message: 'Modul berhasil ditambahkan!');
+        ];
+
+        if ($this->editingModuleId) {
+            $module = Modules::findOrFail($this->editingModuleId);
+            $module->update($data);
+            AuditLogger::record(AuditLogger::MODULE_UPDATED, null, ['module' => $module->name, 'module_id' => $module->id]);
+            $this->dispatch('notify', type: 'success', message: 'Modul berhasil diperbarui!');
+        } else {
+            $module = Modules::create($data);
+            AuditLogger::record(AuditLogger::MODULE_CREATED, null, ['module' => $module->name, 'module_id' => $module->id]);
+            $this->dispatch('notify', type: 'success', message: 'Modul berhasil ditambahkan!');
+        }
+        $this->reset(['moduleName', 'moduleSlug', 'moduleIcon', 'moduleOrder', 'moduleIsActive', 'moduleDescription', 'showCreateModuleModal', 'editingModuleId']);
+    }
+
+    public function editModule(Modules $module)
+    {
+        $this->editingModuleId = $module->id;
+        $this->moduleName = $module->name;
+        $this->moduleSlug = $module->slug;
+        $this->moduleIcon = $module->icon ?? '';
+        $this->moduleOrder = $module->order ?? 0;
+        $this->moduleIsActive = (bool) $module->is_active;
+        $this->moduleDescription = $module->description ?? '';
+        $this->showCreateModuleModal = true;
     }
 
     public function createMenu()
     {
         $this->validateOnly('menuName');
-        Menus::create([
+        $data = [
             'name' => $this->menuName,
             'icon' => $this->menuIcon,
             'route' => $this->menuRoute,
@@ -177,14 +216,161 @@ new class extends Component {
             'permission_id' => $this->menuPermissionId ?: null,
             'order' => $this->menuOrder,
             'is_active' => $this->menuIsActive,
+        ];
+
+        if ($this->editingMenuId) {
+            $menu = Menus::findOrFail($this->editingMenuId);
+            $menu->update($data);
+            AuditLogger::record(AuditLogger::MENU_UPDATED, null, ['menu' => $menu->name, 'menu_id' => $menu->id]);
+            $this->dispatch('notify', type: 'success', message: 'Menu berhasil diperbarui!');
+        } else {
+            $menu = Menus::create($data);
+            AuditLogger::record(AuditLogger::MENU_CREATED, null, ['menu' => $menu->name, 'menu_id' => $menu->id]);
+            $this->dispatch('notify', type: 'success', message: 'Menu berhasil ditambahkan!');
+        }
+
+        // Automatic Synchronization
+        $this->syncMenuPermission($menu);
+        $this->syncChildModules($menu);
+
+        $this->reset(['menuName', 'menuIcon', 'menuRoute', 'menuModuleId', 'menuParentId', 'menuPermissionId', 'menuOrder', 'menuIsActive', 'showCreateMenuModal', 'editingMenuId']);
+    }
+
+    private function syncMenuPermission(Menus $menu)
+    {
+        if ($menu->permission_id && $menu->module_id) {
+            $permission = Permissions::find($menu->permission_id);
+            if ($permission && $permission->module_id != $menu->module_id) {
+                $permission->update(['module_id' => $menu->module_id]);
+            }
+        }
+    }
+
+    private function syncChildModules(Menus $menu)
+    {
+        if ($menu->children()->exists()) {
+            foreach ($menu->children as $child) {
+                $child->update(['module_id' => $menu->module_id]);
+                $this->syncMenuPermission($child);
+                $this->syncChildModules($child); // Recursive
+            }
+        }
+    }
+
+    public function editMenu(Menus $menu)
+    {
+        $this->editingMenuId = $menu->id;
+        $this->menuName = $menu->name;
+        $this->menuIcon = $menu->icon ?? '';
+        $this->menuRoute = $menu->route ?? '';
+        $this->menuModuleId = $menu->module_id ?? 0;
+        $this->menuParentId = $menu->parent_id ?? 0;
+        $this->menuPermissionId = $menu->permission_id ?? 0;
+        $this->menuOrder = $menu->order ?? 0;
+        $this->menuIsActive = (bool) $menu->is_active;
+        $this->showCreateMenuModal = true;
+    }
+
+    public function addSubMenu(int $parentId)
+    {
+        $this->reset(['menuName', 'menuIcon', 'menuRoute', 'menuModuleId', 'menuPermissionId', 'menuOrder', 'menuIsActive', 'editingMenuId']);
+        $this->menuParentId = $parentId;
+        $this->showCreateMenuModal = true;
+    }
+
+    public function createPermission()
+    {
+        $this->validate([
+            'permissionName' => 'required|string|max:255',
+            'permissionSlug' => 'required|string|max:255',
         ]);
-        $this->reset(['menuName', 'menuIcon', 'menuRoute', 'menuModuleId', 'menuParentId', 'menuPermissionId', 'menuOrder', 'menuIsActive', 'showCreateMenuModal']);
-        $this->dispatch('notify', type: 'success', message: 'Menu berhasil ditambahkan!');
+
+        $data = [
+            'name' => $this->permissionName,
+            'slug' => $this->permissionSlug,
+            'group_name' => $this->permissionGroupName,
+            'module_id' => $this->permissionModuleId ?: null,
+        ];
+
+        if ($this->editingPermissionId) {
+            $permission = Permissions::findOrFail($this->editingPermissionId);
+            $permission->update($data);
+            AuditLogger::record(AuditLogger::PERMISSION_UPDATED, null, ['permission' => $permission->slug, 'permission_id' => $permission->id]);
+            $this->dispatch('notify', type: 'success', message: 'Izin berhasil diperbarui!');
+        } else {
+            $permission = Permissions::create($data);
+            AuditLogger::record(AuditLogger::PERMISSION_CREATED, null, ['permission' => $permission->slug, 'permission_id' => $permission->id]);
+            $this->dispatch('notify', type: 'success', message: 'Izin berhasil ditambahkan!');
+        }
+
+        $this->reset(['permissionName', 'permissionSlug', 'permissionGroupName', 'permissionModuleId', 'showCreatePermissionModal', 'editingPermissionId']);
+    }
+
+    public function addPermission(int $moduleId)
+    {
+        $this->reset(['permissionName', 'permissionSlug', 'permissionGroupName', 'editingPermissionId']);
+        $this->permissionModuleId = $moduleId;
+        $this->showCreatePermissionModal = true;
+    }
+
+    public function editPermission(Permissions $permission)
+    {
+        $this->editingPermissionId = $permission->id;
+        $this->permissionName = $permission->name;
+        $this->permissionSlug = $permission->slug;
+        $this->permissionGroupName = $permission->group_name ?? '';
+        $this->permissionModuleId = $permission->module_id ?? 0;
+        $this->showCreatePermissionModal = true;
+    }
+
+    public function deletePermission(Permissions $permission)
+    {
+        AuditLogger::record(AuditLogger::PERMISSION_DELETED, null, [
+            'permission' => $permission->slug,
+            'permission_id' => $permission->id,
+        ]);
+        $permission->delete();
+        $this->dispatch('notify', type: 'success', message: 'Izin berhasil dihapus!');
+    }
+
+    public function promptDelete(string $type, int $id, string $name)
+    {
+        $this->confirmingDeletionType = $type;
+        $this->confirmingDeletionId = $id;
+        $this->confirmingDeletionName = $name;
+    }
+
+    public function confirmDelete()
+    {
+        if (!$this->confirmingDeletionType || !$this->confirmingDeletionId) {
+            return;
+        }
+
+        if ($this->confirmingDeletionType === 'role') {
+            $role = Roles::findOrFail($this->confirmingDeletionId);
+            $this->deleteRole($role);
+        } elseif ($this->confirmingDeletionType === 'module') {
+            $module = Modules::findOrFail($this->confirmingDeletionId);
+            $this->deleteModule($module);
+        } elseif ($this->confirmingDeletionType === 'menu') {
+            $menu = Menus::findOrFail($this->confirmingDeletionId);
+            $this->deleteMenu($menu);
+        } elseif ($this->confirmingDeletionType === 'permission') {
+            $perm = Permissions::findOrFail($this->confirmingDeletionId);
+            $this->deletePermission($perm);
+        }
+
+        $this->cancelDeletion();
+    }
+
+    public function cancelDeletion()
+    {
+        $this->reset(['confirmingDeletionType', 'confirmingDeletionId', 'confirmingDeletionName']);
     }
 
     public function deleteRole(Roles $role)
     {
-        AuditLogger::record('role_deleted', null, [
+        AuditLogger::record(AuditLogger::ROLE_DELETED, null, [
             'role' => $role->role,
             'role_id' => $role->id,
         ]);
@@ -194,7 +380,7 @@ new class extends Component {
 
     public function deleteModule(Modules $module)
     {
-        AuditLogger::record('module_deleted', null, [
+        AuditLogger::record(AuditLogger::MODULE_DELETED, null, [
             'module' => $module->name,
             'module_id' => $module->id,
         ]);
@@ -204,7 +390,7 @@ new class extends Component {
 
     public function deleteMenu(Menus $menu)
     {
-        AuditLogger::record('menu_deleted', null, [
+        AuditLogger::record(AuditLogger::MENU_DELETED, null, [
             'menu' => $menu->name,
             'menu_id' => $menu->id,
         ]);
@@ -354,7 +540,9 @@ new class extends Component {
             @else
                 <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
                     @foreach ($this->roles as $role)
-                        <x-rbac.card-item :role="$role" />
+                        <div wire:key="role-{{ $role->id }}">
+                            <x-rbac.card-item :role="$role" />
+                        </div>
                     @endforeach
                 </div>
             @endif
@@ -384,7 +572,8 @@ new class extends Component {
             @else
                 <div class="space-y-3">
                     @foreach ($this->modules as $loop_module)
-                        <div class="collapse collapse-arrow group/mod
+                        <div wire:key="module-{{ $loop_module->id }}"
+                            class="collapse collapse-arrow group/mod
                                     border border-white/30 dark:border-white/10
                                     bg-white/60 dark:bg-zinc-800/50
                                     backdrop-blur-xl rounded-2xl
@@ -416,6 +605,13 @@ new class extends Component {
                                             <span
                                                 class="badge badge-xs bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-0">{{ $loop_module->permissions_count }}
                                                 izin</span>
+                                            <div class="relative z-10">
+                                                <button wire:click.stop="addPermission({{ $loop_module->id }})"
+                                                    class="badge badge-xs bg-blue-600 hover:bg-blue-700 text-white border-0 cursor-pointer shadow-sm hover:shadow-md transition-all gap-1 px-1.5 py-2">
+                                                    <x-heroicon-o-plus class="size-2.5" />
+                                                    Tambah Izin
+                                                </button>
+                                            </div>
                                         </div>
                                         @if ($loop_module->description)
                                             <p class="text-xs text-zinc-500 dark:text-zinc-400 truncate mt-0.5">
@@ -424,12 +620,18 @@ new class extends Component {
                                         <span
                                             class="text-xs text-zinc-400 dark:text-zinc-500 font-mono">{{ $loop_module->slug }}</span>
                                     </div>
-                                    <button
-                                        class="btn btn-xs btn-ghost text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 shrink-0"
-                                        wire:click.stop="deleteModule({{ $loop_module->id }})"
-                                        wire:confirm="Yakin ingin menghapus modul '{{ $loop_module->name }}'?">
-                                        <x-heroicon-o-trash class="size-3.5" />
-                                    </button>
+                                    <div class="flex items-center gap-1.5 relative z-10">
+                                        <button
+                                            class="btn btn-xs btn-ghost text-amber-500 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 shrink-0"
+                                            wire:click.stop="editModule({{ $loop_module->id }})">
+                                            <x-heroicon-o-pencil-square class="size-3.5" />
+                                        </button>
+                                        <button
+                                            class="btn btn-xs btn-ghost text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 shrink-0"
+                                            wire:click.stop="promptDelete('module', {{ $loop_module->id }}, '{{ $loop_module->name }}')">
+                                            <x-heroicon-o-trash class="size-3.5" />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <div
@@ -441,7 +643,7 @@ new class extends Component {
                                     <div class="grid gap-2 grid-cols-1 sm:grid-cols-2 pt-3">
                                         @foreach ($loop_module->permissions as $permission)
                                             <div
-                                                class="flex items-center gap-3
+                                                class="flex items-center gap-3 group
                                                         bg-white/60 dark:bg-zinc-800/60
                                                         backdrop-blur-sm
                                                         border border-white/40 dark:border-zinc-700/50
@@ -462,6 +664,18 @@ new class extends Component {
                                                     <span
                                                         class="badge badge-xs bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-0 shrink-0">{{ $permission->group_name }}</span>
                                                 @endif
+                                                <div
+                                                    class="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity relative z-10">
+                                                    <button wire:click.stop="editPermission({{ $permission->id }})"
+                                                        class="btn btn-xs btn-ghost text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 px-1 min-h-0 h-6">
+                                                        <x-heroicon-o-pencil-square class="size-3.5" />
+                                                    </button>
+                                                    <button
+                                                        wire:click.stop="promptDelete('permission', {{ $permission->id }}, '{{ $permission->name }}')"
+                                                        class="btn btn-xs btn-ghost text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 px-1 min-h-0 h-6">
+                                                        <x-heroicon-o-trash class="size-3.5" />
+                                                    </button>
+                                                </div>
                                             </div>
                                         @endforeach
                                     </div>
@@ -497,7 +711,8 @@ new class extends Component {
             @else
                 <div class="space-y-3">
                     @foreach ($this->menus as $loop_menu)
-                        <div class="collapse collapse-arrow group/menu
+                        <div wire:key="menu-{{ $loop_menu->id }}"
+                            class="collapse collapse-arrow group/menu
                                     border border-white/30 dark:border-white/10
                                     bg-white/60 dark:bg-zinc-800/50
                                     backdrop-blur-xl rounded-2xl
@@ -547,23 +762,36 @@ new class extends Component {
                                             @endif
                                         </div>
                                     </div>
-                                    <button
-                                        class="btn btn-xs btn-ghost text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 shrink-0"
-                                        wire:click.stop="deleteMenu({{ $loop_menu->id }})"
-                                        wire:confirm="Yakin ingin menghapus menu '{{ $loop_menu->name }}'?">
-                                        <x-heroicon-o-trash class="size-3.5" />
-                                    </button>
+                                    <div class="flex items-center gap-1.5 relative z-10">
+                                        <button
+                                            class="btn btn-xs btn-ghost text-amber-500 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 shrink-0"
+                                            wire:click.stop="editMenu({{ $loop_menu->id }})">
+                                            <x-heroicon-o-pencil-square class="size-3.5" />
+                                        </button>
+                                        <button
+                                            class="btn btn-xs btn-ghost text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 shrink-0"
+                                            wire:click.stop="promptDelete('menu', {{ $loop_menu->id }}, '{{ $loop_menu->name }}')">
+                                            <x-heroicon-o-trash class="size-3.5" />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <div
                                 class="collapse-content bg-white/30 dark:bg-zinc-900/30 backdrop-blur-sm rounded-b-2xl">
                                 @if ($loop_menu->children && $loop_menu->children->isNotEmpty())
                                     <div class="space-y-2 pt-3">
-                                        <p
-                                            class="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-2">
-                                            Sub-menu</p>
+                                        <div class="flex items-center justify-between mb-2">
+                                            <p
+                                                class="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                                                Sub-menu</p>
+                                            <button wire:click.stop="addSubMenu({{ $loop_menu->id }})"
+                                                class="btn btn-xs bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-0 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg gap-1 px-2">
+                                                <x-heroicon-o-plus class="size-3" />
+                                                Tambah
+                                            </button>
+                                        </div>
                                         @foreach ($loop_menu->children as $child)
-                                            <div
+                                            <div wire:key="submenu-{{ $child->id }}"
                                                 class="flex items-center gap-3
                                                         bg-white/60 dark:bg-zinc-800/60 backdrop-blur-sm
                                                         border border-white/40 dark:border-zinc-700/50
@@ -585,16 +813,35 @@ new class extends Component {
                                                         @endif
                                                     </div>
                                                 </div>
-                                                <span
-                                                    class="badge badge-xs {{ $child->is_active ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border-0' : 'bg-zinc-100 dark:bg-zinc-700/50 text-zinc-500 dark:text-zinc-400 border-0' }}">
-                                                    {{ $child->is_active ? 'Aktif' : 'Nonaktif' }}
-                                                </span>
+                                                <div class="flex items-center gap-2">
+                                                    <span
+                                                        class="badge badge-xs {{ $child->is_active ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border-0' : 'bg-zinc-100 dark:bg-zinc-700/50 text-zinc-500 dark:text-zinc-400 border-0' }}">
+                                                        {{ $child->is_active ? 'Aktif' : 'Nonaktif' }}
+                                                    </span>
+                                                    <div class="flex items-center gap-1 relative z-10">
+                                                        <button wire:click.stop="editMenu({{ $child->id }})"
+                                                            class="btn btn-xs btn-ghost text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 px-1 min-h-0 h-6">
+                                                            <x-heroicon-o-pencil-square class="size-3.5" />
+                                                        </button>
+                                                        <button
+                                                            wire:click.stop="promptDelete('menu', {{ $child->id }}, '{{ $child->name }}')"
+                                                            class="btn btn-xs btn-ghost text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 px-1 min-h-0 h-6">
+                                                            <x-heroicon-o-trash class="size-3.5" />
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         @endforeach
                                     </div>
                                 @else
-                                    <p class="text-center text-sm text-zinc-400 dark:text-zinc-500 py-4">Tidak ada
-                                        sub-menu.</p>
+                                    <div class="flex flex-col items-center justify-center py-6 gap-3">
+                                        <p class="text-sm text-zinc-400 dark:text-zinc-500">Tidak ada sub-menu.</p>
+                                        <button wire:click.stop="addSubMenu({{ $loop_menu->id }})"
+                                            class="btn btn-xs bg-blue-600 hover:bg-blue-700 text-white border-0 shadow-md rounded-lg gap-1 px-3">
+                                            <x-heroicon-o-plus class="size-3" />
+                                            Tambah Sub-menu
+                                        </button>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -637,7 +884,8 @@ new class extends Component {
                         </thead>
                         <tbody class="divide-y divide-zinc-100 dark:divide-zinc-700/50">
                             @foreach ($logs as $log)
-                                <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
+                                <tr wire:key="log-{{ $log->id }}"
+                                    class="hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
                                     <td class="text-zinc-400 dark:text-zinc-500 text-xs">{{ $log->id }}</td>
                                     <td>
                                         <div class="flex items-center gap-2">
@@ -745,9 +993,11 @@ new class extends Component {
         <dialog open class="modal modal-open z-50">
             <div
                 class="modal-box bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 max-w-lg w-full">
-                <h3 class="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">Tambah Modul Baru</h3>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-6">Modul mengelompokkan izin-izin yang saling
-                    berhubungan.</p>
+                <h3 class="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">
+                    {{ $editingModuleId ? 'Edit Modul' : 'Tambah Modul Baru' }}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
+                    {{ $editingModuleId ? 'Perbarui data modul pengelompok izin.' : 'Modul mengelompokkan izin-izin yang saling berhubungan.' }}
+                </p>
                 <form wire:submit="createModule" class="space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <fieldset class="fieldset col-span-full">
@@ -805,15 +1055,17 @@ new class extends Component {
                     </div>
                     <div class="modal-action gap-2">
                         <button type="button" class="btn btn-ghost dark:text-zinc-400 dark:hover:text-zinc-200"
-                            wire:click="$set('showCreateModuleModal', false)">Batal</button>
+                            wire:click="$set('showCreateModuleModal', false); $set('editingModuleId', null)">Batal</button>
                         <button type="submit" class="btn bg-blue-600 hover:bg-blue-700 text-white border-blue-700">
-                            <x-heroicon-o-plus class="size-4" />Tambah Modul
+                            <x-heroicon-o-plus class="size-4 {{ $editingModuleId ? 'hidden' : '' }}" />
+                            <x-heroicon-o-check class="size-4 {{ $editingModuleId ? '' : 'hidden' }}" />
+                            {{ $editingModuleId ? 'Simpan Perubahan' : 'Tambah Modul' }}
                         </button>
                     </div>
                 </form>
             </div>
             <div class="modal-backdrop bg-black/40 dark:bg-black/60"
-                wire:click="$set('showCreateModuleModal', false)"></div>
+                wire:click="$set('showCreateModuleModal', false); $set('editingModuleId', null)"></div>
         </dialog>
     @endif
 
@@ -822,9 +1074,11 @@ new class extends Component {
         <dialog open class="modal modal-open z-50">
             <div
                 class="modal-box bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 max-w-lg w-full max-h-[90vh] overflow-y-auto">
-                <h3 class="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">Tambah Menu Baru</h3>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-5">Menu tampil di sidebar berdasarkan izin
-                    pengguna.</p>
+                <h3 class="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">
+                    {{ $editingMenuId ? 'Edit Menu' : 'Tambah Menu Baru' }}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-5">
+                    {{ $editingMenuId ? 'Perbarui konfigurasi menu sidebar.' : 'Menu tampil di sidebar berdasarkan izin pengguna.' }}
+                </p>
                 <form wire:submit="createMenu" class="space-y-4">
                     <fieldset class="fieldset">
                         <legend class="legend text-sm font-semibold text-zinc-700 dark:text-zinc-300">Nama Menu <span
@@ -911,18 +1165,101 @@ new class extends Component {
                     </div>
                     <div class="modal-action gap-2">
                         <button type="button" class="btn btn-ghost dark:text-zinc-400 dark:hover:text-zinc-200"
-                            wire:click="$set('showCreateMenuModal', false)">Batal</button>
+                            wire:click="$set('showCreateMenuModal', false); $set('editingMenuId', null)">Batal</button>
                         <button type="submit" class="btn bg-blue-600 hover:bg-blue-700 text-white border-blue-700">
-                            <x-heroicon-o-plus class="size-4" />Tambah Menu
+                            <x-heroicon-o-plus class="size-4 {{ $editingMenuId ? 'hidden' : '' }}" />
+                            <x-heroicon-o-check class="size-4 {{ $editingMenuId ? '' : 'hidden' }}" />
+                            {{ $editingMenuId ? 'Simpan Perubahan' : 'Tambah Menu' }}
                         </button>
                     </div>
                 </form>
             </div>
-            <div class="modal-backdrop bg-black/40 dark:bg-black/60" wire:click="$set('showCreateMenuModal', false)">
+            <div class="modal-backdrop bg-black/40 dark:bg-black/60"
+                wire:click="$set('showCreateMenuModal', false); $set('editingMenuId', null)">
             </div>
         </dialog>
     @endif
 
+    {{-- =========== MODAL: TAMBAH IZIN (PERMISSION) =========== --}}
+    @if ($showCreatePermissionModal)
+        <dialog open class="modal modal-open z-50">
+            <div
+                class="modal-box bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 max-w-lg w-full">
+                <h3 class="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">
+                    {{ $editingPermissionId ? 'Edit Izin' : 'Tambah Izin Baru' }}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
+                    {{ $editingPermissionId ? 'Perbarui data izin akses sistem.' : 'Izin menentukan tindakan apa yang bisa dilakukan pengguna.' }}
+                </p>
+                <form wire:submit="createPermission" class="space-y-4">
+                    <fieldset class="fieldset">
+                        <legend class="legend text-sm font-semibold text-zinc-700 dark:text-zinc-300">Nama Izin <span
+                                class="text-red-500">*</span></legend>
+                        <div
+                            class="input input-bordered w-full dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-100">
+                            <input type="text" wire:model="permissionName" placeholder="Contoh: Lihat Dashboard"
+                                autofocus class="dark:placeholder-zinc-500" />
+                        </div>
+                        @error('permissionName')
+                            <span class="text-xs text-red-500">{{ $message }}</span>
+                        @enderror
+                    </fieldset>
+                    <fieldset class="fieldset">
+                        <legend class="legend text-sm font-semibold text-zinc-700 dark:text-zinc-300">Slug (Unique)
+                            <span class="text-red-500">*</span>
+                        </legend>
+                        <div
+                            class="input input-bordered w-full bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-100">
+                            <input type="text" wire:model="permissionSlug" placeholder="Contoh: dashboard.view"
+                                class="dark:placeholder-zinc-500" />
+                        </div>
+                        @error('permissionSlug')
+                            <span class="text-xs text-red-500">{{ $message }}</span>
+                        @enderror
+                    </fieldset>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <fieldset class="fieldset">
+                            <legend class="legend text-sm font-semibold text-zinc-700 dark:text-zinc-300">Grup
+                                (Opsional)</legend>
+                            <div
+                                class="input input-bordered w-full dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-100">
+                                <input type="text" wire:model="permissionGroupName"
+                                    placeholder="Contoh: Operasional" class="dark:placeholder-zinc-500" />
+                            </div>
+                        </fieldset>
+                        <fieldset class="fieldset">
+                            <legend class="legend text-sm font-semibold text-zinc-700 dark:text-zinc-300">Modul
+                            </legend>
+                            <select
+                                class="select select-bordered w-full dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-100"
+                                wire:model="permissionModuleId">
+                                <option value="0">-- Pilih Modul --</option>
+                                @foreach ($this->allModules as $mod)
+                                    <option value="{{ $mod->id }}">{{ $mod->name }}</option>
+                                @endforeach
+                            </select>
+                        </fieldset>
+                    </div>
+                    <div class="modal-action gap-2 mt-6">
+                        <button type="button" class="btn btn-ghost dark:text-zinc-400 dark:hover:text-zinc-200"
+                            wire:click="$set('showCreatePermissionModal', false); $set('editingPermissionId', null)">Batal</button>
+                        <button type="submit" class="btn bg-blue-600 hover:bg-blue-700 text-white border-blue-700">
+                            <x-heroicon-o-plus class="size-4 {{ $editingPermissionId ? 'hidden' : '' }}" />
+                            <x-heroicon-o-check class="size-4 {{ $editingPermissionId ? '' : 'hidden' }}" />
+                            {{ $editingPermissionId ? 'Simpan Perubahan' : 'Tambah Izin' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-backdrop bg-black/40 dark:bg-black/60"
+                wire:click="$set('showCreatePermissionModal', false); $set('editingPermissionId', null)"></div>
+        </dialog>
+    @endif
+
+    @if ($confirmingDeletionType)
+        <x-rbac.confirm-modal title="Konfirmasi Hapus"
+            message="Yakin ingin menghapus {{ $confirmingDeletionType }} '{{ $confirmingDeletionName }}'? Tindakan ini tidak dapat dibatalkan!"
+            confirmAction="confirmDelete" cancelAction="cancelDeletion" />
+    @endif
 </div>
 
 <style>

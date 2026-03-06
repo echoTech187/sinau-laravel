@@ -32,9 +32,9 @@
                         <div class="flex items-center gap-2">
 
                             <span
-                                class="text-[10px] font-black bg-indigo-600 text-white px-2 py-0.5 rounded-md uppercase tracking-[0.15em]">{{ $manifest->schedule->bus->fleet_code }}</span>
+                                class="text-[10px] font-black bg-indigo-600 text-white px-2 py-0.5 rounded-md uppercase tracking-[0.15em]">{{ $manifest->schedule->bus?->fleet_code ?? 'TBA' }}</span>
                             <span
-                                class="text-xs text-zinc-400 font-bold uppercase">{{ $manifest->schedule->route->name }}</span>
+                                class="text-xs text-zinc-400 font-bold uppercase">{{ $manifest->schedule->route?->name ?? 'N/A' }}</span>
                         </div>
                     </div>
                 </div>

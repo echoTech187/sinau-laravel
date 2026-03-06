@@ -25,4 +25,10 @@ class MaintenanceRule extends Model
     {
         return $this->hasMany(MaintenanceLog::class);
     }
+
+    public function servicePackages()
+    {
+        return $this->belongsToMany(ServicePackage::class)
+                    ->withTimestamps();
+    }
 }

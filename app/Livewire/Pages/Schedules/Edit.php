@@ -142,7 +142,9 @@ class Edit extends Component
     #[Computed]
     public function agents()
     {
-        return Agent::orderBy('name', 'asc')->get();
+        return Agent::with('location')->get()->sortBy(function($agent) {
+            return ($agent->location->province ?? '') . $agent->name;
+        });
     }
 
     public function saveSchedule()

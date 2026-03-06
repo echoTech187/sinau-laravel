@@ -51,11 +51,11 @@
                                         <div class="flex-1 min-w-0">
                                             <div
                                                 class="font-bold text-sm text-zinc-900 dark:text-white uppercase tracking-tight">
-                                                {{ $schedule->bus->fleet_code }}
+                                                {{ $schedule->bus?->fleet_code ?? 'Belum Ditentukan' }}
                                             </div>
                                             <div
                                                 class="text-[10px] text-zinc-500 font-semibold uppercase truncate tracking-wide mt-0.5">
-                                                {{ $schedule->route->name }}</div>
+                                                {{ $schedule->route?->name ?? 'Tanpa Rute' }}</div>
                                             <div class="flex items-center gap-2 mt-2">
                                                 <span
                                                     class="text-[9px] bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 px-2 py-0.5 rounded-lg text-zinc-600 dark:text-zinc-400 font-bold uppercase shadow-sm">
@@ -218,7 +218,7 @@
                                         <td class="py-5">
                                             <div class="flex flex-col">
                                                 <span
-                                                    class="font-bold text-zinc-800 dark:text-zinc-200 text-xs">{{ $manifest->schedule->route->name }}</span>
+                                                    class="font-bold text-zinc-800 dark:text-zinc-200 text-xs">{{ $manifest->schedule->route?->name ?? 'N/A' }}</span>
                                                 <span
                                                     class="text-[10px] text-zinc-500 mt-0.5 font-bold tracking-tight uppercase">{{ $manifest->manifest_number }}</span>
                                             </div>
@@ -231,9 +231,9 @@
                                                 <div>
                                                     <p
                                                         class="text-[11px] font-bold text-zinc-800 dark:text-zinc-300 leading-tight">
-                                                        {{ $manifest->schedule->bus->fleet_code }}</p>
+                                                        {{ $manifest->schedule->bus?->fleet_code ?? 'TBA' }}</p>
                                                     <p class="text-[9px] text-zinc-500 uppercase font-medium">
-                                                        {{ $manifest->schedule->bus->license_plate ?? 'B 7123 KGA' }}
+                                                        {{ $manifest->schedule->bus?->license_plate ?? 'TBA' }}
                                                     </p>
                                                 </div>
                                             </div>

@@ -1,19 +1,25 @@
 <?php
-use Livewire\Component;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\Validate;
+use App\Helpers\AuditLogger;
 use App\Models\Modules;
 use App\Models\Permissions;
-use App\Helpers\AuditLogger;
 use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Validate;
+use Livewire\Component;
 
-new class extends Component {
+new class extends Component
+{
     public Modules $modules;
+
     public bool $showCreatePermissionModal = false;
+
+    public ?int $editingPermissionId = null;
 
     #[Validate('required|string|max:255')]
     public string $permName = '';
+
     public string $permSlug = '';
+
     public string $permGroupName = '';
 
     public function mount(Modules $modules)
@@ -35,26 +41,48 @@ new class extends Component {
     public function createPermission(): void
     {
         $this->validateOnly('permName');
-        $perm = Permissions::create([
+        $data = [
             'module_id' => $this->modules->id,
             'name' => $this->permName,
             'slug' => $this->permSlug ?: \Illuminate\Support\Str::slug($this->permName),
             'group_name' => $this->permGroupName ?: null,
-        ]);
-        AuditLogger::record('permission_created', null, [
-            'module' => $this->modules->name,
-            'permission' => $perm->name,
-            'slug' => $perm->slug,
-        ]);
-        $this->reset(['permName', 'permSlug', 'permGroupName', 'showCreatePermissionModal']);
+        ];
+
+        if ($this->editingPermissionId) {
+            $perm = Permissions::findOrFail($this->editingPermissionId);
+            $perm->update($data);
+            AuditLogger::record(AuditLogger::PERMISSION_UPDATED, null, [
+                'module' => $this->modules->name,
+                'permission' => $perm->name,
+                'slug' => $perm->slug,
+            ]);
+            $this->dispatch('notify', type: 'success', message: 'Izin berhasil diperbarui!');
+        } else {
+            $perm = Permissions::create($data);
+            AuditLogger::record(AuditLogger::PERMISSION_CREATED, null, [
+                'module' => $this->modules->name,
+                'permission' => $perm->name,
+                'slug' => $perm->slug,
+            ]);
+            $this->dispatch('notify', type: 'success', message: 'Izin berhasil ditambahkan!');
+        }
+        $this->reset(['permName', 'permSlug', 'permGroupName', 'showCreatePermissionModal', 'editingPermissionId']);
         unset($this->permissions);
-        $this->dispatch('notify', type: 'success', message: 'Izin berhasil ditambahkan!');
+    }
+
+    public function editPermission(Permissions $perm)
+    {
+        $this->editingPermissionId = $perm->id;
+        $this->permName = $perm->name;
+        $this->permSlug = $perm->slug;
+        $this->permGroupName = $perm->group_name ?? '';
+        $this->showCreatePermissionModal = true;
     }
 
     public function deletePermission(int $id): void
     {
         $perm = Permissions::findOrFail($id);
-        AuditLogger::record('permission_deleted', null, [
+        AuditLogger::record(AuditLogger::PERMISSION_DELETED, null, [
             'module' => $this->modules->name,
             'permission' => $perm->name,
             'slug' => $perm->slug,
@@ -128,6 +156,11 @@ new class extends Component {
                         @endif
                     </div>
                     <button
+                        class="btn btn-xs btn-ghost text-amber-500 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        wire:click="editPermission({{ $permission->id }})">
+                        <x-heroicon-o-pencil-square class="size-3.5" />
+                    </button>
+                    <button
                         class="btn btn-xs btn-ghost text-red-400 dark:text-red-400/70 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
                         wire:click="deletePermission({{ $permission->id }})"
                         wire:confirm="Yakin ingin menghapus izin '{{ $permission->name }}'?">
@@ -150,8 +183,10 @@ new class extends Component {
         <dialog open class="modal modal-open z-50">
             <div
                 class="modal-box bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 max-w-md w-full">
-                <h3 class="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">Tambah Izin Baru</h3>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-5">Tambahkan izin baru ke modul <strong
+                <h3 class="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">
+                    {{ $editingPermissionId ? 'Edit Izin' : 'Tambah Izin Baru' }}</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-5">
+                    {{ $editingPermissionId ? 'Perbarui data izin fitur.' : 'Tambahkan izin baru ke modul ' }}<strong
                         class="text-zinc-800 dark:text-zinc-200">{{ $this->modules->name }}</strong>.</p>
                 <form wire:submit="createPermission" class="space-y-4">
                     <fieldset class="fieldset">
@@ -184,15 +219,17 @@ new class extends Component {
                     </fieldset>
                     <div class="modal-action gap-2">
                         <button type="button" class="btn btn-ghost dark:text-zinc-400 dark:hover:text-zinc-200"
-                            wire:click="$set('showCreatePermissionModal', false)">Batal</button>
+                            wire:click="$set('showCreatePermissionModal', false); $set('editingPermissionId', null)">Batal</button>
                         <button type="submit" class="btn bg-blue-600 hover:bg-blue-700 text-white border-blue-700">
-                            <x-heroicon-o-plus class="size-4" />Tambah Izin
+                            <x-heroicon-o-plus class="size-4 {{ $editingPermissionId ? 'hidden' : '' }}" />
+                            <x-heroicon-o-check class="size-4 {{ $editingPermissionId ? '' : 'hidden' }}" />
+                            {{ $editingPermissionId ? 'Simpan Perubahan' : 'Tambah Izin' }}
                         </button>
                     </div>
                 </form>
             </div>
             <div class="modal-backdrop bg-black/40 dark:bg-black/60"
-                wire:click="$set('showCreatePermissionModal', false)"></div>
+                wire:click="$set('showCreatePermissionModal', false); $set('editingPermissionId', null)"></div>
         </dialog>
     @endif
 </div>

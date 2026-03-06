@@ -21,7 +21,7 @@ class Create extends Component
     #[Computed]
     public function locations()
     {
-        return Location::orderBy('name', 'asc')->get();
+        return Location::orderBy('province', 'asc')->orderBy('name', 'asc')->get();
     }
 
     #[Computed]

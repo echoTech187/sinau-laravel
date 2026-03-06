@@ -25,7 +25,7 @@ class Index extends Component
 
     public string $statusFilter = '';
 
-    public string $locationFilter = '';
+    public string $provinceFilter = '';
 
     public function updatingSearch()
     {
@@ -42,17 +42,21 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function updatingLocationFilter()
+    public function updatingProvinceFilter()
     {
         $this->resetPage();
     }
 
     #[Computed]
-    public function locations()
+    public function provinces()
     {
         return Location::whereHas('roles', function ($q) {
-            $q->where('name', '=', 'Agen');
-        })->get();
+            $q->where('name', 'like', 'Agen%');
+        })->whereNotNull('province')->where('province', '!=', '')
+            ->select('province')
+            ->distinct()
+            ->orderBy('province', 'asc')
+            ->pluck('province');
     }
 
     #[Computed]
@@ -83,8 +87,16 @@ class Index extends Component
             ->when($this->statusFilter, function ($query) {
                 $query->where('status', '=', $this->statusFilter);
             })
-            ->when($this->locationFilter, function ($query) {
-                $query->where('location_id', '=', $this->locationFilter);
+            ->when($this->provinceFilter, function ($query) {
+                if ($this->provinceFilter === 'LAINNYA') {
+                    $query->whereHas('location', function ($q) {
+                        $q->whereNull('province')->orWhere('province', '');
+                    });
+                } else {
+                    $query->whereHas('location', function ($q) {
+                        $q->where('province', '=', $this->provinceFilter);
+                    });
+                }
             })
             ->latest()
             ->paginate(10);

@@ -57,18 +57,26 @@
                     <x-form-select label="Terminal Keberangkatan*" wire:model.live="form.origin_agent_id"
                         class="border-emerald-200 dark:border-emerald-900/50 focus:ring-emerald-500">
                         <option value="">-- Pilih Agen Asal --</option>
-                        @foreach ($this->agents as $agent)
-                            <option wire:key="agt-org-{{ $agent->id }}" value="{{ $agent->id }}">
-                                {{ $agent->name }}</option>
+                        @foreach ($this->agents->groupBy(fn($a) => $a->location->province ?? 'LAINNYA') as $province => $provAgents)
+                            <optgroup label="{{ $province }}">
+                                @foreach ($provAgents as $agent)
+                                    <option wire:key="agt-org-{{ $agent->id }}" value="{{ $agent->id }}">
+                                        {{ $agent->name }}</option>
+                                @endforeach
+                            </optgroup>
                         @endforeach
                     </x-form-select>
 
                     <x-form-select label="Destinasi Akhir Penurunan*" wire:model.live="form.destination_agent_id"
                         class="border-red-200 dark:border-red-900/50 focus:ring-red-500">
                         <option value="">-- Pilih Agen Tujuan --</option>
-                        @foreach ($this->agents as $agent)
-                            <option wire:key="agt-dest-{{ $agent->id }}" value="{{ $agent->id }}">
-                                {{ $agent->name }}</option>
+                        @foreach ($this->agents->groupBy(fn($a) => $a->location->province ?? 'LAINNYA') as $province => $provAgents)
+                            <optgroup label="{{ $province }}">
+                                @foreach ($provAgents as $agent)
+                                    <option wire:key="agt-dest-{{ $agent->id }}" value="{{ $agent->id }}">
+                                        {{ $agent->name }}</option>
+                                @endforeach
+                            </optgroup>
                         @endforeach
                     </x-form-select>
 
@@ -131,10 +139,15 @@
                                             <select wire:model.live="form.stops.{{ $index }}.agent_id"
                                                 class="select select-bordered select-sm w-full bg-white dark:bg-zinc-900 @error('form.stops.' . $index . '.agent_id')  @enderror">
                                                 <option value="">Pilih Agen Stop</option>
-                                                @foreach ($this->agents as $agent)
-                                                    <option
-                                                        wire:key="stop-agt-{{ $index }}-{{ $agent->id }}"
-                                                        value="{{ $agent->id }}">{{ $agent->name }}</option>
+                                                @foreach ($this->agents->groupBy(fn($a) => $a->location->province ?? 'LAINNYA') as $province => $provAgents)
+                                                    <optgroup label="{{ $province }}">
+                                                        @foreach ($provAgents as $agent)
+                                                            <option
+                                                                wire:key="stop-agt-{{ $index }}-{{ $agent->id }}"
+                                                                value="{{ $agent->id }}">{{ $agent->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </optgroup>
                                                 @endforeach
                                             </select>
                                             @error('form.stops.' . $index . '.agent_id')

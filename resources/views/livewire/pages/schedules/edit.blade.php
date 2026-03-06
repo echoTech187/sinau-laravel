@@ -162,10 +162,15 @@
                                                     wire:model="form.crews.{{ $index }}.boarding_location_id"
                                                     class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-semibold">
                                                     <option value="">-- Pilih Agen --</option>
-                                                    @foreach ($this->agents as $agent)
-                                                        <option
-                                                            wire:key="opt-boarding-{{ $index }}-{{ $agent->id }}"
-                                                            value="{{ $agent->id }}">{{ $agent->name }}</option>
+                                                    @foreach ($this->agents->groupBy(fn($a) => $a->location->province ?? 'LAINNYA') as $province => $provAgents)
+                                                        <optgroup label="{{ $province }}">
+                                                            @foreach ($provAgents as $agent)
+                                                                <option
+                                                                    wire:key="opt-boarding-{{ $index }}-{{ $agent->id }}"
+                                                                    value="{{ $agent->id }}">{{ $agent->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </optgroup>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -177,10 +182,15 @@
                                                     wire:model="form.crews.{{ $index }}.dropoff_location_id"
                                                     class="select select-bordered bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all font-semibold">
                                                     <option value="">-- Pilih Agen --</option>
-                                                    @foreach ($this->agents as $agent)
-                                                        <option
-                                                            wire:key="opt-dropoff-{{ $index }}-{{ $agent->id }}"
-                                                            value="{{ $agent->id }}">{{ $agent->name }}</option>
+                                                    @foreach ($this->agents->groupBy(fn($a) => $a->location->province ?? 'LAINNYA') as $province => $provAgents)
+                                                        <optgroup label="{{ $province }}">
+                                                            @foreach ($provAgents as $agent)
+                                                                <option
+                                                                    wire:key="opt-dropoff-{{ $index }}-{{ $agent->id }}"
+                                                                    value="{{ $agent->id }}">{{ $agent->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </optgroup>
                                                     @endforeach
                                                 </select>
                                             </div>

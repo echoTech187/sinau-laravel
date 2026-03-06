@@ -2,6 +2,7 @@
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use App\Models\Roles;
+use App\Helpers\AuditLogger;
 
 new class extends Component {
     public Roles $roles;
@@ -11,6 +12,7 @@ new class extends Component {
     #[Validate('nullable|string|max:500')]
     public string $roleDescription = '';
     public bool $roleIsActive = true;
+    public bool $confirmingDeletion = false;
 
     public function mount(Roles $roles)
     {
@@ -29,12 +31,22 @@ new class extends Component {
             'description' => $this->roleDescription,
             'is_active' => $this->roleIsActive,
         ]);
+        AuditLogger::record(AuditLogger::ROLE_UPDATED, null, ['role' => $this->roleName, 'role_id' => $this->roles->id]);
         $this->dispatch('notify', type: 'success', message: 'Data peran berhasil diperbarui!');
+    }
+
+    public function confirmDelete(): void
+    {
+        $this->delete();
+        $this->confirmingDeletion = false;
     }
 
     public function delete(): void
     {
+        $roleName = $this->roles->role;
+        $roleId = $this->roles->id;
         $this->roles->delete();
+        AuditLogger::record(AuditLogger::ROLE_DELETED, null, ['role' => $roleName, 'role_id' => $roleId]);
         $this->redirect(route('rbac.show'));
     }
 };
@@ -100,8 +112,7 @@ new class extends Component {
                     <div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 pt-4">
                         <button type="button"
                             class="btn btn-ghost text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 btn-sm rounded-xl font-bold"
-                            wire:click="delete"
-                            wire:confirm="Yakin ingin menghapus peran '{{ $this->roles->role }}'? Tindakan ini permanen.">
+                            wire:click="$set('confirmingDeletion', true)">
                             <x-heroicon-o-trash class="size-4 mr-2" />
                             Hapus Peran
                         </button>
@@ -164,6 +175,12 @@ new class extends Component {
             </div>
         </div>
     </div>
+
+    @if ($confirmingDeletion)
+        <x-rbac.confirm-modal title="Hapus Peran"
+            message="Yakin ingin menghapus peran '{{ $this->roles->role }}'? Semua data terkait peran ini akan dihapus dan tindakan ini permanen."
+            confirmAction="confirmDelete" cancelAction="$set('confirmingDeletion', false)" />
+    @endif
 </div>
 
 <style>
